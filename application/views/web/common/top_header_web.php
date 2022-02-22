@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
 
     <!-- PAGE TITLE HERE -->
-    <title>Service Finder Template | Home Page Style 1</title>
+    <title>Shubhexa | Home Page </title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">

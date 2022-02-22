@@ -4667,7 +4667,7 @@ opacity:1;
 /*jobs*/
 .aon-recent-post-area {
   padding-top: 120px;
-  padding-bottom: 10px;
+  padding-bottom: 120px;
 }
 @media only screen and (max-width:991px) {
   .aon-recent-post-area{ padding: 40px 0px;}
@@ -4917,8 +4917,8 @@ input:checked + .slider:before {
 }
 /*Testimonial*/
 .aon-testmonials-area {
-  padding-top: 50px;
-  padding-bottom: 60px;
+  padding-top: 120px;
+  padding-bottom: 120px;
 }
 @media only screen and (max-width:991px) {
   .aon-testmonials-area{ padding: 40px 0px;}
