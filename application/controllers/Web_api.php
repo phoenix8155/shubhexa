@@ -125,6 +125,107 @@ class Web_api extends CI_Controller {
 		}
 	}
 
+	public function celebs_login() {
+
+		$emailid = $_REQUEST['emailid'];
+
+		$password = $_REQUEST['password'];
+
+		$firebase_token = $_REQUEST['firebase_token'];
+
+		$device_type = $_REQUEST['device_type']; //'IOS'// 'Android'
+
+		$result = $this->ObjM->celebs_login($emailid, $password);
+
+		if (isset($result[0])) {
+
+			if ($result[0]['status'] == 'Active') {
+
+				if ($result[0]['email_verify'] == 'Y') {
+
+					$updateData['firebase_token'] = filter_data($firebase_token);
+
+					$updateData['device_type'] = filter_data($device_type);
+
+					$updateData['accessToken'] = $this->getToken(); //get Token
+
+					$updateData['update_date'] = date('Y-m-d h:i:s');
+
+					$this->comman_fun->update($updateData, 'membermaster', array('usercode' => $result[0]['usercode']));
+					$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $result[0]['usercode']));
+
+					$json_arr = array();
+
+					$json_arr['usercode'] = $dataRes[0]['usercode'];
+					$json_arr['first_name'] = $dataRes[0]['fname'];
+					$json_arr['last_name'] = $dataRes[0]['lname'];
+					$json_arr['emailid'] = $dataRes[0]['emailid'];
+					$json_arr['accessToken'] = $dataRes[0]['accessToken'];
+
+					$json_arr['validation'] = true;
+
+					$json_arr['msg'] = "";
+
+					echo json_encode($json_arr);
+					exit;
+				} else {
+					$json_arr['validation'] = false;
+
+					$json_arr['msg'] = "Please verify your emailid";
+
+					echo json_encode($json_arr);
+					exit;
+				}
+			} else {
+				$json_arr['validation'] = false;
+
+				$json_arr['msg'] = "Invalid email OR password";
+
+				echo json_encode($json_arr);
+				exit;
+			}
+		} else {
+
+			$res = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
+			if (count($res) > 0) {
+
+				$ltype_array = array('Facebook', 'Google');
+
+				if (in_array($res[0]['oauth_provider'], $ltype_array)) {
+
+					$json_arr['validation'] = false;
+
+					$json_arr['msg'] = "your are signup with " . $res[0]['oauth_provider'];
+
+					echo json_encode($json_arr);
+
+					exit;
+
+				} else {
+
+					$json_arr['validation'] = false;
+
+					$json_arr['msg'] = "Invalid email OR password";
+
+					echo json_encode($json_arr);
+
+					exit;
+				}
+
+			} else {
+
+				$json_arr['validation'] = false;
+
+				$json_arr['msg'] = "Invalid email OR password";
+
+				echo json_encode($json_arr);
+
+				exit;
+			}
+
+		}
+	}
+
 	function signup() {
 
 		$first_name = $_REQUEST['first_name'];
