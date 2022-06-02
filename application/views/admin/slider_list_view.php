@@ -20,7 +20,7 @@
       <h4 class="panel-title"><?=$sub_title?>
       	<span class="pull-right">
   			<div class="btn-group pull-right">
-                <a class="btn btn-success btn-small" href="<?=file_path('admin')?>/<?=$this->uri->rsegment(1)?>/addnew/add/<?=$option[0]['contain_name']?>">
+                <a class="btn btn-success btn-small" href="<?=file_path('admin')?><?=$this->uri->rsegment(1)?>/addnew/add">
         		Add New
         		</a>
         	</div>

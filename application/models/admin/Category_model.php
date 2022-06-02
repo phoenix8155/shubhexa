@@ -36,5 +36,77 @@ Class Category_model extends CI_Model {
 
 	}
 
+	function get_record_name_not_in($eid, $category_name) {
+
+		$this->db->select('*');
+
+		$this->db->from('category_master');
+
+		$this->db->where('category_name', $category_name);
+
+		$this->db->where('status !=', 'Delete');
+
+		$this->db->where_not_in('category_id', $eid);
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+	}
+
+	function check_cate_name($category_name) {
+
+		$this->db->select('*');
+
+		$this->db->from('category_master');
+
+		$this->db->where('category_name', $category_name);
+
+		$this->db->where('status !=', 'Delete');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+	}
+
+	function check_access_name($access_name) {
+
+		$this->db->select('*');
+
+		$this->db->from('category_master');
+
+		$this->db->where('access_name', $access_name);
+
+		$this->db->where('status !=', 'Delete');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+	}
+
+	function get_record_access_name_not_in($eid, $access_name) {
+
+		$this->db->select('*');
+
+		$this->db->from('category_master');
+
+		$this->db->where('access_name', $access_name);
+
+		$this->db->where('status !=', 'Delete');
+
+		$this->db->where_not_in('category_id', $eid);
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+	}
+
 }
 ?>

@@ -19,9 +19,9 @@ class Promocode_list extends CI_Controller {
 
 		$data['html'] = $this->listing();
 
-		$page_info['menu_id'] = 'menu-testimonial-list';
+		$page_info['menu_id'] = 'menu-promocode-list';
 
-		$page_info['page_title'] = 'Testimonial List';
+		$page_info['page_title'] = 'Promocode List';
 
 		$this->load->view('common/topheader');
 
@@ -54,13 +54,15 @@ class Promocode_list extends CI_Controller {
 			$row = $i + 1;
 			$html .= '<tr>
 						<td>' . $row . '</td>
-						<td>' . $result[$i]['category_name'] . '</td>
+						<td>' . $result[$i]['promocode'] . '</td>
+						<td>' . date('d-m-Y', strtotime($result[$i]['start_date'])) . '</td>
+						<td>' . date('d-m-Y', strtotime($result[$i]['end_end'])) . '</td>
 						<td><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
-							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['category_id'] . '">' . $update_status . '</a></li>
-							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/addnew/edit/' . $result[$i]['category_id'] . '">Edit</a></li>';
-			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['category_id'] . '">Delete</a></li>';
+							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['id'] . '">' . $update_status . '</a></li>
+							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/addnew/edit/' . $result[$i]['id'] . '">Edit</a></li>';
+			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['id'] . '">Delete</a></li>';
 			$html .= '</ul>
 						</div>
 						</td>
@@ -80,9 +82,9 @@ class Promocode_list extends CI_Controller {
 			$data['form_set'] = array('mode' => 'add');
 		}
 
-		$page_info['menu_id'] = 'menu-testimonial-list';
+		$page_info['menu_id'] = 'menu-promocode-list';
 
-		$page_info['page_title'] = 'Testimonial List';
+		$page_info['page_title'] = 'Promocode List';
 
 		$this->load->view('common/topheader');
 
@@ -94,8 +96,19 @@ class Promocode_list extends CI_Controller {
 	}
 
 	function insert() {
+		//var_dump($_POST);exit;
+
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
-			$this->form_validation->set_rules('category_name', 'Category Name', 'required|trim');
+
+			if ($_POST['mode'] == 'edit') {
+				$this->form_validation->set_rules('promocode', 'promocode', 'required|trim|callback_check_edit_unique_promocode');
+			} else {
+				$this->form_validation->set_rules('promocode', 'promocode', 'required|trim|callback_check_add_unique_promocode');
+			}
+
+			$this->form_validation->set_rules('start_date', 'start date', 'required|trim|callback_check_valid_start_date');
+
+			$this->form_validation->set_rules('end_end', 'end end', 'required|trim|callback_check_valid_end_date');
 
 			if ($this->form_validation->run() === false) {
 				$this->addnew($_POST['mode'], $_POST['eid']);
@@ -111,11 +124,88 @@ class Promocode_list extends CI_Controller {
 		}
 	}
 
+	function check_add_unique_promocode() {
+
+		$promocode = $this->input->post('promocode');
+
+		$res = $this->ObjM->check_promocode($promocode);
+
+		if (count($res) > 0) {
+			$this->form_validation->set_message('check_add_unique_promocode', 'This promocode id is already taken. Please use a different promocode.');
+
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function check_edit_unique_promocode() {
+
+		$id = $this->input->post('eid');
+
+		$promocode = $this->input->post('promocode');
+
+		$res = $this->ObjM->get_record_promocode_not_in($id, $promocode);
+
+		if (count($res) > 0) {
+			$this->form_validation->set_message('check_edit_unique_promocode', 'This promocode is already taken. Please use a different promocode.');
+
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function check_valid_start_date() {
+
+		$start_date = $this->input->post('start_date');
+
+		$today_date = date('Y-m-d');
+
+		if ($today_date <= $start_date) {
+			return true;
+		} else {
+			$this->form_validation->set_message('check_valid_start_date', 'please choose valid date, start date does not smaller than todays date.');
+			return false;
+
+		}
+
+	}
+
+	function check_valid_end_date() {
+
+		$start_date = $this->input->post('start_date');
+		$end_end = $this->input->post('end_end');
+		$today_date = date('Y-m-d');
+
+		if ($today_date <= $start_date) {
+
+			//return true;
+
+			if ($start_date <= $end_end) {
+
+				return true;
+			} else {
+				$this->form_validation->set_message('check_valid_end_date', 'please choose valid date, start date does not smaller than end date.');
+				return false;
+			}
+		} else {
+			$this->form_validation->set_message('check_valid_end_date', 'please choose valid date, start date does not smaller than todays date.');
+			return false;
+
+		}
+
+	}
+
 	protected function _insert() {
 
 		$data = array();
 
-		$data['category_name'] = filter_data($_POST['category_name']);
+		$data['promocode'] = filter_data($_POST['promocode']);
+
+		$data['start_date'] = date('Y-m-d', strtotime($_POST['start_date']));
+
+		$data['end_end'] = date('Y-m-d', strtotime($_POST['end_end']));
 
 		if ($_POST['mode'] == 'add') {
 
@@ -125,7 +215,7 @@ class Promocode_list extends CI_Controller {
 
 			$data['update_date'] = date('Y-m-d h:i:s');
 
-			$this->comman_fun->additem($data, 'category_master');
+			$this->comman_fun->additem($data, 'promocode_master');
 
 			$this->session->set_flashdata("success", "Record Insert Successfully.....");
 		}
@@ -133,7 +223,7 @@ class Promocode_list extends CI_Controller {
 
 			$data['update_date'] = date('Y-m-d h:i:s');
 
-			$this->comman_fun->update($data, 'category_master', array('category_id' => $_POST['eid']));
+			$this->comman_fun->update($data, 'promocode_master', array('id' => $_POST['eid']));
 
 			$this->session->set_flashdata("success", "Record Update Successfully.....");
 		}
@@ -141,11 +231,11 @@ class Promocode_list extends CI_Controller {
 
 	function status_update($st, $eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('promocode_master', array('id' => $eid));
 
 		$data['status'] = $st;
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'promocode_master', array('id' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Status ' . $st . ' Successfully.....'));
 
@@ -154,11 +244,11 @@ class Promocode_list extends CI_Controller {
 
 	function delete_record($eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('promocode_master', array('id' => $eid));
 
 		$data['status'] = 'Delete';
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'promocode_master', array('id' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 

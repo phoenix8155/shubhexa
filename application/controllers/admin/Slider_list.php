@@ -13,6 +13,10 @@ class Slider_list extends CI_Controller {
 			exit;
 		}
 
+		$this->load->library('upload');
+
+		$this->load->library('image_lib');
+
 		$this->load->model('admin/slider_model', 'ObjM', true);
 	}
 
@@ -22,7 +26,7 @@ class Slider_list extends CI_Controller {
 
 		$page_info['menu_id'] = 'menu-slider-list';
 
-		$page_info['page_title'] = 'slider List';
+		$page_info['page_title'] = 'Slider List';
 
 		$this->load->view('common/topheader');
 
@@ -50,18 +54,24 @@ class Slider_list extends CI_Controller {
 				$cls = 'btn-danger';
 			}
 
-			// <td>'.$result[$i]['amount'].'</td>
+			if ($result[$i]['img_name'] != "") {
+				$td_image = "<img src='" . base_url() . "upload/slider/" . $result[$i]['img_name'] . "' height='50' />";
+			} else {
+				$td_image = "-";
+			}
 
 			$row = $i + 1;
 			$html .= '<tr>
 						<td>' . $row . '</td>
-						<td>' . $result[$i]['category_name'] . '</td>
+						<td>' . $result[$i]['slider_title'] . '</td>
+						<td>' . $td_image . '</td>
+						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
 						<td><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
-							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['category_id'] . '">' . $update_status . '</a></li>
-							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/addnew/edit/' . $result[$i]['category_id'] . '">Edit</a></li>';
-			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['category_id'] . '">Delete</a></li>';
+							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['id'] . '">' . $update_status . '</a></li>
+							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/addnew/edit/' . $result[$i]['id'] . '">Edit</a></li>';
+			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['id'] . '">Delete</a></li>';
 			$html .= '</ul>
 						</div>
 						</td>
@@ -74,9 +84,11 @@ class Slider_list extends CI_Controller {
 	function addnew($mode = null, $eid = null) {
 
 		if ($mode == 'edit') {
+
 			$data['form_set'] = array('mode' => 'edit', 'eid' => $eid);
 
 			$data['result'] = $this->ObjM->get_record($eid);
+
 		} else {
 			$data['form_set'] = array('mode' => 'add');
 		}
@@ -95,8 +107,10 @@ class Slider_list extends CI_Controller {
 	}
 
 	function insert() {
+
 		if ($this->input->server('REQUEST_METHOD') === 'POST') {
-			$this->form_validation->set_rules('category_name', 'Category Name', 'required|trim');
+
+			$this->form_validation->set_rules('slider_title', 'title', 'required|trim');
 
 			if ($this->form_validation->run() === false) {
 				$this->addnew($_POST['mode'], $_POST['eid']);
@@ -131,7 +145,7 @@ class Slider_list extends CI_Controller {
 
 			$data['update_date'] = date('Y-m-d h:i:s');
 
-			$this->comman_fun->additem($data, 'category_master');
+			$this->comman_fun->additem($data, 'slider_master');
 
 			$this->session->set_flashdata("success", "Record Insert Successfully.....");
 		}
@@ -139,11 +153,11 @@ class Slider_list extends CI_Controller {
 
 			$data['update_date'] = date('Y-m-d h:i:s');
 
-			$this->comman_fun->update($data, 'category_master', array('category_id' => $_POST['eid']));
+			$this->comman_fun->update($data, 'slider_master', array('id' => $_POST['eid']));
 
 			if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-				$url = './upload/web/slider/' . $_POST['old_file'];
-				$url2 = './upload/web/slider/thum/' . $_POST['old_file'];
+				$url = './upload/slider/' . $_POST['old_file'];
+				$url2 = './upload/slider/thum/' . $_POST['old_file'];
 				unlink($url);
 				unlink($url2);
 			}
@@ -154,11 +168,11 @@ class Slider_list extends CI_Controller {
 
 	function status_update($st, $eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('slider_master', array('id' => $eid));
 
 		$data['status'] = $st;
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'slider_master', array('id' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Status ' . $st . ' Successfully.....'));
 
@@ -167,11 +181,18 @@ class Slider_list extends CI_Controller {
 
 	function delete_record($eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('slider_master', array('id' => $eid));
 
 		$data['status'] = 'Delete';
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'slider_master', array('id' => $eid));
+
+		if (count($record) > 0) {
+			$url = './upload/slider/' . $record[0]['img_name'];
+			$url2 = './upload/slider/thum/' . $record[0]['img_name'];
+			unlink($url);
+			unlink($url2);
+		}
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
@@ -180,7 +201,7 @@ class Slider_list extends CI_Controller {
 	function handle_upload() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 			$config = array();
-			$config['upload_path'] = './upload/web/slider/';
+			$config['upload_path'] = './upload/slider/';
 			$config['allowed_types'] = 'jpg|jpeg|gif|png';
 			$config['max_size'] = '0';
 			$config['overwrite'] = TRUE;
@@ -191,7 +212,7 @@ class Slider_list extends CI_Controller {
 			$_FILES['userfile']['error'] = $_FILES['upload_file']['error'];
 			$_FILES['userfile']['size'] = $_FILES['upload_file']['size'];
 			$rand = md5(uniqid(rand(), true));
-			$fileName = $_POST['option_type'] . '_' . $rand . '' . $_FILES['upload_file']['name'];
+			$fileName = 'slider_' . $rand . '' . $_FILES['upload_file']['name'];
 			$fileName = str_replace(" ", "", $fileName);
 			$config['file_name'] = $fileName;
 			$this->upload->initialize($config);
@@ -200,9 +221,7 @@ class Slider_list extends CI_Controller {
 				$upload_data = $this->upload->data();
 				$_POST['file_name'] = $upload_data['file_name'];
 
-				if ($_POST['option_type'] == "slider") {
-					$this->_create_slider($upload_data['file_name'], 1349, 500);
-				}
+				$this->_create_slider($upload_data['file_name'], 1462, 837);
 				$this->_create_thumbnail($upload_data['file_name'], 250, 250);
 				return true;
 			} else {
@@ -216,12 +235,12 @@ class Slider_list extends CI_Controller {
 	protected function _create_thumbnail($fileName, $width, $height) {
 
 		$config['image_library'] = 'gd2';
-		$config['source_image'] = media_path() . $fileName;
+		$config['source_image'] = './upload/slider/' . $fileName;
 		$config['create_thumb'] = TRUE;
 		$config['maintain_ratio'] = TRUE;
 		$config['width'] = $width;
 		$config['height'] = $height;
-		$config['new_image'] = media_path() . 'web/slider/thum/' . $fileName;
+		$config['new_image'] = './upload/slider/thum/' . $fileName;
 		$config['thumb_marker'] = '';
 
 		$this->image_lib->initialize($config);
@@ -233,12 +252,12 @@ class Slider_list extends CI_Controller {
 	protected function _create_slider($fileName, $width, $height) {
 
 		$config['image_library'] = 'gd2';
-		$config['source_image'] = media_path() . $fileName;
+		$config['source_image'] = './upload/slider/' . $fileName;
 		$config['create_thumb'] = TRUE;
 		$config['maintain_ratio'] = TRUE;
 		$config['width'] = $width . 'px';
 		$config['height'] = $height . 'px';
-		$config['new_image'] = media_path() . 'web/slider/' . $fileName;
+		$config['new_image'] = './upload/slider/' . $fileName;
 		$config['thumb_marker'] = '';
 
 		$this->image_lib->initialize($config);

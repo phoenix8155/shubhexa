@@ -29,11 +29,17 @@ class Dashboard extends CI_Controller {
 
 		$page_info['page_title'] = 'Dashboard';
 
+		$data['resCategory'] = $this->ObjM->getTotCategory();
+		$data['resCelebrity'] = $this->ObjM->getTotCelebrity();
+		$data['resUser'] = $this->ObjM->getTotUser();
+		$data['resTestimonials'] = $this->ObjM->getTotTestimonials();
+		$data['resPromocode'] = $this->ObjM->getTotPromocode();
+
 		$this->load->view('common/topheader');
 
 		$this->load->view('common/header_admin', $page_info);
 
-		$this->load->view('admin/dashboard_view');
+		$this->load->view('admin/dashboard_view', $data);
 
 		$this->load->view('common/footer_admin');
 

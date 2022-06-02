@@ -26,6 +26,9 @@ $(document).ready(function(e) {
 					<tr>
 						<th>Sr. No</th>
 						<th>Category Name</th>
+						<th>Access Name</th>
+						<th>Image</th>
+						<th>Banner Image</th>
 						<th>Action</th>
 					</tr>
 				</thead>

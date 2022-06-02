@@ -152,7 +152,7 @@ class Login extends CI_Controller {
 
 			$this->session->set_userdata('celebs', $info);
 
-			header('Location: ' . file_path('celebrity') . 'dashboard/view/');
+			header('Location: ' . file_path('celebrity_admin') . 'dashboard/view/');
 
 		} else if ($result[0]['role_type'] == '3') {
 
@@ -164,7 +164,7 @@ class Login extends CI_Controller {
 
 			$this->session->set_userdata('user', $info);
 
-			header('Location: ' . file_path('client') . 'dashboard/view/');
+			header('Location: ' . file_path('home') . '');
 		}
 
 	}
@@ -181,7 +181,7 @@ class Login extends CI_Controller {
 
 		if ($this->session->userdata('celebs')) {
 
-			header('Location: ' . file_path('celebrity') . 'dashboard/view/');
+			header('Location: ' . file_path('celebrity_admin') . 'dashboard/view/');
 
 			exit;
 
@@ -189,7 +189,7 @@ class Login extends CI_Controller {
 
 		if ($this->session->userdata('user')) {
 
-			header('Location: ' . file_path('user') . 'dashboard/view/');
+			header('Location: ' . file_path('home') . '');
 
 			exit;
 

@@ -2662,6 +2662,7 @@ THEMEFOREST REQUIRED CLASSES
 }
 .header-style-1 .header-nav .nav > li > a {
   color: #fff;
+  /*color: #000;*/
 }
 .header-style-1 .header-nav .nav > li:hover > a {
   color: #ffb600;
@@ -3733,7 +3734,7 @@ select {
 }
 
 @media only screen and (max-width:1440px) {
-.aon-banner-outer .aon-banner-text .text-top-line { font-size: 50px; }
+.aon-banner-outer .aon-banner-text .text-top-line { font-size: 28px; }
 .aon-banner-outer .aon-banner-text .text-bot-line { font-size: 50px; padding-bottom: 15px; }
 }
 
@@ -5794,7 +5795,7 @@ opacity:1;
   position: relative;
   z-index: 2;
   height: 500px;
-  background-image: url("../images/whychoose/pic1.jpg");
+  background-image: url("../images/about-right-first.png");
   background-position: center;
   background-size: cover;
   border-radius: 30px;
@@ -8801,6 +8802,7 @@ justify-content: space-between;
 .sf-provi-bio-right {
   padding-left: 50px;
   overflow: hidden;
+  padding-top: 20px;
 }
 .sf-provi-bio-right .sf-provi-btn {
   margin-bottom: 30px;
@@ -10621,7 +10623,7 @@ transition: all 0.5s ease;
   float: right;
 }
 .aon-search-result-area {
-  margin-left: 450px;
+  /*margin-left: 450px;*/
   padding: 30px;
   min-height: 100vh;
   margin-top: 0px;
@@ -11550,7 +11552,7 @@ Search list 2
 .aon-search-result-wrap { margin-left: 350px; }
 .aon-search-result-wrap { margin-right: 350px; }    
 .aon-search-right-map { width:350px; }
-.aon-search-result-area {margin-left: 350px;}
+.aon-search-result-area {/*margin-left: 350px;*/}
 }
 
 @media only screen and (max-width:1350px) {
@@ -13747,4 +13749,19 @@ button.close { line-height: 12px; }
 
 .g-recaptcha { display: table; margin: 15px auto 30px; }
 
+.padding-top-celebrity-section{
+	padding-top: 125px;
+}
 
+.padding-top-search-section{
+	padding-top: 80px;
+}
+
+.aon-why-choose2-area-custom {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.aon-recent-post-area-custom{
+	padding-top: 40px;
+    padding-bottom: 40px;
+}

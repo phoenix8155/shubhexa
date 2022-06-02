@@ -26,13 +26,13 @@ $(document).ready(function(e) {
         <div class="panel panel-warning panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="demo-pli-add-user icon-3x"></i>
+                    <i class="demo-pli-receipt-4 icon-3x"></i>
                 </div>
             </div>
             <div class="media-body">
-				<a href="<?=file_path('admin')?>employee/view/" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
+				<a href="<?=file_path('admin')?>category_list/view/" style="color:#fff;">
+					<p class="text-2x mar-no text-semibold"><?=$resCategory[0]['totCategory'];?></p>
+					<p class="mar-no">Total Category</p>
 				</a>
             </div>
         </div>
@@ -45,9 +45,9 @@ $(document).ready(function(e) {
                 </div>
             </div>
             <div class="media-body">
-				<a href="<?=file_path('admin')?>client/view" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
+				<a href="<?=file_path('admin')?>celebrity_list/view" style="color:#fff;">
+					<p class="text-2x mar-no text-semibold"><?=$resCelebrity[0]['totCelebrity'];?></p>
+					<p class="mar-no">Total Celebrity</p>
 				</a>
             </div>
         </div>
@@ -56,13 +56,13 @@ $(document).ready(function(e) {
         <div class="panel panel-mint panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="demo-pli-receipt-4 icon-3x"></i>
+                    <i class="demo-pli-add-user icon-3x"></i>
                 </div>
             </div>
             <div class="media-body">
-				<a href="<?=file_path('admin')?>task_mgmt/view/" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
+				<a href="<?=file_path('admin')?>user_list/view/" style="color:#fff;">
+					<p class="text-2x mar-no text-semibold"><?=$resUser[0]['totUser'];?></p>
+					<p class="mar-no">Total User</p>
 				</a>
             </div>
         </div>
@@ -75,9 +75,9 @@ $(document).ready(function(e) {
                 </div>
             </div>
             <div class="media-body">
-		      <a href="<?=file_path('admin')?>sms/view" style="color:#fff;">
-		          <p class="text-2x mar-no text-semibold">1</p>
-		          <p class="mar-no">simply dummy</p>
+		      <a href="<?=file_path('admin')?>testimonial_list/view" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=$resTestimonials[0]['totTestimonials'];?></p>
+		          <p class="mar-no">Total Testimonials</p>
 		      </a>
             </div>
         </div>
@@ -90,104 +90,11 @@ $(document).ready(function(e) {
                 </div>
             </div>
             <div class="media-body">
-		      <a href="<?=file_path('admin')?>upload_document_master/view" style="color:#fff;">
-		          <p class="text-2x mar-no text-semibold">1</p>
-		          <p class="mar-no">simply dummy</p>
+		      <a href="<?=file_path('admin')?>promocode_list/view" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=$resPromocode[0]['totPromocode'];?></p>
+		          <p class="mar-no">Total Promocode</p>
 		      </a>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="panel panel-mint panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
-                    <i class="demo-pli-receipt-4 icon-3x"></i>
-                </div>
-            </div>
-            <div class="media-body">
-				<a href="<?=file_path('admin')?>service_request/view" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
-				</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-info panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
-                    <i class="demo-pli-data-storage icon-3x"></i>
-                </div>
-            </div>
-            <div class="media-body">
-				<a href="<?=file_path('admin')?>id_proof_master/view" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
-				</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-warning panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
-                    <i class="demo-pli-add-user icon-3x"></i>
-                </div>
-            </div>
-
-            <div class="media-body">
-				<a href="<?=file_path('admin')?>support/view" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy</p>
-				</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-warning panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
-                    <i class="fa fa-calendar icon-3x" style="font-size: 45px;"></i>
-                </div>
-            </div>
-            <div class="media-body">
-				<a href="<?=file_path('admin')?>appointment_approvel/view" style="color:#fff;">
-					<p class="text-2x mar-no text-semibold">1</p>
-					<p class="mar-no">simply dummy </p>
-				</a>
-            </div>
-        </div>
-    </div>
 </div>
-<!-- <div class="row">
-    <div class="col-md-12">
-        <div class="panel">
-			<div class="panel-body">
-				<h3>Notification</h3>
-				<div align="right">
-					<a id="mark_as_read" href="<?=base_url()?>index.php/admin/<?=$this->uri->rsegment(1)?>/updateAllSeenStatus" class="btn btn-success">Mark as all read</a>
-				</div><br>
-				<table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-						<th>No</th>
-						<th>Member Name</th>
-						<th>Message</th>
-						<th>Time</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php for ($i = 0; $i < count($result); $i++) {$row = $i + 1;?>
-						<tr>
-							<td class="<?=$bg_color?>"><?=$row?></td>
-							<td class="<?=$bg_color?>"><?=$result[$i]['member_name']?></td>
-							<td class="<?=$bg_color?>"><?=$result[$i]['message']?></td>
-							<td class="<?=$bg_color?>"><?=get_time_ago($result[$i]['timedt'])?></td>
-						</tr>
-						<?php }?>
-					</tbody>
-				</table>
-			</div>
-		</div>
-    </div>
-</div> -->

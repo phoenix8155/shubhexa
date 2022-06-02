@@ -26,6 +26,10 @@ $(document).ready(function(e) {
 					<tr>
 						<th>Sr. No</th>
 						<th>Name</th>
+						<th>Photo</th>
+						<th>Birthdate</th>
+						<th>View Profile</th>
+						<th>Create date</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -34,11 +38,8 @@ $(document).ready(function(e) {
 				</tbody>
 			</table>
 		</div>
-		<!-- panel-body -->
 	</div>
-	<!-------------->
 </div>
-<!-- contentpanel -->
 <style>
 	.btn_custom {
 		padding: 3px 15px !important;

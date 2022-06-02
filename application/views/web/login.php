@@ -52,7 +52,7 @@
 
 
         </form>
-		  <div class="pad-all forget_pass_link"> You don't have account ? <a href="<?=file_path()?>registration" class="btn-link mar-rgt">Sign up Here.</a></div>
+		  <!-- <div class="pad-all forget_pass_link"> You don't have account ? <a href="<?=file_path()?>registration" class="btn-link mar-rgt">Sign up Here.</a></div> -->
       </div>
 
 

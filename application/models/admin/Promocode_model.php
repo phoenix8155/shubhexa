@@ -3,13 +3,13 @@ Class Promocode_model extends CI_Model {
 
 	function getAllCategory() {
 
-		$this->db->select('category_master.*');
+		$this->db->select('promocode_master.*');
 
-		$this->db->from('category_master');
+		$this->db->from('promocode_master');
 
-		$this->db->where('category_master.status !=', 'Delete');
+		$this->db->where('promocode_master.status !=', 'Delete');
 
-		$this->db->order_by('category_master.category_id', 'Desc');
+		$this->db->order_by('promocode_master.id', 'Desc');
 
 		$query = $this->db->get();
 
@@ -19,15 +19,15 @@ Class Promocode_model extends CI_Model {
 
 	}
 
-	function get_record($category_id) {
+	function get_record($id) {
 
-		$this->db->select('category_master.*');
+		$this->db->select('promocode_master.*');
 
-		$this->db->from('category_master');
+		$this->db->from('promocode_master');
 
-		$this->db->where('category_master.status !=', 'Delete');
+		$this->db->where('promocode_master.status !=', 'Delete');
 
-		$this->db->where('category_master.category_id', '' . $category_id . '');
+		$this->db->where('promocode_master.id', '' . $id . '');
 
 		$query = $this->db->get();
 
@@ -35,6 +35,42 @@ Class Promocode_model extends CI_Model {
 
 		return $the_content;
 
+	}
+
+	function check_promocode($promocode) {
+
+		$this->db->select('*');
+
+		$this->db->from('promocode_master');
+
+		$this->db->where('promocode', $promocode);
+
+		$this->db->where('status !=', 'Delete');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+	}
+
+	function get_record_promocode_not_in($eid, $promocode) {
+
+		$this->db->select('*');
+
+		$this->db->from('promocode_master');
+
+		$this->db->where('promocode', $promocode);
+
+		$this->db->where('status !=', 'Delete');
+
+		$this->db->where_not_in('id', $eid);
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
 	}
 
 }

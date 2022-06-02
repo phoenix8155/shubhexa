@@ -31,12 +31,15 @@
 .unseen{
 		background-color: gainsboro;
 	}
+	#navbar-container {
+	    background-color: #225887;
+	}
 </style>
 
 <div id="container" class="effect aside-float aside-bright mainnav-lg print-content">
 <header id="navbar">
   <div id="navbar-container" class="boxed">
-    <div class="navbar-header"> <a href="#" class="navbar-brand" style=" background-color: #225887;"> <img src="<?=asset_path()?>web/images/logo-dark.png" alt="Logo" class="brand-icon" style="width:100%;margin-top: 10px; padding: 5px;"> </a> </div>
+    <div class="navbar-header"> <!-- <a href="#" class="navbar-brand" style=" background-color: #225887;"> <img src="<?=asset_path()?>web/images/logo-dark.png" alt="Logo" class="brand-icon" style="width:100%;margin-top: 10px; padding: 5px;"> </a> --> </div>
     <div class="navbar-content">
       <ul class="nav navbar-top-links">
         <li class="tgl-menu-btn"> <a class="mainnav-toggle" href="#"> <i class="demo-pli-list-view"></i> </a> </li>
@@ -120,17 +123,20 @@
             <li class="list-header">Navigation</li>
             <li> <a id="menu-dashboard" href="<?=file_path('admin')?>dashboard/view/"> <i class="demo-pli-home"></i> <span class="menu-title"> Dashboard </span> </a> </li>
             <li> <a id="menu-category-list" href="<?=file_path('admin')?>category_list/view/"> <i class="demo-pli-gear"></i> <span class="menu-title"> Category List </span> </a> </li>
+            <li> <a id="menu-category-list" href="<?=file_path('admin')?>occasion_list/view/"> <i class="demo-pli-gear"></i> <span class="menu-title"> Occasion List </span> </a> </li>
+            <li> <a id="menu-category-list" href="<?=file_path('admin')?>template_list/view/"> <i class="demo-pli-gear"></i> <span class="menu-title"> Template List </span> </a> </li>
             <li> <a id="menu-celebrity-list" href="<?=file_path('admin')?>celebrity_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Celebrity List </span> </a> </li>
             <li> <a id="menu-user-list" href="<?=file_path('admin')?>user_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> User List </span> </a> </li>
             <li> <a href="#"> <i class="fa fa-desktop" aria-hidden="true"></i> <span class="menu-title">Website CMS</span> <i class="arrow"></i> </a>
               <ul class="collapse">
                	<li><a id="menu-slider-list" href="<?=file_path('admin')?>slider_list/view/">Slider</a></li>
-				<li><a id="menu-contact" href="#<?=file_path('admin')?>contact_us/view/">Contact</a></li>
+				<li><a id="menu-contact-list" href="<?=file_path('admin')?>contact_list/view/">Contact</a></li>
+				<li><a id="menu-nl-list" href="<?=file_path('admin')?>newsletter_list/view/">Newsletter List</a></li>
 				<li><a id="menu-career" href="#<?=file_path('admin')?>career/view/">Pages</a></li>
               </ul>
             </li>
             <li> <a id="menu-testimonial-list" href="<?=file_path('admin')?>testimonial_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Testimonial List </span> </a> </li>
-            <li> <a id="menu-promocode-list" href="#<?=file_path('admin')?>promocode_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Promo code List </span> </a> </li>
+            <li> <a id="menu-promocode-list" href="<?=file_path('admin')?>promocode_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Promo code List </span> </a> </li>
 			<!-- <li> <a href="#"> <i class="fa fa-tachometer" aria-hidden="true"></i> <span class="menu-title">Masters</span> <i class="arrow"></i> </a>
 			  <ul class="collapse">
 				<li><a id="menu-service" href="<?=file_path('admin')?>service/view">Service Master</a></li>

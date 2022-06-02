@@ -62,7 +62,7 @@ if ($form_value == "") {
 	$sel0 = "";
 }
 ?>
-                <select class="form-control" id="rating" name="rating">
+                <select class="form-control" id="rating" name="rating" required>
                 	<option value="">choose one</option>
                 	<option <?=$sel1?> value="1">1</option>
                 	<option <?=$sel2?> value="2">2</option>

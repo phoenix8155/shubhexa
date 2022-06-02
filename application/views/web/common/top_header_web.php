@@ -1,6 +1,33 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+<?php
+if ($this->uri->rsegment(1) == "home") {
+
+	$home = "current-menu-item";
+}
+if ($this->uri->rsegment(1) == "about") {
+
+	$about = "current-menu-item";
+}
+if ($this->uri->rsegment(1) == "testimonials") {
+
+	$testimonials = "current-menu-item";
+}
+if ($this->uri->rsegment(1) == "faq") {
+
+	$faq = "current-menu-item";
+}
+if ($this->uri->rsegment(1) == "contact") {
+
+	$contact = "current-menu-item";
+}
+if ($this->uri->rsegment(1) == "my_bookings") {
+
+	$myBooking = "current-menu-item";
+}
+
+?>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -56,11 +83,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/slick-theme.css">
     <!-- Main STyle Sheet -->
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/style.css">
-
 </head>
-
 <body>
-    <!-- LOADING AREA START ===== -->
     <div class="loading-area">
         <div class="loading-box"></div>
         <div class="loading-pic">
@@ -83,116 +107,70 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </div>
     </div>
-    <!-- LOADING AREA  END ====== -->
 <div class="page-wraper">
+    <header class="site-header header-style-1 mobile-sider-drawer-menu header-full-width">
+        <div class="sticky-header main-bar-wraper  navbar-expand-lg">
+            <div class="main-bar">
+                <div class="container clearfix">
+                    <div class="logo-header">
+                        <div class="logo-header-inner logo-header-one">
+                            <a href="#">
+                                <img src="<?=asset_path('web/')?>images/white-logo-light.png" alt="" class="site-logo-has">
+                                <!-- <img src="<?=asset_path('web/')?>images/logo-light.png" alt="" class="site-logo-sticky"> -->
+                                <img src="<?=asset_path('web/')?>images/shubhexa-logo-blue.png" alt="" class="site-logo-sticky">
 
-        <!-- HEADER START -->
-        <header class="site-header header-style-1 mobile-sider-drawer-menu header-full-width">
-            <div class="sticky-header main-bar-wraper  navbar-expand-lg">
-                <div class="main-bar">
-
-                    <div class="container clearfix">
-                        <!--Logo section start-->
-                        <div class="logo-header">
-                            <div class="logo-header-inner logo-header-one">
-                                <a href="#">
-                                    <img src="<?=asset_path('web/')?>images/logo-dark.png" alt="" class="site-logo-has">
-                                    <img src="<?=asset_path('web/')?>images/logo-light.png" alt="" class="site-logo-sticky">
-                                </a>
-                            </div>
+                            </a>
                         </div>
-                        <!--Logo section End-->
-
-                        <!-- NAV Toggle Button -->
-                        <button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar icon-bar-first"></span>
-                            <span class="icon-bar icon-bar-two"></span>
-                            <span class="icon-bar icon-bar-three"></span>
-                        </button>
-
-                        <!-- MAIN Vav -->
-                        <div class="nav-animation header-nav navbar-collapse collapse d-flex justify-content-start">
-
-                            <ul class=" nav navbar-nav">
-                            	<li class="current-menu-item"><a href="<?=file_path()?>home">Home</a></li>
-                                <li class="has-child">
-                                    <a href="javascript:;">Pages</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about-us.html">About us</a></li>
-                                        <li><a href="javascript:;">Categories</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="all-categories.html">All Categories</a></li>
-                                                <li><a href="categories-detail.html">Categories Detail</a></li>
-                                                <li><a href="categories-detail-2.html">Categories Detail 2</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <li><a href="javascript:;">Search</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="search-list.html">Search List</a></li>
-                                                <li><a href="new-search-list-2.html">Search List 2</a></li>
-                                                <li><a href="search-list-map.html">Search List Map</a></li>
-                                                <li><a href="search-list-map2.html">Search List Map 2</a></li>
-                                                <li><a href="search-grid.html">Search-grid</a></li>
-                                                <li><a href="search-grids-map.html">Search-grid-map</a></li>
-                                                <li><a href="search-grid-map2.html">Search-grid-map2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="error-404.html">Error 404</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="has-child"><a href="javascript:;">Profile</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="profile-full.html">Profile</a></li>
-                                        <li><a href="profile-sidebar.html">Profile Sidebar</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="has-child"><a href="javascript:;">Jobs</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="job-listing.html">Job listing</a></li>
-                                        <li><a href="job-grid.html">Job grid</a></li>
-                                        <li><a href="job-detail.html">Job detail</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="has-child"><a href="javascript:;">Blog</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-grid.html">Blog Grid</a></li>
-                                        <li><a href="blog-grid-2.html">Blog Grid 2</a></li>
-                                        <li><a href="blog-list.html">Blog list</a></li>
-                                        <li><a href="blog-list-2.html">Blog list 2</a></li>
-                                        <li><a href="blog-list-3.html">Blog list 3</a></li>
-                                        <li><a href="blog-list-4.html">Blog list 4</a></li>
-                                        <li><a href="blog-detail.html">Blog detail</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="contact-us.html">Contact</a></li>
-
-                            </ul>
-
-                        </div>
-
-                        <!-- Header Right Section-->
-                        <div class="extra-nav header-2-nav">
-                            <div class="extra-cell">
-                                <!--Login-->
-                                <button type="button" class="site-button aon-btn-login" data-toggle="modal" data-target="#login-signup-model">
-                                    <i class="fa fa-user"></i> Login
-                                </button>
-                                <!--Sign up-->
-                                <a href="mc-profile.html" class="site-button aon-btn-signup m-l20">
-                                    <i class="fa fa-plus"></i> Add Listing
-                                </a>
-                            </div>
-
-                            </div>
-
+                    </div>
+                    <button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar icon-bar-first"></span>
+                        <span class="icon-bar icon-bar-two"></span>
+                        <span class="icon-bar icon-bar-three"></span>
+                    </button>
+                    <div class="nav-animation header-nav navbar-collapse collapse d-flex justify-content-start">
+                        <ul class=" nav navbar-nav">
+                        	<li class="<?=$home?>"><a href="<?=file_path()?>home">Home</a></li>
+                        	<li class="<?=$about?>"><a href="<?=file_path()?>about">About us</a></li>
+                        	<li class="<?=$testimonials?>"><a href="<?=file_path()?>testimonials">Testimonial</a></li>
+                        	<li class="<?=$faq?>"><a href="<?=file_path()?>faq">FAQ</a></li>
+                            <li class="<?=$contact?>"><a href="<?=file_path()?>contact">Contact</a></li>
+                            <?php if ($this->session->userdata['user']) {?>
+                            	<li class="<?=$myBooking?>"><a href="<?=file_path()?>my_account/myBooking">My Bookings</a></li>
+                            <?php }?>
+                        </ul>
                     </div>
 
+                    <div class="extra-nav header-2-nav">
+                        <div class="extra-cell">
+                        	<?php if (!$this->session->userdata['user']) {?>
+
+                            <button id="btn-login" type="button" class="site-button aon-btn-login" data-toggle="modal" data-target="#login-signup-model">
+                                <i class="fa fa-user"></i> Login
+                            </button>
+                            <button id="btn-signin" type="button" class="site-button aon-btn-login" data-toggle="modal" data-target="#login-signup-model">
+                                <i class="fa fa-plus"></i> Sign up
+                            </button>
+                        <?php } else {?>
+                            <div class="btn-group">
+							  <button type="button" class="btn btn-warning dropdown-toggle site-button aon-btn-login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							   <i class="fa fa-user"></i> My Account
+							  </button>
+							  <div class="dropdown-menu">
+							    <a class="dropdown-item" href="<?=file_path()?>my_account/profile/view">Profile</a>
+							    <a class="dropdown-item" href="<?=file_path()?>cart">Cart</a>
+							    <a class="dropdown-item" href="<?=file_path()?>my_wishlist">Wishlist</a>
+							    <?php if ($this->session->userdata['user']['loginWithOther'] == false) {?>
+							    <a class="dropdown-item" href="<?=file_path()?>my_account/changePassword">Change Password</a>
+							    <?php }?>
+							    <div class="dropdown-divider"></div>
+							    <a class="dropdown-item" href="<?=file_path()?>home/logout">Logout</a>
+							  </div>
+							</div>
+                        <?php }?>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </header>
-        <!-- HEADER END -->
+        </div>
+    </header>

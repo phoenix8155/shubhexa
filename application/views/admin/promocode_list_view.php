@@ -25,7 +25,9 @@ $(document).ready(function(e) {
 				<thead>
 					<tr>
 						<th>Sr. No</th>
-						<th>Category Name</th>
+						<th>Promo Code</th>
+						<th>Valid Start Date</th>
+						<th>Valid End Date</th>
 						<th>Action</th>
 					</tr>
 				</thead>

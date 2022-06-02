@@ -35,7 +35,7 @@ class User_list extends CI_Controller {
 
 	function listing() {
 
-		$result = $this->ObjM->getAllCategory();
+		$result = $this->ObjM->getAllUser();
 
 		$html = '';
 
@@ -55,13 +55,16 @@ class User_list extends CI_Controller {
 			$row = $i + 1;
 			$html .= '<tr>
 						<td>' . $row . '</td>
-						<td>' . $result[$i]['category_name'] . '</td>
+						<td>' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
+						<td>' . $result[$i]['mobileno'] . '</td>
+						<td>' . $result[$i]['emailid'] . '</td>
+						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
 						<td><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
-							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['category_id'] . '">' . $update_status . '</a></li>
-							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/addnew/edit/' . $result[$i]['category_id'] . '">Edit</a></li>';
-			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['category_id'] . '">Delete</a></li>';
+							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['usercode'] . '">' . $update_status . '</a></li>
+							<li><a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/profileView/' . $result[$i]['usercode'] . '">View</a></li>';
+			$html .= '<li><a class="delete_record" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['usercode'] . '">Delete</a></li>';
 			$html .= '</ul>
 						</div>
 						</td>
@@ -73,11 +76,11 @@ class User_list extends CI_Controller {
 
 	function status_update($st, $eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('membermaster', array('usercode' => $eid));
 
 		$data['status'] = $st;
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Status ' . $st . ' Successfully.....'));
 
@@ -86,14 +89,31 @@ class User_list extends CI_Controller {
 
 	function delete_record($eid) {
 
-		$record = $this->comman_fun->get_table_data('category_master', array('category_id' => $eid));
+		$record = $this->comman_fun->get_table_data('membermaster', array('usercode' => $eid));
 
 		$data['status'] = 'Delete';
 
-		$this->comman_fun->update($data, 'category_master', array('category_id' => $eid));
+		$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+
+	public function profileView($usercode = Null) {
+
+		$data['result'] = $this->comman_fun->get_table_data('membermaster', array('usercode' => $usercode));
+
+		$page_info['menu_id'] = 'menu-celebrity-list';
+
+		$page_info['page_title'] = 'Profile View';
+
+		$this->load->view('common/topheader');
+
+		$this->load->view('common/header_admin', $page_info);
+
+		$this->load->view('admin/' . $this->uri->rsegment(1) . '_profile_view', $data);
+
+		$this->load->view('common/footer_admin');
 	}
 }

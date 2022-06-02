@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="page-notfound-content m-b30">
                         <h3 class="error-comment">The Page You Are Looking For Doesn't Exist...</h3>
                         <p>We Ran Into An Issue, But Don’t Worry, We’ll Take Care Of It For Sure.</p>
-                        <a href="#" class="site-button">Back to Home</a>
+                        <a href="<?=file_path()?>home" class="site-button">Back to Home</a>
                     </div>
                 </div>
 

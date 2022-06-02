@@ -26,6 +26,9 @@ $(document).ready(function(e) {
 					<tr>
 						<th>Sr. No</th>
 						<th>Name</th>
+						<th>Mobile No</th>
+						<th>Email ID</th>
+						<th>Register Date</th>
 						<th>Action</th>
 					</tr>
 				</thead>

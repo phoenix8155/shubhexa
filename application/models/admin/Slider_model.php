@@ -2,13 +2,13 @@
 Class Slider_model extends CI_Model {
 
 	function getAllCategory() {
-		$this->db->select('category_master.*');
+		$this->db->select('slider_master.*');
 
-		$this->db->from('category_master');
+		$this->db->from('slider_master');
 
-		$this->db->where('category_master.status !=', 'Delete');
+		$this->db->where('slider_master.status !=', 'Delete');
 
-		$this->db->order_by('category_master.category_id', 'Desc');
+		$this->db->order_by('slider_master.id', 'Desc');
 
 		$query = $this->db->get();
 
@@ -18,15 +18,15 @@ Class Slider_model extends CI_Model {
 
 	}
 
-	function get_record($category_id) {
+	function get_record($id) {
 
-		$this->db->select('category_master.*');
+		$this->db->select('slider_master.*');
 
-		$this->db->from('category_master');
+		$this->db->from('slider_master');
 
-		$this->db->where('category_master.status !=', 'Delete');
+		$this->db->where('slider_master.status !=', 'Delete');
 
-		$this->db->where('category_master.category_id', '' . $category_id . '');
+		$this->db->where('slider_master.id', '' . $id . '');
 
 		$query = $this->db->get();
 
