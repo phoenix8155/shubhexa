@@ -41,19 +41,17 @@ Class Web_app_module extends CI_Model {
 
 	}
 
-	function celebs_login($emailid, $password) {
+	function celebs_login($username, $password) {
 
 		$this->db->select('*');
 
 		$this->db->from('membermaster');
 
-		$this->db->where('emailid', '' . $emailid . '');
+		$this->db->where('username', '' . $username . '');
 
 		$this->db->where('password', '' . $password . '');
 
 		$this->db->where('role_type', '2');
-
-		//$this->db->where('email_verify', 'Y');
 
 		$this->db->where('status', 'Active');
 
