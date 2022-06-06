@@ -2991,4 +2991,210 @@ class Web_api extends CI_Controller {
 
 	}
 
+	function getCelebProfile() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+		
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultCelebs = $this->ObjM->getCelebrity($accessToken);
+			
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultCelebs) > 0) {
+
+			$resultCelebsDetails = $this->ObjM->getCelebsDetails($resultCelebs[0]['celebrity_id']);
+			
+			if ($resultCelebsDetails[0]['profile_pic'] != "") {
+				$image = base_url() . "upload/celebrity_profile/" . $resultCelebsDetails[0]['profile_pic'];
+
+			} else {
+				$image = base_url() . "upload/user/default.png";
+			}
+
+			$category = json_decode($resultCelebsDetails[0]['category'], true);
+			$arrCate = array();
+			$dataCate = array();
+			for ($j = 0; $j < count($category); $j++) {
+
+				$dataCate['category'] = $category[$j];
+				$arrCate[] = $dataCate;
+			}
+
+			$languageKnown = json_decode($resultCelebsDetails[0]['language_known'], true);
+			$arrLang = array();
+			$dataLang = array();
+			for ($k = 0; $k < count($languageKnown); $k++) {
+
+				$dataLang['language_known'] = $languageKnown[$k];
+				$arrLang[] = $dataLang;
+			}
+
+			
+
+			$data_json['usercode']         = $resultCelebsDetails[0]['id'];
+
+			$data_json['category']	      = ($arrCate != '') ? $arrCate : '';
+
+			$data_json['first_name']      = $resultCelebsDetails[0]['fname'];
+
+			$data_json['last_name']       = $resultCelebsDetails[0]['lname'];
+
+			$data_json['known_for']       = $resultCelebsDetails[0]['known_for'];
+ 
+			$data_json['charge_fees']   =($resultCelebsDetails[0]['charge_fees'] != '') ? $resultCelebsDetails[0]['charge_fees'] : '';
+ 
+			$data_json['gender']          = $resultCelebsDetails[0]['gender'];
+
+			$data_json['birthdate']       = ($resultCelebsDetails[0]['birthdate'] != '') ? date('d-m-Y', strtotime($resultCelebsDetails[0]['birthdate'])) : '';
+
+			$data_json['age']             = ($resultCelebsDetails[0]['age'] != '') ? $resultCelebsDetails[0]['age'] : '';
+			
+
+			$data_json['blue_tick']              = $resultCelebsDetails[0]['blue_tick'];
+
+			$data_json['language_known']         =($arrLang != '') ? $arrLang : '';
+
+			$data_json['profile_pic']            = $image;
+
+			$data_json['twitter_link']           = ($resultCelebsDetails[0]['twitter_link'] != '') ? $resultCelebsDetails[0]['twitter_link'] : '';
+
+			$data_json['fb_link']                = ($resultCelebsDetails[0]['fb_link'] != '') ? $resultCelebsDetails[0]['fb_link'] : '';
+
+			$data_json['insta_link']             = ($resultCelebsDetails[0]['insta_link'] != '') ? $resultCelebsDetails[0]['insta_link'] : '';
+
+			$data_json['sample_video_link']      = ($resultCelebsDetails[0]['sample_video_link'] != '') ? $resultCelebsDetails[0]['sample_video_link'] : ''; 
+
+			$data_json['experience_in_industry'] = ($resultCelebsDetails[0]['experience_in_industry'] != '') ? $resultCelebsDetails[0]['experience_in_industry'] : ''; 
+
+			$data_json['about_life']             = ($resultCelebsDetails[0]['about_life'] != '') ? $resultCelebsDetails[0]['about_life'] : ''; 
+
+			$data_json['successfull_events']     = ($resultCelebsDetails[0]['successfull_events'] != '') ? $resultCelebsDetails[0]['successfull_events'] : ''; 
+
+			$data_json['nature_character']       = ($resultCelebsDetails[0]['nature_character'] != '') ? $resultCelebsDetails[0]['nature_character'] : '';
+
+			$data_json['brief_family_bg']        = ($resultCelebsDetails[0]['brief_family_bg'] != '') ? $resultCelebsDetails[0]['brief_family_bg'] : ''; 
+
+			$data_json['about_career']           = ($resultCelebsDetails[0]['about_career'] != '') ? $resultCelebsDetails[0]['about_career'] : '' ;
+
+			
+			$data_json['validation'] = true;
+
+			$data_json['msg'] = "";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Celebrity not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+	}
+
+	function getBookingByUserList() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$orderType = $_REQUEST['orderType']; //Initialize //Complete
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			$result = $this->ObjM->getOrderBookingUserList($resultUser[0]['celebrity_id'], $orderType);
+
+			if (isset($result[0])) {
+
+				$json_arr = array();
+
+				$arr = array();
+
+				for ($i = 0; $i < count($result); $i++) {
+
+					$resultCartDetails = $this->comman_fun->get_table_data('cart_details', array('id' => $result[$i]['cart_detail_id']));
+
+					$resultOccationDetails = $this->comman_fun->get_table_data('occasion_master', array('occasion_title' => $resultCartDetails[0]['occation_type']));
+
+					$data = array();
+
+					$data['occasion_id']      = $resultOccationDetails[0]['id'];
+					$data['occation_type']    = $resultCartDetails[0]['occation_type'];
+					$data['delivery_date']    = date('d-m-Y',strtotime($resultCartDetails[0]['delivery_date']));
+					$data['amount']           = $resultCartDetails[0]['amount'];
+					
+					$arr[] = $data;
+				}
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $arr;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Celebrity not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
 }

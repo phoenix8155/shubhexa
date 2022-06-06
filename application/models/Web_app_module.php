@@ -495,5 +495,63 @@ Class Web_app_module extends CI_Model {
 
 	}
 
+	function getCelebrity($accessToken) {
+
+		$this->db->select('membermaster.*');
+
+		$this->db->from('membermaster');
+
+		$this->db->where('membermaster.accessToken', $accessToken);
+
+		$this->db->where('membermaster.role_type', '2');
+
+		$this->db->where('membermaster.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getCelebsDetails($celebrity_id) {
+
+		$this->db->select('celebrity_master.*');
+
+		$this->db->from('celebrity_master');
+
+		$this->db->where('celebrity_master.id', $celebrity_id);
+
+		$this->db->where('celebrity_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getOrderBookingUserList($celebrity_id, $orderType) {
+
+		$this->db->select('celebrity_task_master.*');
+
+		$this->db->from('celebrity_task_master');
+
+		$this->db->where('celebrity_task_master.celebrity_id', $celebrity_id);
+
+		$this->db->where('celebrity_task_master.video_status', $orderType); //Initialize //Complete
+
+		$this->db->where('celebrity_task_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
 }
 ?>
