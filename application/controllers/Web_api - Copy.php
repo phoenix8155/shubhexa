@@ -1090,7 +1090,7 @@ class Web_api extends CI_Controller {
 			if ($oauth_provider == "") {
 
 				if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-					$this->handle_upload('user');
+					$this->handle_upload();
 					$data['profile_pic'] = $_POST['file_name'];
 
 					if ($old_file != "") {
@@ -1934,15 +1934,10 @@ class Web_api extends CI_Controller {
 
 	}
 
-	function handle_upload($user_type) {
+	function handle_upload() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 			$config = array();
-			if($user_type == 'user') {
-
-				$config['upload_path'] = './upload/user';
-			} else {
-				$config['upload_path'] = './upload/celebrity_profile';
-			}
+			$config['upload_path'] = './upload/user';
 			$config['allowed_types'] = 'jpg|jpeg|gif|png|JPG|JPEG|PNG';
 			$config['max_size'] = '0';
 			$config['overwrite'] = TRUE;
@@ -1962,7 +1957,7 @@ class Web_api extends CI_Controller {
 				$upload_data = $this->upload->data();
 				$_POST['file_name'] = $upload_data['file_name'];
 
-				$this->_create_thumbnail($upload_data['file_name'], 120, 120,$user_type);
+				$this->_create_thumbnail($upload_data['file_name'], 120, 120);
 				return true;
 			} else {
 
@@ -1972,29 +1967,15 @@ class Web_api extends CI_Controller {
 
 	}
 
-	protected function _create_thumbnail($fileName, $width, $height,$user_type) {
+	protected function _create_thumbnail($fileName, $width, $height) {
 
 		$config['image_library'] = 'gd2';
-		if($user_type == 'user') {
-
-			$config['source_image'] = './upload/user/' . $fileName;
-		} else {
-			$config['source_image'] = './upload/celebrity_profile/' . $fileName;;
-		}
-
-		
+		$config['source_image'] = './upload/user/' . $fileName;
 		$config['create_thumb'] = TRUE;
 		$config['maintain_ratio'] = TRUE;
 		$config['width'] = $width;
 		$config['height'] = $height;
-
-		if($user_type == 'user') {
-
-			$config['new_image'] = './upload/user/thum/' . $fileName;
-		} else {
-			$config['new_image'] = './upload/celebrity_profile/thum/' . $fileName;;
-		}
-
+		$config['new_image'] = './upload/user/thum/' . $fileName;
 		$config['thumb_marker'] = '';
 
 		$this->image_lib->initialize($config);
@@ -3039,8 +3020,6 @@ class Web_api extends CI_Controller {
 		if (count($resultCelebs) > 0) {
 
 			$resultCelebsDetails = $this->ObjM->getCelebsDetails($resultCelebs[0]['celebrity_id']);
-
-			$getUserName = $this->comman_fun->get_table_data('membermaster', array('celebrity_id' => $resultCelebs[0]['celebrity_id'], 'status' => 'Active'));
 			
 			if ($resultCelebsDetails[0]['profile_pic'] != "") {
 				$image = base_url() . "upload/celebrity_profile/" . $resultCelebsDetails[0]['profile_pic'];
@@ -3076,8 +3055,6 @@ class Web_api extends CI_Controller {
 			$data_json['first_name']      = $resultCelebsDetails[0]['fname'];
 
 			$data_json['last_name']       = $resultCelebsDetails[0]['lname'];
-
-			$data_json['username']        = $getUserName[0]['username'];
 
 			$data_json['known_for']       = $resultCelebsDetails[0]['known_for'];
  
@@ -3179,12 +3156,11 @@ class Web_api extends CI_Controller {
 					$resultOccationDetails = $this->comman_fun->get_table_data('occasion_master', array('occasion_title' => $resultCartDetails[0]['occation_type']));
 
 					$data = array();
-					$data['occasion_id']      = $resultOccationDetails[0]['id'];
 					$data['booking_id']       = $resultCartDetails[0]['id'];
+					$data['occasion_id']      = $resultOccationDetails[0]['id'];
 					$data['occation_type']    = $resultCartDetails[0]['occation_type'];
 					$data['delivery_date']    = date('d-m-Y',strtotime($resultCartDetails[0]['delivery_date']));
 					$data['amount']           = $resultCartDetails[0]['amount'];
-					$data['video']            = ($result[$i]['video_name'] != '') ? base_url().'upload/celebrity_video/' .$result[$i]['video_name'] : '';
 					
 					$arr[] = $data;
 				}
@@ -3463,7 +3439,7 @@ class Web_api extends CI_Controller {
 
 				$data['mobileno']            = ($getUserData[0]['mobileno'] != '') ? $getUserData[0]['mobileno'] : '';
 
-				$data['amount']              = ($result[0]['amount'] != '') ? $result[0]['amount'] : '';
+
 				
 				$arr[] = $data;
 
@@ -3506,315 +3482,25 @@ class Web_api extends CI_Controller {
 
 		$accessToken = $getHeaders['Accesstoken'];
 
-		$booking_id = $_REQUEST['booking_id'];
-
-		
-		
-		$data_json = array();
-
-		if ($accessToken != "") {
-
-			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Please enter your token.";
-
-			echo json_encode($data_json);
-
-			exit;
-		}
-
-		if (count($resultUser) > 0) {
-
-			$resultCelebsTask = $this->comman_fun->get_table_data('celebrity_task_master', array('celebrity_id' => $resultUser[0]['celebrity_id'], 'cart_detail_id' => $booking_id, 'status' => 'Active'));
-
-			if (count($resultCelebsTask) > 0) {
-
-				$data['video_status'] = 'Complete';
-
-				$data['update_date'] = date('Y-m-d h:i:s');
-				
-				
-				if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-
-					$this->handle_upload_videos();
-
-					$data['video_name'] = $_POST['file_name'];
-					
-					$old_file = $resultCelebsTask[0]['video_name'];
-
-					if ($old_file != "") {
-						$url = base_url(). 'upload/celebrity_video/' . $old_file;
-						unlink($url);
-					}
-
-					$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCelebsTask[0]['id']));
-					
-					$data_json['video']      = base_url().'upload/celebrity_video/' . $data['video_name'];
-
-					$data_json['validation'] = true;
-
-					$data_json['msg'] = "Video Sent Successfully";
-
-					echo json_encode($data_json);
-
-					exit;
-
-				} else {
-					$data_json['validation'] = false;
-
-					$data_json['msg'] = "Please Select The Video.";
-
-					echo json_encode($data_json);
-					exit;
-				}
-
-				
-			} else {
-
-				$data_json['validation'] = false;
-
-				$data_json['msg'] = "There is no data";
-
-				echo json_encode($data_json);
-				exit;
-			}
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Celebrity not found.!";
-
-			echo json_encode($data_json);
-
-			exit;
-
-		}
-	}
-
-	function handle_upload_videos() {
-		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-			$config = array();
-			$config['upload_path'] = './upload/celebrity_video';
-			$config['allowed_types'] = 'mp4|avi|3gp';
-			$config['max_size'] = '0';
-			$config['overwrite'] = TRUE;
-			$config['remove_spaces'] = TRUE;
-			$_FILES['userfile']['name'] = $_FILES['upload_file']['name'];
-			$_FILES['userfile']['type'] = $_FILES['upload_file']['type'];
-			$_FILES['userfile']['tmp_name'] = $_FILES['upload_file']['tmp_name'];
-			$_FILES['userfile']['error'] = $_FILES['upload_file']['error'];
-			$_FILES['userfile']['size'] = $_FILES['upload_file']['size'];
-			$rand = md5(uniqid(rand(), true));
-			$fileName = 'my_vid_' . $rand;
-			$fileName = str_replace(" ", "", $fileName);
-			$config['file_name'] = $fileName;
-			$this->upload->initialize($config);
-
-			if ($this->upload->do_upload()) {
-				ini_set('upload_max_filesize', '64M');
-				$upload_data = $this->upload->data();
-				$_POST['file_name'] = $upload_data['file_name'];
-				return true;
-			} else {
-
-				echo $this->upload->display_errors();
-			}
-		}
-
-	}
-
-	function getEarningList() {
-
-		$getHeaders = apache_request_headers();
-
-		$accessToken = $getHeaders['Accesstoken'];
-
-		$data_json = array();
-
-		if ($accessToken != "") {
-
-			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Please enter your token.";
-
-			echo json_encode($data_json);
-
-			exit;
-		}
-
-		if (count($resultUser) > 0) {
-
-			$resultCelebsTodayAmt = $this->ObjM->getCelebsPaymentTodayList($resultUser[0]['celebrity_id'],'today');
-
-			$resultCelebsLMonthAmt = $this->ObjM->getCelebsPaymentTodayList($resultUser[0]['celebrity_id'],'last_month');
-			// echo $this->db->last_query();exit;
-
-			$resultCelebsLYearAmt = $this->ObjM->getCelebsPaymentTodayList($resultUser[0]['celebrity_id'],'last_year');
-
-			$resultCelebsTotalAmt = $this->ObjM->getCelebsPaymentTodayList($resultUser[0]['celebrity_id'],'net_income');
-
-			
-			if($resultCelebsTodayAmt > 0 || $resultCelebsLMonthAmt > 0 || $resultCelebsLYearAmt > 0 || $resultCelebsTotalAmt > 0) {
-				
-				
-				
-				$resultCelebsTodayAmt = ($resultCelebsTodayAmt > 0) ? $resultCelebsTodayAmt : '';
-				$resultCelebsLMonthAmt= ($resultCelebsLMonthAmt > 0) ? $resultCelebsLMonthAmt : '';
-				$resultCelebsLYearAmt = ($resultCelebsLYearAmt > 0) ? $resultCelebsLYearAmt : '';
-				$resultCelebsTotalAmt = ($resultCelebsTotalAmt > 0) ? $resultCelebsTotalAmt : '';
-
-				$datas = [
-							0 => ['id' => 1,'name' => 'Today Earning','amount'=>$resultCelebsTodayAmt,],
-							1 => ['id' => 2,'name' => 'Last Month Earning','amount'=>$resultCelebsLMonthAmt,],
-							2 => ['id' => 3,'name' => 'Last Year Earning','amount'=>$resultCelebsLYearAmt,],
-							3 => ['id' => 4,'name' => 'Net Earning','amount'=>$resultCelebsTotalAmt]
-				];
-
-				$json_arr['data'] = $datas;
-				
-				$json_arr['validation'] = true;
-
-				$json_arr['msg'] = "";
-
-				echo json_encode($json_arr);
-
-				exit;
-			
-			} else {
-				$data_json['validation'] = false;
-
-				$data_json['msg'] = "You Have no earning Yet";
-
-				echo json_encode($data_json);
-
-				exit;
-			}
-			
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Celebrity not found.!";
-
-			echo json_encode($data_json);
-
-			exit;
-
-		}
-	}
-
-	function getEarningDetails() {
-
-		$getHeaders = apache_request_headers();
-
-		$accessToken = $getHeaders['Accesstoken'];
-
-		$filter = $_REQUEST['id'];
-
-		$data_json = array();
-
-		if ($accessToken != "") {
-
-			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Please enter your token.";
-
-			echo json_encode($data_json);
-
-			exit;
-		}
-
-		if (count($resultUser) > 0) {
-
-			$resultEarningInDetails = $this->ObjM->getEarningInDetails($resultUser[0]['celebrity_id'],$filter);
-			
-			
-
-			
-			if(isset($resultEarningInDetails[0])) {
-
-				for($i=0;$i<count($resultEarningInDetails);$i++) {
-
-					
-					$data['date']          =  date('d-m-Y',strtotime($resultEarningInDetails[$i]['delivery_date']));
-					$data['booking_id']    =  $resultEarningInDetails[$i]['id'];
-					$data['occasion_name'] =  $resultEarningInDetails[$i]['occation_type'];
-					$data['amount']        =  $resultEarningInDetails[$i]['amount'];
-
-					$arr[] = $data;
-				}
-				
-				
-
-				$data_json['validation'] = true;
-
-				$data_json['msg'] = "";
-
-				$data_json['data'] = $arr;
-
-				echo json_encode($data_json);
-
-				exit;
-			
-			} else {
-				$data_json['validation'] = false;
-
-				$data_json['msg'] = "Data not Found";
-
-				echo json_encode($data_json);
-
-				exit;
-			}
-			
-
-		} else {
-
-			$data_json['validation'] = false;
-
-			$data_json['msg'] = "Celebrity not found.!";
-
-			echo json_encode($data_json);
-
-			exit;
-
-		}
-	}
-
-	function updateCelebsProfile() {
-
-		$getHeaders = apache_request_headers();
-
-		$accessToken = $getHeaders['Accesstoken'];
+		//$accessToken = $_REQUEST['Accesstoken'];
 
 		$first_name = filter_data($_REQUEST['first_name']);
 
-		$last_name    = filter_data($_REQUEST['last_name']);
+		$last_name = filter_data($_REQUEST['last_name']);
 
-		$birthdate   = date('Y-m-d', strtotime($_REQUEST['birthdate']));
+		$birthdate = date('Y-m-d', strtotime($_REQUEST['birthdate']));
 
-		$charge_fees = filter_data($_REQUEST['charge_fees']);
+		//$upload_file = $_REQUEST['upload_file'];
 
 		$old_file = $_REQUEST['old_file'];
+
+		$oauth_provider = $_REQUEST['oauth_provider']; //Facebook //Google
 
 		$data_json = array();
 
 		if ($accessToken != "") {
 
-			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
 
 		} else {
 
@@ -3829,11 +3515,7 @@ class Web_api extends CI_Controller {
 
 		if (count($resultUser) > 0) {
 
-			$celeb_id = $resultUser[0]['celebrity_id'];
-
-			$dataMem['fname'] = $first_name;
-
-			$dataMem['lname'] = $last_name;
+			$usercode = $resultUser[0]['usercode'];
 
 			$data['fname'] = $first_name;
 
@@ -3841,49 +3523,70 @@ class Web_api extends CI_Controller {
 
 			$data['birthdate'] = $birthdate;
 
-			$data['charge_fees'] = $charge_fees;
-
 			$data['update_date'] = date('Y-m-d h:i:s');
 
-			if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-				$this->handle_upload('celebrity');
-				$data['profile_pic'] = $_POST['file_name'];
+			if ($oauth_provider == "") {
 
-				if ($old_file != "") {
-					$url = base_url() . 'upload/celebrity_profile/' . $old_file;
-					$url2 = base_url() . 'upload/celebrity_profile/thum/' . $old_file;
-					unlink($url);
-					unlink($url2);
+				if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+					$this->handle_upload_videos();
+					$data['profile_pic'] = $_POST['file_name'];
+
+					if ($old_file != "") {
+						$url = base_url() . 'upload/user/' . $old_file;
+						$url2 = base_url() . 'upload/user/thum/' . $old_file;
+						unlink($url);
+						unlink($url2);
+					}
+
 				}
-
 			}
 
-			$this->comman_fun->update($dataMem, 'membermaster', array('celebrity_id' => $celeb_id));
+			$this->comman_fun->update($data, 'membermaster', array('usercode' => $usercode));
 
-			$this->comman_fun->update($data, 'celebrity_master', array('id' => $celeb_id));
+			$latestResUser = $this->comman_fun->get_table_data('membermaster', array('usercode' => $usercode));
 
-			$updatedUser = $this->comman_fun->get_table_data('celebrity_master', array('id' => $celeb_id));
-
-			if ($updatedUser[0]['profile_pic'] != "") {
-
-				$image = base_url() . "upload/celebrity_profile/" . $updatedUser[0]['profile_pic'];
-
+			if ($latestResUser[0]['oauth_provider'] != "" & $latestResUser[0]['oauth_provider'] == "Facebook") {
+				$image = $latestResUser[0]['profile_pic'];
+			} else if ($latestResUser[0]['oauth_provider'] != "" & $latestResUser[0]['oauth_provider'] == "Google") {
+				$image = $latestResUser[0]['profile_pic'];
 			} else {
-				$image = base_url() . "upload/user/default.png";
+				if ($latestResUser[0]['profile_pic'] != "") {
+					$image = base_url() . "upload/user/" . $latestResUser[0]['profile_pic'];
+
+				} else {
+					$image = base_url() . "upload/user/default.png";
+				}
 			}
 
-			$datas['celebrity_id'] = $updatedUser[0]['id'];
+			$datas['usercode'] = $latestResUser[0]['usercode'];
 
-			$datas['first_name'] = $updatedUser[0]['fname'];
+			$datas['first_name'] = $latestResUser[0]['fname'];
 
-			$datas['last_name'] = $updatedUser[0]['lname'];
-
-			$datas['birthdate'] = date('d-m-Y',strtotime($updatedUser[0]['birthdate']));
-
-			$datas['price_per_video'] = $updatedUser[0]['charge_fees'];
+			$datas['last_name'] = $latestResUser[0]['lname'];
 
 			$datas['profile_pic'] = $image;
-			
+
+			$datas['emailid'] = $latestResUser[0]['emailid'];
+
+			if ($latestResUser[0]['oauth_provider'] != "") {
+
+				$datas['oauth_provider'] = $latestResUser[0]['oauth_provider'];
+
+			} else {
+
+				$datas['oauth_provider'] = '';
+
+			}
+
+			if ($latestResUser[0]['birthdate'] != "") {
+
+				$datas['birthdate'] = date('d-m-Y', strtotime($latestResUser[0]['birthdate']));
+
+			} else {
+
+				$datas['birthdate'] = '';
+
+			}
 
 			$arr[] = $datas;
 
@@ -3910,6 +3613,37 @@ class Web_api extends CI_Controller {
 		}
 	}
 
-	
+	function handle_upload_videos() {
+		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+			$config = array();
+			$config['upload_path'] = './upload/user';
+			$config['allowed_types'] = 'jpg|jpeg|gif|png|JPG|JPEG|PNG';
+			$config['max_size'] = '0';
+			$config['overwrite'] = TRUE;
+			$config['remove_spaces'] = TRUE;
+			$_FILES['userfile']['name'] = $_FILES['upload_file']['name'];
+			$_FILES['userfile']['type'] = $_FILES['upload_file']['type'];
+			$_FILES['userfile']['tmp_name'] = $_FILES['upload_file']['tmp_name'];
+			$_FILES['userfile']['error'] = $_FILES['upload_file']['error'];
+			$_FILES['userfile']['size'] = $_FILES['upload_file']['size'];
+			$rand = md5(uniqid(rand(), true));
+			$fileName = 'my_pic_' . $rand;
+			$fileName = str_replace(" ", "", $fileName);
+			$config['file_name'] = $fileName;
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload()) {
+				$upload_data = $this->upload->data();
+				$_POST['file_name'] = $upload_data['file_name'];
+
+				$this->_create_thumbnail($upload_data['file_name'], 120, 120);
+				return true;
+			} else {
+
+				echo $this->upload->display_errors();
+			}
+		}
+
+	}
 
 }

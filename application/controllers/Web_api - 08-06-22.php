@@ -1090,7 +1090,7 @@ class Web_api extends CI_Controller {
 			if ($oauth_provider == "") {
 
 				if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-					$this->handle_upload('user');
+					$this->handle_upload();
 					$data['profile_pic'] = $_POST['file_name'];
 
 					if ($old_file != "") {
@@ -1934,15 +1934,10 @@ class Web_api extends CI_Controller {
 
 	}
 
-	function handle_upload($user_type) {
+	function handle_upload() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 			$config = array();
-			if($user_type == 'user') {
-
-				$config['upload_path'] = './upload/user';
-			} else {
-				$config['upload_path'] = './upload/celebrity_profile';
-			}
+			$config['upload_path'] = './upload/user';
 			$config['allowed_types'] = 'jpg|jpeg|gif|png|JPG|JPEG|PNG';
 			$config['max_size'] = '0';
 			$config['overwrite'] = TRUE;
@@ -1962,7 +1957,7 @@ class Web_api extends CI_Controller {
 				$upload_data = $this->upload->data();
 				$_POST['file_name'] = $upload_data['file_name'];
 
-				$this->_create_thumbnail($upload_data['file_name'], 120, 120,$user_type);
+				$this->_create_thumbnail($upload_data['file_name'], 120, 120);
 				return true;
 			} else {
 
@@ -1972,29 +1967,15 @@ class Web_api extends CI_Controller {
 
 	}
 
-	protected function _create_thumbnail($fileName, $width, $height,$user_type) {
+	protected function _create_thumbnail($fileName, $width, $height) {
 
 		$config['image_library'] = 'gd2';
-		if($user_type == 'user') {
-
-			$config['source_image'] = './upload/user/' . $fileName;
-		} else {
-			$config['source_image'] = './upload/celebrity_profile/' . $fileName;;
-		}
-
-		
+		$config['source_image'] = './upload/user/' . $fileName;
 		$config['create_thumb'] = TRUE;
 		$config['maintain_ratio'] = TRUE;
 		$config['width'] = $width;
 		$config['height'] = $height;
-
-		if($user_type == 'user') {
-
-			$config['new_image'] = './upload/user/thum/' . $fileName;
-		} else {
-			$config['new_image'] = './upload/celebrity_profile/thum/' . $fileName;;
-		}
-
+		$config['new_image'] = './upload/user/thum/' . $fileName;
 		$config['thumb_marker'] = '';
 
 		$this->image_lib->initialize($config);
@@ -3673,10 +3654,10 @@ class Web_api extends CI_Controller {
 				$resultCelebsTotalAmt = ($resultCelebsTotalAmt > 0) ? $resultCelebsTotalAmt : '';
 
 				$datas = [
-							0 => ['id' => 1,'name' => 'Today Earning','amount'=>$resultCelebsTodayAmt,],
-							1 => ['id' => 2,'name' => 'Last Month Earning','amount'=>$resultCelebsLMonthAmt,],
-							2 => ['id' => 3,'name' => 'Last Year Earning','amount'=>$resultCelebsLYearAmt,],
-							3 => ['id' => 4,'name' => 'Net Earning','amount'=>$resultCelebsTotalAmt]
+							0 => ['id' => 1,'name' => 'today_earning','amount'=>$resultCelebsTodayAmt,],
+							1 => ['id' => 2,'name' => 'last_month_earning','amount'=>$resultCelebsLMonthAmt,],
+							2 => ['id' => 3,'name' => 'last_year_earning','amount'=>$resultCelebsLYearAmt,],
+							3 => ['id' => 4,'name' => 'net_earning','amount'=>$resultCelebsTotalAmt]
 				];
 
 				$json_arr['data'] = $datas;
@@ -3846,7 +3827,7 @@ class Web_api extends CI_Controller {
 			$data['update_date'] = date('Y-m-d h:i:s');
 
 			if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
-				$this->handle_upload('celebrity');
+				$this->handle_upload();
 				$data['profile_pic'] = $_POST['file_name'];
 
 				if ($old_file != "") {
@@ -3878,11 +3859,10 @@ class Web_api extends CI_Controller {
 
 			$datas['last_name'] = $updatedUser[0]['lname'];
 
-			$datas['birthdate'] = date('d-m-Y',strtotime($updatedUser[0]['birthdate']));
-
-			$datas['price_per_video'] = $updatedUser[0]['charge_fees'];
-
 			$datas['profile_pic'] = $image;
+
+			$datas['emailid'] = $updatedUser[0]['emailid'];
+
 			
 
 			$arr[] = $datas;
