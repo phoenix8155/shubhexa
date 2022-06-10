@@ -2764,7 +2764,7 @@ class Web_api extends CI_Controller {
 
 					if ($result[$i]['video_name'] != "") {
 						$data['video_name'] = $result[$i]['video_name'];
-						$data['video_path'] = '-';
+						$data['video_path'] = base_url().'upload/celebrity_video/' .$result[$i]['video_name'];
 					} else {
 						$data['video_name'] = "-";
 						$data['video_path'] = "-";

@@ -126,6 +126,13 @@ class Celebrity_list extends CI_Controller {
 			$data['form_set'] = array('mode' => 'add');
 		}
 
+		$data['categoryList'] = $this->comman_fun->get_table_data(
+			'category_master',
+			array(
+				'status'=>'Active'
+			)
+		);
+
 		$page_info['menu_id'] = 'menu-celebrity-list';
 
 		$page_info['page_title'] = 'Celebrity List';

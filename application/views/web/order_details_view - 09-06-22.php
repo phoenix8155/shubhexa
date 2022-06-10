@@ -36,12 +36,7 @@
 	                            				<div class="sf-provi-art-pic"><img src="<?=upload_path()?>celebrity_profile/thum/<?=$cartResult[$i]['profile_pic']?>" class="img-min-heght" alt=""></div>
 	                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title"><?=$cartResult[$i]['fname']?> <?=$cartResult[$i]['lname']?></h4></div>
 	                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title">Delivery date: <?=date('d-m-Y', strtotime($cartResult[$i]['delivery_date']))?></h4></div>
-	                                            <?php 
-													$videoDownload = '<a class="video-download" href='.upload_path().'celebrity_video/'.$cartResult[$i]['video_name'].' Download>Download</a>';
-													$videoLink = ($cartResult[$i]['video_name'] != '') ? $videoDownload : '-'; 
-													  
-												?>
-												<div class="sf-provi-art-date"><h4 class="sf-provi-art-title">Video Link: <?=$videoLink?> </h4></div>
+	                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title">Video Link: </h4></div>
 	                                            <div class="sf-provi-art-comment"><span style="float: left;color: #062279;font-weight: 900;font-size: 15px;">Price : ₹ <?=$cartResult[$i]['amount']?></span></div>
 
 
@@ -65,10 +60,6 @@
     	</div>
  </div>
 <style type="text/css">
-	.video-download {
-		text-decoration: underline;
-    color: #ffb600;
-	}
 	.img-min-heght{
 		min-height: 145px;
 		max-height: 145px;

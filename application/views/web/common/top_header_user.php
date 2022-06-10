@@ -103,7 +103,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                     <div class="header-left">
 
                         <div class="my-account-logo">
-                            <a href="#"><img src="<?=asset_path('web/')?>images/logo-light.png" alt=""></a>
+                            <a href="<?=base_url()?>"><img src="<?=asset_path('web/')?>images/logo-light.png" alt=""></a>
                         </div>
 
                         <!-- <div class="header-widget aon-admin-search-box">

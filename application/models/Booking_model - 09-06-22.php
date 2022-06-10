@@ -22,10 +22,8 @@ Class Booking_model extends CI_Model {
 	}
 
 	function getCartDetailsList($cart_id) {
-		
-		$this->db->select('cart_details.*');
 
-		$this->db->select('celebrity_task_master.id as taskMasterId,celebrity_task_master.cart_id as taskMasterIdCartId,celebrity_task_master.video_name,celebrity_task_master.video_status');
+		$this->db->select('cart_details.*');
 
 		$this->db->select('celebrity_master.id as celeb_id,celebrity_master.fname,celebrity_master.lname,celebrity_master.profile_pic');
 
@@ -33,11 +31,7 @@ Class Booking_model extends CI_Model {
 
 		$this->db->join('celebrity_master', 'celebrity_master.id=cart_details.celebrity_id', 'left');
 
-		$this->db->join('celebrity_task_master', 'celebrity_task_master.cart_id=cart_details.cart_id', 'left');
-
 		$this->db->where('cart_details.cart_id', $cart_id);
-
-		$this->db->where('celebrity_task_master.cart_id', $cart_id);
 
 		$this->db->where('cart_details.status', 'Active');
 

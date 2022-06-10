@@ -25,48 +25,35 @@
               <div class="col-sm-10">
                 <?php $form_value = set_value('category', isset($result[0]['category']) ? $result[0]['category'] : '');?>
                 <?php
-if ($this->uri->segment(4) == 'edit') {
-	?>
+                    if ($this->uri->segment(4) == 'edit') { ?>
               				<?php
-$edit_skills_f = json_decode($result[0]['category'], true);
-
-	$check = array('Actor', 'Lokgayak', 'Sahityakar', 'Dancer', 'Hasyakalakar', 'Mahanubhavo', 'Sangitkar', 'Sportman');
-	?>
-              				<div class="form-group is-select">
-                                <select required name="category[]" data-placeholder="Choose a category..." class="chosen-select2 form-control" multiple tabindex="4">
-
-                                    <?php
-
-	for ($i = 0; $i < count($check); $i++) {
-
-		if (in_array($check[$i], $edit_skills_f)) {
-
-			echo '<option selected value="' . $check[$i] . '">' . $check[$i] . '</option>';
-		} else {
-			echo '<option  value="' . $check[$i] . '">' . $check[$i] . '</option>';
-		}
-
-	}
-
-	?>
-
-                                </select>
-                               </div>
-                                <?php
-
-} else {
-	?>
-                <select multiple class="form-control chosen-select2" name="category[]" data-placeholder="Select category">
-						<option value="Actor">Actor</option>
-						<option value="Lokgayak">Lokgayak</option>
-						<option value="Sahityakar">Sahityakar</option>
-						<option value="Dancer">Dancer</option>
-						<option value="Hasyakalakar">Hasyakalakar</option>
-						<option value="Mahanubhavo">Mahanubhavo</option>
-						<option value="Sangitkar">Sangitkar</option>
-						<option value="Sportman">Sportman</option>
-					</select>
-                <?php echo form_error('category', '<p class="error_p">', '</p>');} ?> </div>
+                        $edit_skills_f = json_decode($result[0]['category'], true);
+                      ?>
+                        <div class="form-group is-select">
+                          <select required name="category[]" data-placeholder="Choose a category..." class="chosen-select2 form-control" multiple tabindex="4">
+                            <?php
+                              for ($i = 0; $i < count($categoryList); $i++) { 
+                                if (in_array($categoryList[$i]['access_name'], $edit_skills_f)) {
+                                  echo '<option selected value="' . $categoryList[$i]['access_name'] . '">' . $categoryList[$i]['access_name'] . '</option>';
+                                } else {
+                                  echo '<option  value="' . $categoryList[$i]['access_name'] . '">' . $categoryList[$i]['access_name'] . '</option>';
+                                }
+                              }
+                            ?>
+                          </select>
+                        </div>
+                      <?php } else {          ?>
+                      <select multiple class="form-control chosen-select2" name="category[]" data-placeholder="Select category">
+                        <?php 
+                            $edit_skills_f = json_decode($result[0]['category'], true);
+                            for ($i = 0; $i < count($categoryList); $i++) {
+                              echo '<option  value="' . $categoryList[$i]['access_name'] . '">' . $categoryList[$i]['access_name'] . '</option>';
+                            }
+                        ?>
+                      </select>
+                      <?php } ?>
+                      <?php echo form_error('category', '<p class="error_p">', '</p>'); ?> 
+                    </div>
             </div>
 
             <div class="form-group">
@@ -79,48 +66,36 @@ $edit_skills_f = json_decode($result[0]['category'], true);
               <div class="col-sm-4">
                 <?php $form_value = set_value('language_known', isset($result[0]['language_known']) ? $result[0]['language_known'] : '');?>
                 <?php
-if ($this->uri->segment(4) == 'edit') {
-	?>
-              				<?php
-$edit_skills_f = json_decode($result[0]['language_known'], true);
-
-	$check = array('English', 'Hindi', 'Gujarati', 'Tamil', 'Marathi', 'Punjabi', 'Haryanvi', 'Telugu', 'Malyalam');
-	?>
-              				<div class="form-group is-select">
-                                <select required name="language_known[]" data-placeholder="Choose a language..." class="chosen-select form-control" multiple tabindex="4">
-
-                                    <?php
-
-	for ($i = 0; $i < count($check); $i++) {
-
-		if (in_array($check[$i], $edit_skills_f)) {
-
-			echo '<option selected value="' . $check[$i] . '">' . $check[$i] . '</option>';
-		} else {
-			echo '<option  value="' . $check[$i] . '">' . $check[$i] . '</option>';
-		}
-
-	}
-
-	?>
-
-                                </select>
-                               </div>
-                                <?php
-
-} else {
-	?>
+                  if ($this->uri->segment(4) == 'edit') { ?>
+                    <?php
+                      $edit_skills_f = json_decode($result[0]['language_known'], true);
+                      $check = array('English', 'Hindi', 'Gujarati', 'Tamil', 'Marathi', 'Punjabi', 'Haryanvi', 'Telugu', 'Malyalam');
+                    ?>
+                    <div class="form-group is-select">
+                      <select required name="language_known[]" data-placeholder="Choose a language..." class="chosen-select form-control" multiple tabindex="4">
+                        <?php
+                          for ($i = 0; $i < count($check); $i++) {
+                            if (in_array($check[$i], $edit_skills_f)) {
+                                echo '<option selected value="' . $check[$i] . '">' . $check[$i] . '</option>';
+                            } else {
+                                echo '<option  value="' . $check[$i] . '">' . $check[$i] . '</option>';
+                            }
+                          }
+                        ?>
+                      </select>
+                    </div>
+                  <?php } else { ?>
                 <select multiple class="form-control chosen-select" name="language_known[]" data-placeholder="Select Language" required="required">
-						<option value="English">English</option>
-						<option value="Hindi">Hindi</option>
-						<option value="Gujarati">Gujarati</option>
-						<option value="Tamil">Tamil</option>
-						<option value="Marathi">Marathi</option>
-						<option value="Punjabi">Punjabi</option>
-						<option value="Haryanvi">Haryanvi</option>
-						<option value="Telugu">Telugu</option>
-						<option value="Malyalam">Malyalam</option>
-					</select>
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Gujarati">Gujarati</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="Marathi">Marathi</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="Haryanvi">Haryanvi</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Malyalam">Malyalam</option>
+					      </select>
                 <?php echo form_error('language_known', '<p class="error_p">', '</p>');} ?> </div>
             </div>
 

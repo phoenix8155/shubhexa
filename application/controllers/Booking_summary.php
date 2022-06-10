@@ -54,6 +54,8 @@ class Booking_summary extends CI_Controller {
 
 			$resCartDetails = $this->comman_fun->get_table_data('cart_details', array('cart_id' => $cartId));
 
+			
+			
 			if (count($resCartDetails) > 0) {
 
 				for ($i = 0; $i < count($resCartDetails); $i++) {
@@ -79,6 +81,10 @@ class Booking_summary extends CI_Controller {
 					$data['update_date'] = date('Y-m-d h:i:s');
 
 					$id = $this->comman_fun->addItem($data, 'celebrity_task_master');
+
+					// Remove Celebrity From Whistlist
+
+					$this->comman_fun->delete('wishlist_master', array('celebrity_id' => $resCartDetails[$i]['celebrity_id'], 'usercode' => $this->session->userdata['user']['usercode']));
 
 				}
 			}

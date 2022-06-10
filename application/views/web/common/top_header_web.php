@@ -114,7 +114,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                 <div class="container clearfix">
                     <div class="logo-header">
                         <div class="logo-header-inner logo-header-one">
-                            <a href="#">
+                            <a href="<?=base_url()?>">
                                 <img src="<?=asset_path('web/')?>images/white-logo-light.png" alt="" class="site-logo-has">
                                 <!-- <img src="<?=asset_path('web/')?>images/logo-light.png" alt="" class="site-logo-sticky"> -->
                                 <img src="<?=asset_path('web/')?>images/shubhexa-logo-blue.png" alt="" class="site-logo-sticky">
