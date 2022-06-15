@@ -125,70 +125,6 @@ class Web_api extends CI_Controller {
 		}
 	}
 
-	public function celebs_login() {
-
-		$username = $_REQUEST['username'];
-
-		$password = $_REQUEST['password'];
-
-		$firebase_token = $_REQUEST['firebase_token'];
-
-		$device_type = $_REQUEST['device_type']; //'IOS'// 'Android'
-
-		$result = $this->ObjM->celebs_login($username, $password);
-		
-		if (isset($result[0])) {
-
-			if ($result[0]['status'] == 'Active') {
-
-				$updateData['firebase_token'] = filter_data($firebase_token);
-
-				$updateData['device_type'] = filter_data($device_type);
-
-				$updateData['accessToken'] = $this->getToken(); //get Token
-
-				$updateData['update_date'] = date('Y-m-d h:i:s');
-
-				$this->comman_fun->update($updateData, 'membermaster', array('usercode' => $result[0]['usercode']));
-				
-				$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $result[0]['usercode']));
-
-				$json_arr = array();
-
-				$json_arr['usercode'] = $dataRes[0]['usercode'];
-				$json_arr['first_name'] = $dataRes[0]['fname'];
-				$json_arr['last_name'] = $dataRes[0]['lname'];
-				$json_arr['username'] = $dataRes[0]['username'];
-				$json_arr['accessToken'] = $dataRes[0]['accessToken'];
-
-				$json_arr['validation'] = true;
-
-				$json_arr['msg'] = "";
-
-				echo json_encode($json_arr);
-				exit;
-
-			} else {
-				$json_arr['validation'] = false;
-
-				$json_arr['msg'] = "Invalid email OR password";
-
-				echo json_encode($json_arr);
-				exit;
-			}
-		} else {
-
-			$json_arr['validation'] = false;
-
-			$json_arr['msg'] = "Invalid username OR password";
-
-			echo json_encode($json_arr);
-
-			exit;
-
-		}
-	}
-
 	function signup() {
 
 		$first_name = $_REQUEST['first_name'];
@@ -396,9 +332,9 @@ class Web_api extends CI_Controller {
 
 			$data_json['data'] = $this->getCelebirtyList($usercode);
 
-			//$data_json['popular_celebs'] = $this->getPopularCelebrity();
-
-			//$data_json['recent_added_celebs'] = $this->getRecentlyAddedCelebrity();
+			$data_json['પ્રખ્યાત'] = $this->getPopularCelebrity();
+			
+			$data_json['હમણાં જ ઉમેરેલા'] = $this->getRecentlyAddedCelebrity();
 
 			echo json_encode($data_json);
 
@@ -408,7 +344,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -492,7 +428,7 @@ class Web_api extends CI_Controller {
 	function getPopularCelebrity() {
 
 		$result = $this->ObjM->getPopularCelebrityList();
-
+		
 		if (isset($result[0])) {
 			$json_arr = array();
 
@@ -512,7 +448,7 @@ class Web_api extends CI_Controller {
 
 				//$data['isFavorite'] = $resWishlist;
 
-				$data['charge_fees'] = $result[$i]['charge_fees'];
+				$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 				if ($result[$i]['profile_pic'] != "") {
 					$img_file_path = base_url() . "upload/celebrity_profile/" . $result[$i]['profile_pic'];
@@ -524,7 +460,7 @@ class Web_api extends CI_Controller {
 
 				$arr[] = $data;
 			}
-
+			
 			return $arr;
 			exit;
 		} else {
@@ -552,7 +488,7 @@ class Web_api extends CI_Controller {
 
 				$data['lname'] = $result[$i]['lname'];
 
-				$data['charge_fees'] = $result[$i]['charge_fees'];
+				$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 				if ($result[$i]['profile_pic'] != "") {
 					$img_file_path = base_url() . "upload/celebrity_profile/" . $result[$i]['profile_pic'];
@@ -593,7 +529,7 @@ class Web_api extends CI_Controller {
 
 			$data['lname'] = $result[$i]['lname'];
 
-			$data['charge_fees'] = $result[$i]['charge_fees'];
+			$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 			$data['isFavorite'] = $resWishlist;
 
@@ -613,7 +549,7 @@ class Web_api extends CI_Controller {
 			$arr = [];
 		}
 		$json_arr[] = [
-			'title' => 'popular_celebs',
+			'title' => 'પ્રખ્યાત',
 			'data' => $arr,
 		];
 		// $json_arr['title'] = 'popular_celebs';
@@ -636,7 +572,7 @@ class Web_api extends CI_Controller {
 
 			$data1['isFavorite'] = $resWishlist1;
 
-			$data1['charge_fees'] = $result1[$i]['charge_fees'];
+			$data1['charge_fees'] = '₹.'.$result1[$i]['charge_fees'];
 
 			if ($result1[$i]['profile_pic'] != "") {
 				$img_file_path1 = base_url() . "upload/celebrity_profile/" . $result1[$i]['profile_pic'];
@@ -658,7 +594,7 @@ class Web_api extends CI_Controller {
 		// $json_arr['data1'] = $arr1;
 
 		$json_arr[] = [
-			'title' => 'recent_added_celebs',
+			'title' => 'હમણાં જ ઉમેરેલા',
 			'data' => $arr1,
 		];
 
@@ -747,7 +683,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -805,7 +741,7 @@ class Web_api extends CI_Controller {
 
 					$data['isFavorite'] = $resWishlist;
 
-					$data['charge_fees'] = $result[$i]['charge_fees'];
+					$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 					if ($result[$i]['profile_pic'] != "") {
 						$img_file_path = base_url() . "upload/celebrity_profile/" . $result[$i]['profile_pic'];
@@ -842,7 +778,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -869,7 +805,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please enter your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -900,7 +836,7 @@ class Web_api extends CI_Controller {
 
 					$data['isFavorite'] = $resWishlist;
 
-					$data['charge_fees'] = $result[$i]['charge_fees'];
+					$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 					if ($result[$i]['profile_pic'] != "") {
 						$img_file_path = base_url() . "upload/celebrity_profile/" . $result[$i]['profile_pic'];
@@ -937,7 +873,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -1030,7 +966,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "User not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -1166,7 +1102,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "User not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -1253,7 +1189,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "User not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -1497,7 +1433,7 @@ class Web_api extends CI_Controller {
 
 					$data['isFavorite'] = $resWishlist;
 
-					$data['charge_fees'] = $result[$i]['charge_fees'];
+					$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 
 					if ($result[$i]['profile_pic'] != "") {
 						$img_file_path = base_url() . "upload/celebrity_profile/" . $result[$i]['profile_pic'];
@@ -1536,7 +1472,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -1591,7 +1527,7 @@ class Web_api extends CI_Controller {
 
 				$data['lname'] = $result[0]['lname'];
 
-				$data['charge_fees'] = $result[0]['charge_fees'];
+				$data['charge_fees'] = '₹.'.$result[0]['charge_fees'];
 
 				$data['isFavorite'] = $resWishlist;
 
@@ -1669,7 +1605,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -1748,7 +1684,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -1835,7 +1771,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Please check your token.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -2222,7 +2158,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "User not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -2283,7 +2219,7 @@ class Web_api extends CI_Controller {
 
 					$data['lname'] = $resultCDetails[$i]['lname'];
 
-					$data['amount'] = $resultCDetails[$i]['amount'];
+					$data['amount'] = '₹.'.$resultCDetails[$i]['amount'];
 
 					$data['delivery_date'] = date('d-m-Y', strtotime($resultCDetails[$i]['delivery_date']));
 
@@ -2484,7 +2420,7 @@ class Web_api extends CI_Controller {
 					$data['celebrity_id'] = $result[$i]['celeb_id'];
 					$data['fname'] = $result[$i]['fname'];
 					$data['lname'] = $result[$i]['lname'];
-					$data['charge_fees'] = $result[$i]['charge_fees'];
+					$data['charge_fees'] = '₹.'.$result[$i]['charge_fees'];
 					$data['isFavoriteq'] = true;
 
 					if ($result[$i]['profile_pic'] != "") {
@@ -2661,6 +2597,25 @@ class Web_api extends CI_Controller {
 
 					$id = $this->comman_fun->addItem($data, 'celebrity_task_master');
 
+					if($id > 0) {
+						$getCelebsToken = $this->comman_fun->get_table_data('membermaster',array('celebrity_id'=>$resCartDetails[$i]['celebrity_id'],''));
+						if($getCelebsToken[0]['firebase_token'] != '' && $getCelebsToken[0]['device_type'] != '') {
+
+							$registatoin_ids = $getCelebsToken[0]['firebase_token'];
+
+							$noti_title = 'New Video Request';
+							$message = 'Hello you got a new video request';
+							if($getCelebsToken[0]['device_type'] == 'Android') {
+								
+								$this->sendNotificationUsingSeverKeyAndroid([$registatoin_ids], $noti_title, $message);
+							} else {
+								$this->sendNotificationToIOSUsingSeverKey([$registatoin_ids], $noti_title, $message);
+							}
+						
+						}
+					
+					}
+
 				}
 
 				$data_json['validation'] = true;
@@ -2758,8 +2713,8 @@ class Web_api extends CI_Controller {
 					$data['order_no'] = $resultCartMaster[0]['order_no'];
 					$data['delivery_date'] = date('d-m-Y', strtotime($resultCartDetails[0]['delivery_date']));
 					$data['occation'] = $resultCartDetails[0]['occation_type'];
-					$data['amount'] = $resultCartDetails[0]['amount'];
-					$data['total_amount'] = $resultCartMaster[0]['total_amount'];
+					$data['amount'] = '₹.'.$resultCartDetails[0]['amount'];
+					$data['total_amount'] = '₹.'.$resultCartMaster[0]['total_amount'];
 					$data['cart_detail_id'] = $result[$i]['cart_detail_id'];
 
 					if ($result[$i]['video_name'] != "") {
@@ -3011,6 +2966,298 @@ class Web_api extends CI_Controller {
 
 	}
 
+	function getSetting()
+	{
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+		
+			$result = $this->comman_fun->get_table_data('settings',array('status'=>'Active'));
+			
+			if (isset($result[0])) {
+
+				$arr = array();
+
+				for ($i = 0; $i < count($result); $i++) {
+
+					$data = array();
+
+					
+					
+					$data['access_name'] = $result[$i]['access_name'];
+
+					if($result[$i]['type'] == 'website') {
+						$data['link'] = ($result[$i]['page_name'] != '') ? file_path().$result[$i]['page_name'] : ''; 
+					} else {
+						$data['link'] = ($result[$i]['page_name'] != '') ? $result[$i]['page_name'] : '';
+					}
+
+					$arr[] = $data;
+				}
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $arr;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.!";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
+	function cancelOrderByUser()
+	{
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$booking_id = $_REQUEST['booking_id'];
+
+		//echo $cartId;exit;
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data(
+				'membermaster',
+				array(
+					'accessToken' => $accessToken,
+					'role_type' => '3',
+					'status' => 'Active'
+				)
+			);
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+		if (count($resultUser) > 0) {
+
+			
+			$resultCelebTaskMaster = $this->comman_fun->get_table_data(
+				'celebrity_task_master',
+				 array(
+					'cart_detail_id' => $booking_id,
+					'celebrity_id'   => $resultUser[0]['usercode'],
+					'video_status' => 'Initialize',
+					'status'	=> 'Active',
+				)
+			);
+
+			if (count($resultCelebTaskMaster) > 0) {
+
+				$getCartDetailsData = $this->comman_fun->get_table_data(
+					'cart_details',
+					 array(
+						'id' => $booking_id,
+						'status'	=> 'Active',
+					)
+				); 
+				
+				$getCartMasterData = $this->comman_fun->get_table_data(
+					'cart_master',
+					 array(
+						'cart_id' => $getCartDetailsData[0]['cart_id'],
+						'status'	=> 'Active',
+					)
+				); 
+
+				// Insert Record For Return Money To User
+				$dataInsertCancel['cart_id'] 		     =  $getCartDetailsData[0]['cart_id'];
+
+				$dataInsertCancel['cart_details_id']     =  $booking_id;
+
+				$dataInsertCancel['total_amount']	     =  $getCartMasterData[0]['total_amount'];
+
+				$dataInsertCancel['cancel_amount']		 =  $getCartDetailsData[0]['amount'];
+
+				$dataInsertCancel['grand_total'] 		 =  $getCartMasterData[0]['total_amount'] - $getCartDetailsData[0]['amount'];
+
+				$dataInsertCancel['create_date'] 		 = date('Y-m-d h:i:s');
+
+				$cancelOrderReturnTb = $this->comman_fun->addItem($dataInsertCancel, 'cancel_order_payment');
+
+				if($cancelOrderReturnTb > 0) {
+
+					$cancelOrderPaymentDt = $this->comman_fun->get_table_data(
+						'cancel_order_payment',
+						 array(
+							'id' => $cancelOrderReturnTb,
+						)
+					);
+
+					// Update Amount
+					$dataUpdateCart['total_amount'] = $cancelOrderPaymentDt[0]['grand_total'];
+					
+					$dataUpdateCart['update_date'] = date('Y-m-d h:i:s');
+
+					$this->comman_fun->update($dataUpdateCart, 'cart_master', array('cart_id' => $cancelOrderPaymentDt[0]['cart_id']));
+
+					$dataUpdate['status'] = 'Delete';
+					$dataUpdate['update_date'] = date('Y-m-d h:i:s');
+					
+					$this->comman_fun->update($dataUpdate,'celebrity_task_master', array('cart_detail_id' => $booking_id));
+
+					$this->comman_fun->update($dataUpdate,'cart_details', array('id' => $booking_id));
+
+					$data_json['validation'] = true;
+
+					$data_json['msg'] = "Order Cancel Successfully";
+
+					echo json_encode($data_json);
+
+					exit;
+
+
+				} else {
+					$data_json['validation'] = false;
+
+					$data_json['msg'] = "Something Wrong Please Try Again";
+
+					echo json_encode($data_json);
+
+					exit;
+				}
+				
+				
+			
+			} else {
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "data not found.";
+
+				echo json_encode($data_json);
+
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
+
+//-----------------CELEBS API----------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------//
+//-----------------CELEBS API----------------------------------------------------------------------------------------------------------//
+	function celebs_login() {
+
+		$username = $_REQUEST['username'];
+
+		$password = $_REQUEST['password'];
+
+		$firebase_token = $_REQUEST['firebase_token'];
+
+		$device_type = $_REQUEST['device_type']; //'IOS'// 'Android'
+
+		$result = $this->ObjM->celebs_login($username, $password);
+		
+		if (isset($result[0])) {
+
+			if ($result[0]['status'] == 'Active') {
+
+				$updateData['firebase_token'] = filter_data($firebase_token);
+
+				$updateData['device_type'] = filter_data($device_type);
+
+				$updateData['accessToken'] = $this->getToken(); //get Token
+
+				$updateData['update_date'] = date('Y-m-d h:i:s');
+
+				$this->comman_fun->update($updateData, 'membermaster', array('usercode' => $result[0]['usercode']));
+				
+				$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $result[0]['usercode']));
+
+				$json_arr = array();
+
+				$json_arr['usercode'] = $dataRes[0]['usercode'];
+				$json_arr['first_name'] = $dataRes[0]['fname'];
+				$json_arr['last_name'] = $dataRes[0]['lname'];
+				$json_arr['username'] = $dataRes[0]['username'];
+				$json_arr['accessToken'] = $dataRes[0]['accessToken'];
+
+				$json_arr['validation'] = true;
+
+				$json_arr['msg'] = "";
+
+				echo json_encode($json_arr);
+				exit;
+
+			} else {
+				$json_arr['validation'] = false;
+
+				$json_arr['msg'] = "Invalid email OR password";
+
+				echo json_encode($json_arr);
+				exit;
+			}
+		} else {
+
+			$json_arr['validation'] = false;
+
+			$json_arr['msg'] = "Invalid username OR password";
+
+			echo json_encode($json_arr);
+
+			exit;
+
+		}
+	}
 	function getCelebProfile() {
 
 		$getHeaders = apache_request_headers();
@@ -3081,7 +3328,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['known_for']       = $resultCelebsDetails[0]['known_for'];
  
-			$data_json['charge_fees']   =($resultCelebsDetails[0]['charge_fees'] != '') ? $resultCelebsDetails[0]['charge_fees'] : '';
+			$data_json['charge_fees']   =($resultCelebsDetails[0]['charge_fees'] != '') ? '₹.'.$resultCelebsDetails[0]['charge_fees'] : '';
  
 			$data_json['gender']          = $resultCelebsDetails[0]['gender'];
 
@@ -3129,7 +3376,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -3175,15 +3422,17 @@ class Web_api extends CI_Controller {
 				for ($i = 0; $i < count($result); $i++) {
 
 					$resultCartDetails = $this->comman_fun->get_table_data('cart_details', array('id' => $result[$i]['cart_detail_id']));
-
+					$getUserCode    = $this->comman_fun->get_table_data('cart_master', array('cart_id' => $result[$i]['cart_id']));
+					$getUserData = $this->comman_fun->get_table_data('membermaster', array('usercode' => $getUserCode[0]['usercode']));
 					$resultOccationDetails = $this->comman_fun->get_table_data('occasion_master', array('occasion_title' => $resultCartDetails[0]['occation_type']));
-
+					$username = $getUserData[0]['fname'].' '.$getUserData[0]['lname'];
 					$data = array();
 					$data['occasion_id']      = $resultOccationDetails[0]['id'];
 					$data['booking_id']       = $resultCartDetails[0]['id'];
+					$data['username']         = $username;
 					$data['occation_type']    = $resultCartDetails[0]['occation_type'];
 					$data['delivery_date']    = date('d-m-Y',strtotime($resultCartDetails[0]['delivery_date']));
-					$data['amount']           = $resultCartDetails[0]['amount'];
+					$data['amount']           = '₹.'.$resultCartDetails[0]['amount'];
 					$data['video']            = ($result[$i]['video_name'] != '') ? base_url().'upload/celebrity_video/' .$result[$i]['video_name'] : '';
 					
 					$arr[] = $data;
@@ -3213,7 +3462,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -3298,7 +3547,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -3389,7 +3638,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -3463,7 +3712,7 @@ class Web_api extends CI_Controller {
 
 				$data['mobileno']            = ($getUserData[0]['mobileno'] != '') ? $getUserData[0]['mobileno'] : '';
 
-				$data['amount']              = ($result[0]['amount'] != '') ? $result[0]['amount'] : '';
+				$data['amount']              = ($result[0]['amount'] != '') ? '₹.'.$result[0]['amount'] : '';
 				
 				$arr[] = $data;
 
@@ -3491,7 +3740,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.";
+			$data_json['msg'] = "user not found.";
 
 			echo json_encode($data_json);
 
@@ -3587,7 +3836,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -3667,10 +3916,10 @@ class Web_api extends CI_Controller {
 				
 				
 				
-				$resultCelebsTodayAmt = ($resultCelebsTodayAmt > 0) ? $resultCelebsTodayAmt : '';
-				$resultCelebsLMonthAmt= ($resultCelebsLMonthAmt > 0) ? $resultCelebsLMonthAmt : '';
-				$resultCelebsLYearAmt = ($resultCelebsLYearAmt > 0) ? $resultCelebsLYearAmt : '';
-				$resultCelebsTotalAmt = ($resultCelebsTotalAmt > 0) ? $resultCelebsTotalAmt : '';
+				$resultCelebsTodayAmt = ($resultCelebsTodayAmt > 0) ? '₹.'.$resultCelebsTodayAmt : '';
+				$resultCelebsLMonthAmt= ($resultCelebsLMonthAmt > 0) ? '₹.'.$resultCelebsLMonthAmt : '';
+				$resultCelebsLYearAmt = ($resultCelebsLYearAmt > 0) ? '₹.'.$resultCelebsLYearAmt : '';
+				$resultCelebsTotalAmt = ($resultCelebsTotalAmt > 0) ? '₹.'.$resultCelebsTotalAmt : '';
 
 				$datas = [
 							0 => ['id' => 1,'name' => 'Today Earning','amount'=>$resultCelebsTodayAmt,],
@@ -3704,7 +3953,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -3753,7 +4002,7 @@ class Web_api extends CI_Controller {
 					$data['date']          =  date('d-m-Y',strtotime($resultEarningInDetails[$i]['delivery_date']));
 					$data['booking_id']    =  $resultEarningInDetails[$i]['id'];
 					$data['occasion_name'] =  $resultEarningInDetails[$i]['occation_type'];
-					$data['amount']        =  $resultEarningInDetails[$i]['amount'];
+					$data['amount']        =  '₹.'.$resultEarningInDetails[$i]['amount'];
 
 					$arr[] = $data;
 				}
@@ -3785,7 +4034,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "Celebrity not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -3880,7 +4129,7 @@ class Web_api extends CI_Controller {
 
 			$datas['birthdate'] = date('d-m-Y',strtotime($updatedUser[0]['birthdate']));
 
-			$datas['price_per_video'] = $updatedUser[0]['charge_fees'];
+			$datas['price_per_video'] = '₹.'.$updatedUser[0]['charge_fees'];
 
 			$datas['profile_pic'] = $image;
 			
@@ -3901,7 +4150,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['validation'] = false;
 
-			$data_json['msg'] = "User not found.!";
+			$data_json['msg'] = "user not found.!";
 
 			echo json_encode($data_json);
 
@@ -3911,5 +4160,237 @@ class Web_api extends CI_Controller {
 	}
 
 	
+	protected function sendNotificationUsingSeverKeyAndroid($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
 
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title, 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'data' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
+	}
+
+	protected function sendNotificationToIOSUsingSeverKey($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = 'AAAAGWX0hNo:APA91bFlcmGikJg_VBiv7Exiud26VCH4eaTzN1jiaZF3eDX0EDrZ5BFYuUPC9qyGabkgVCpY6WHAvu9xlVVNiRHVpNApTjZPaaSpI-zdWiT2S2pd2-rUpMD5xy6NvKVtknI9U94zrdSn';
+
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title, 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
+	}
+	
+	function testAndroid() {
+		$registatoin_ids = array('f23AtKWVS_28ea0OXoSA3n:APA91bFmvxo4YDmgYSyekNbHZn_Q6lqKysMYlkjqI5UZI0Td4Bimv63FH_MzFLebAbFCEJvgW8nmc5E1qwWpvpPgsD2ygQRW9hvwVnJiyoBR85k_HDqNml_s1NgzsGILJnbaQ7yU2cGy');
+
+		$noti_title = "Hi Android";
+		$message = "simply dummy text of the printing and typesetting";
+		//$countTot = "1";
+
+		$this->sendNotificationUsingSeverKeyAndroid($registatoin_ids, $noti_title, $message);
+	}
+
+	function cancelOrderByCelebs()
+	{
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$booking_id = $_REQUEST['booking_id'];
+
+		//echo $cartId;exit;
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data(
+				'membermaster',
+				array(
+					'accessToken' => $accessToken,
+					'role_type' => '2',
+					'status' => 'Active'
+				)
+			);
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+		if (count($resultUser) > 0) {
+
+			
+			$resultCelebTaskMaster = $this->comman_fun->get_table_data(
+				'celebrity_task_master',
+				 array(
+					'cart_detail_id' => $booking_id,
+					'celebrity_id'   => $resultUser[0]['celebrity_id'],
+					'video_status' => 'Initialize',
+					'status'	=> 'Active',
+				)
+			);
+
+			if (count($resultCelebTaskMaster) > 0) {
+
+				$getCartDetailsData = $this->comman_fun->get_table_data(
+					'cart_details',
+					 array(
+						'id' => $booking_id,
+						'status'	=> 'Active',
+					)
+				); 
+				
+				$getCartMasterData = $this->comman_fun->get_table_data(
+					'cart_master',
+					 array(
+						'cart_id' => $getCartDetailsData[0]['cart_id'],
+						'status'	=> 'Active',
+					)
+				); 
+
+				// Insert Record For Return Money To User
+				$dataInsertCancel['cart_id'] 		     =  $getCartDetailsData[0]['cart_id'];
+
+				$dataInsertCancel['cart_details_id']     =  $booking_id;
+
+				$dataInsertCancel['total_amount']	     =  $getCartMasterData[0]['total_amount'];
+
+				$dataInsertCancel['cancel_amount']		 =  $getCartDetailsData[0]['amount'];
+
+				$dataInsertCancel['grand_total'] 		 =  $getCartMasterData[0]['total_amount'] - $getCartDetailsData[0]['amount'];
+
+				$dataInsertCancel['create_date'] 		 = date('Y-m-d h:i:s');
+
+				$cancelOrderReturnTb = $this->comman_fun->addItem($dataInsertCancel, 'cancel_order_payment');
+
+				if($cancelOrderReturnTb > 0) {
+
+					$cancelOrderPaymentDt = $this->comman_fun->get_table_data(
+						'cancel_order_payment',
+						 array(
+							'id' => $cancelOrderReturnTb,
+						)
+					);
+
+					// Update Amount
+					$dataUpdateCart['total_amount'] = $cancelOrderPaymentDt[0]['grand_total'];
+					
+					$dataUpdateCart['update_date'] = date('Y-m-d h:i:s');
+
+					$this->comman_fun->update($dataUpdateCart, 'cart_master', array('cart_id' => $cancelOrderPaymentDt[0]['cart_id']));
+
+					$dataUpdate['status'] = 'Delete';
+					$dataUpdate['update_date'] = date('Y-m-d h:i:s');
+					
+					$this->comman_fun->update($dataUpdate,'celebrity_task_master', array('cart_detail_id' => $booking_id));
+
+					$this->comman_fun->update($dataUpdate,'cart_details', array('id' => $booking_id));
+
+					$data_json['validation'] = true;
+
+					$data_json['msg'] = "Order Cancel Successfully";
+
+					echo json_encode($data_json);
+
+					exit;
+
+
+				} else {
+					$data_json['validation'] = false;
+
+					$data_json['msg'] = "Something Wrong Please Try Again";
+
+					echo json_encode($data_json);
+
+					exit;
+				}
+				
+				
+			
+			} else {
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "data not found.";
+
+				echo json_encode($data_json);
+
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+	
 }

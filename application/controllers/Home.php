@@ -398,7 +398,7 @@ class Home extends CI_Controller {
 		$your_gst_number = $_POST['your_gst_number'];
 		$your_gst_state = $_POST['your_gst_state'];
 		$amount = $_POST['amount'];
-
+		
 		//check order with usercode, orderdate and payment status
 		$res = $this->ObjM->checkIsCartAvailable();
 

@@ -352,7 +352,110 @@ class Celebrity_list extends CI_Controller {
 
 		$member_id = $this->comman_fun->additem($data, 'membermaster');
 
+		// Send Notification to All Users
+		if($member_id > 0) {
+
+			$getUsersToken = $this->comman_fun->get_table_data(
+				'membermaster',
+				array(
+					'role_type'=>3,
+					'firebase_token !='=>'',
+					'device_type !=' => ''
+				)
+			);
+			
+			for($i=0;$i<count($getUsersToken);$i++) {
+				$registatoin_ids = $getUsersToken[$i]['firebase_token'];
+				$noti_title = 'New Celebrity Added';
+				$message = 'Check New Celebrity Details';
+				if($getUsersToken[$i]['device_type'] == 'Android') {
+					
+					$this->sendNotificationUsingSeverKeyAndroid([$registatoin_ids], $noti_title, $message);
+				} else {
+					$this->sendNotificationToIOSUsingSeverKey([$registatoin_ids], $noti_title, $message);
+				}
+			}
+		}
+		
 		return $member_id;
 
+	}
+
+	protected function sendNotificationUsingSeverKeyAndroid($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title, 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'data' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
+	}
+
+	protected function sendNotificationToIOSUsingSeverKey($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = 'AAAAGWX0hNo:APA91bFlcmGikJg_VBiv7Exiud26VCH4eaTzN1jiaZF3eDX0EDrZ5BFYuUPC9qyGabkgVCpY6WHAvu9xlVVNiRHVpNApTjZPaaSpI-zdWiT2S2pd2-rUpMD5xy6NvKVtknI9U94zrdSn';
+
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title, 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
 	}
 }

@@ -696,5 +696,34 @@ Class Web_app_module extends CI_Model {
 
 	}
 
+	function getNewVideosRequest($celebrity_id) {
+
+		$this->db->select('cart_details.*');
+
+		$this->db->select('celebrity_task_master.usercode,celebrity_task_master.video_status,celebrity_task_master.status');
+
+		$this->db->from('cart_details');
+
+		$this->db->join('celebrity_task_master', 'celebrity_task_master.celebrity_id=cart_details.celebrity_id', 'left');
+
+		$this->db->where('cart_details.celebrity_id', $celebrity_id);
+
+		$this->db->where('celebrity_task_master.celebrity_id', $celebrity_id);
+
+		$this->db->where('celebrity_task_master.video_status','Initialize');
+
+		$this->db->where('celebrity_task_master.status','Active');
+
+		$this->db->where('cart_details.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+	
+
 }
 ?>
