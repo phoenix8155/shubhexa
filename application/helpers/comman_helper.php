@@ -8,15 +8,22 @@ if (!function_exists('asset_path')) {
 	}
 }
 
-if (!function_exists('file_path')) {
-	function file_path($eid = NULL) {
-		if ($eid != '') {
-			return base_url() . 'index.php/' . $eid . '/';
-		} else {
-			return base_url() . 'index.php/';
-		}
+// if (!function_exists('file_path')) {
+// 	function file_path($eid = NULL) {
+// 		if ($eid != '') {
+// 			return base_url() . 'index.php/' . $eid . '/';
+// 		} else {
+// 			return base_url() . 'index.php/';
+// 		}
 
-	}
+// 	}
+// }
+
+if (! function_exists('file_path')) {
+    function file_path($eid = "")
+    {
+        return base_url($eid.'/');
+    }
 }
 
 if (!function_exists('upload_path')) {
@@ -285,4 +292,21 @@ if (!function_exists('is_valid_password_pattern')) {
 
 	}
 
+}
+
+if (! function_exists('getLinks')) {
+	function getLinks($accessName,$type)
+	{
+		$CI = &get_instance();
+		$CI->db->select('*')
+			->from('settings')
+			->where('access_name',$accessName)
+			->where('type',$type)
+			->where('status','Active');
+		$result = $CI->db->get()->result_array();
+		if (!empty($result)) {
+			return $result[0]['page_name'];
+		}
+		return false;
+	}
 }

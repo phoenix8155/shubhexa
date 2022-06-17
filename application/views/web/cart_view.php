@@ -51,7 +51,7 @@
 						                                    </div>
 						                                    <div class="col-md-6">
 						                                        <div class="form-group">
-						                                            <label class="cart-d-title">Booking for: </label>
+						                                            <label class="cart-d-title">Booking for: </label><br/>
 						                                            <?php if ($cartResult[$i]['create_for'] == "my_self") {?>
 						                                            <label><?=$cartResult[$i]['self_name']?></label>
 						                                        <?php } else {?>
@@ -63,7 +63,8 @@
 						                                        <div class="form-group">
 						                                            <label class="cart-d-title">What's the occasion?: </label>
 						                                            <?php if ($cartResult[$i]['occation_type'] != "Customize_Your_Message") {?>
-						                                            <label><?=$cartResult[$i]['occation_type']?></label>
+																	<?php $occationType = str_replace('_',' ',$cartResult[$i]['occation_type']); ?>
+																	<label><?=$occationType?></label>
 						                                        <?php } else {?>
 						                                        	<label>-</label>
 						                                        <?php }?>

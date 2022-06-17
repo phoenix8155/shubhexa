@@ -42,7 +42,7 @@ class Contact extends CI_Controller {
 
 			$this->form_validation->set_rules('message', 'message', 'required|trim');
 
-			//$this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_check_google_validate_captcha');
+			$this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_check_google_validate_captcha');
 
 			if ($this->form_validation->run() === FALSE) {
 				//echo "ee";exit;
@@ -121,28 +121,21 @@ class Contact extends CI_Controller {
 		// mail($toEmail, $subject, $body, $headers);
 	}
 
-	//google captcha testing for localhost
-	//Site key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-	//Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+	function check_google_validate_captcha() {
 
-	//live seceret key : 6LeVSpsUAAAAANh8dFGywQ5HkFR2aWKxwKvkjYPh
-	//Site key: 6LeVSpsUAAAAAN-zJPAJirizQ4Uo8zk5eEU86cmz
+		$google_captcha = $this->input->post('g-recaptcha-response');
 
-	// function check_google_validate_captcha() {
+		$google_response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".GOOGLE_CAPTCHA_SECRET_KEY."&response=" . $google_captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
 
-	// 	$google_captcha = $this->input->post('g-recaptcha-response');
+		if ($google_response . 'success' == false) {
 
-	// 	$google_response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe&response=" . $google_captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
+			$this->form_validation->set_message('check_google_validate_captcha', 'Please check the the captcha form');
 
-	// 	if ($google_response . 'success' == false) {
+			return FALSE;
 
-	// 		$this->form_validation->set_message('check_google_validate_captcha', 'Please check the the captcha form');
+		} else {
 
-	// 		return FALSE;
-
-	// 	} else {
-
-	// 		return TRUE;
-	// 	}
-	// }
+			return TRUE;
+		}
+	}
 }

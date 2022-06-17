@@ -48,7 +48,7 @@
                                                         	<?php for ($i = 0; $i < count($result); $i++) {?>
                                                             <tr>
                                                             	<td><?=$i + 1?></td>
-                                                                <td><?=$result[$i]['cart_id']?></td>
+                                                                <td><?=$result[$i]['order_no']?></td>
                                                                 <td><?=$result[$i]['total_amount']?></td>
                                                                 <td><i class="fa fa-calendar-o"></i></strong> <?=date('d-m-Y', strtotime($result[$i]['order_date']))?></td>
                                                                 <td>

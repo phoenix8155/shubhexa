@@ -30,7 +30,7 @@ class Ulogin extends CI_Controller {
 		//Secret : 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
 		$google_client->setClientId('94035372350-soj2raalg651702bf2ef1oftb4fs2asd.apps.googleusercontent.com'); //Define your ClientID
 		$google_client->setClientSecret('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'); //Define your Client Secret Key
-		$google_client->setRedirectUri('https://pnxschool.com/shubhexa/index.php/ulogin/google_login/');
+		$google_client->setRedirectUri('https://shubhexa.com/ulogin/google_login/');
 
 		$google_client->addScope('email');
 		$google_client->addScope('profile');

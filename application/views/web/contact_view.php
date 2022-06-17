@@ -1,3 +1,4 @@
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <div class="page-content">
     <div class="aon-page-benner-area">
               <div class="aon-page-banner-row" style="background-image: url(<?=asset_path('web/')?>images/banner/contactus.png)">
@@ -23,7 +24,7 @@
                 <!--Title Section Start-->
                 <div class="section-head text-center">
                     <h2 class="sf-title">Contact Information</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do usmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do usmod tempor incididunt ut labore et dolore magna aliqua.</p> -->
                 </div>
                 <!--Title Section End-->
 
@@ -108,7 +109,7 @@ if (is_array($top_msg)) {
                                 <div class="col-md-6">
                                     <div class="form-group">
                                     	<?php $form_value = set_value('email', '');?>
-                                        <input type="text" name="email" placeholder="Email" class="form-control" required>
+                                        <input type="email" name="email" placeholder="Email" class="form-control" required>
                                         <?php echo form_error('email', '<p class="error_p">', '</p>'); ?>
                                     </div>
                                 </div>
@@ -139,7 +140,8 @@ if (is_array($top_msg)) {
                                 </div>
 
                                 <div class="col-md-12">
-                                    <div class="g-recaptcha" data-sitekey="6LeBsyIeAAAAAFfgca0q_h1Dxoy8ekbilrjdBlMf"></div>
+                                    <div class="g-recaptcha" data-sitekey="<?=GOOGLE_CAPTCHA_SITE_KEY?>"></div>
+                                    <?php echo form_error('g-recaptcha-response', '<p class="error_p">', '</p>'); ?>
                                 </div>
 
 
@@ -163,9 +165,9 @@ if (is_array($top_msg)) {
                     <div class="sf-map-social-block text-center">
                         <h2>Trusted by thousands of people all over the world</h2>
                         <ul class="sf-con-social">
-                            <li><a href="https://www.facebook.com/Shubhexa-Gujarat-107701255161008" target="_blank" class="sf-fb"><img src="<?=asset_path('web/')?>images/contact-us/facebook.png" alt="">Facebook</a></li>
-                            <li><a href="https://twitter.com/ShubhexaG" target="_blank" class="sf-twitter"><img src="<?=asset_path('web/')?>images/contact-us/twitter.png" alt="">Twitter</a></li>
-                            <li><a href="https://www.instagram.com/shubhexa_gujarat/" target="_blank" class="sf-pinterest"><i class="fa fa-instagram"></i> Instagram</a></li>
+                            <li><a href="<?=getLinks('Facebook','social')?>" target="_blank" class="sf-fb"><img src="<?=asset_path('web/')?>images/contact-us/facebook.png" alt="">Facebook</a></li>
+                            <li><a href="<?=getLinks('Twitter','social')?>" target="_blank" class="sf-twitter"><img src="<?=asset_path('web/')?>images/contact-us/twitter.png" alt="">Twitter</a></li>
+                            <li><a href="<?=getLinks('Instagram','social')?>" target="_blank" class="sf-pinterest"><i class="fa fa-instagram"></i> Instagram</a></li>
                         </ul>
 
                         <div class="sf-con-social-pic">

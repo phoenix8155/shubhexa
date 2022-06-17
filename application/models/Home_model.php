@@ -281,5 +281,16 @@ Class Home_model extends CI_Model {
 
 	}
 
+	function get_last_value() {
+		$this->db->select("*");
+		$this->db->from('cart_master');
+		$this->db->where('status', 'Active');
+		$this->db->limit(1);
+		$this->db->order_by('cart_id', 'DESC');
+		$query = $this->db->get();
+		$the_content = $query->result_array();
+		return $the_content;
+	}
+
 }
 ?>

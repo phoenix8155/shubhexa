@@ -445,7 +445,8 @@ class Home extends CI_Controller {
 		} else {
 			$usercode = $this->session->userdata['user']['usercode'];
 			$cartData = array();
-			$cartData['order_no'] = rand(10000000, 99999999);
+			// $cartData['order_no'] = rand(10000000, 99999999);
+			$cartData['order_no'] = $this->getOrderNo();
 			$cartData['usercode'] = $usercode;
 			$cartData['order_date'] = date('Y-m-d H:i:s');
 			$cartData['payment_date'] = date('Y-m-d H:i:s');
@@ -550,5 +551,25 @@ class Home extends CI_Controller {
 			echo json_encode($response);exit;
 		}
 
+	}
+
+	public function getOrderNo() {
+
+	    $cartMaster = $this->ObjM->get_last_value();
+
+	    if(empty($cartMaster)) {
+	        $order_no = str_pad(1,4,'0',STR_PAD_LEFT);
+
+	        
+	        return 'Shub'.$order_no; 
+	        
+	        } else {
+				$removeStText =str_replace('Shub','',$cartMaster[0]['order_no']); 
+	            $lastOrder   = $removeStText;
+	            $number = $lastOrder+1;
+	            $order_no = (str_pad($number,4,'0',STR_PAD_LEFT));
+	            return 'Shub'.$order_no;
+	        }
+	        
 	}
 }

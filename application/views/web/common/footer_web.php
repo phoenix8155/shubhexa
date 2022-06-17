@@ -47,10 +47,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="sf-site-link sf-widget-categories">
                         <h4 class="sf-f-title">Social Links</h4>
                         <ul>
-                            <li><a href="https://www.facebook.com/Shubhexa-Gujarat-107701255161008" target="_blank">Facebook</a></li>
-                            <li><a href="https://twitter.com/ShubhexaG" target="_blank">Twitter</a></li>
-                            <li><a href="https://www.instagram.com/shubhexa_gujarat/" target="_blank">Instagram</a></li>
-                            <li><a href="https://www.youtube.com/channel/UClrQAGJDWsOO8txUK6sghGA" target="_blank">Youtube</a></li>
+                            <li><a href="<?=getLinks('Facebook','social')?>" target="_blank">Facebook</a></li>
+                            <li><a href="<?=getLinks('Twitter','social')?>" target="_blank">Twitter</a></li>
+                            <li><a href="<?=getLinks('Instagram','social')?>" target="_blank">Instagram</a></li>
+                            <li><a href="<?=getLinks('Youtube','social')?>" target="_blank">Youtube</a></li>
                         </ul>
                     </div>
                 </div>
@@ -602,7 +602,7 @@ $(document).ready(function(){
 	            dataType: 'json',
 		        success: function(resp) {
 				    if(resp=="add"){
-				    	alert('added in wishlist.');
+				    	// alert('added in wishlist.');
 				    	$('#'+cid1).addClass('fa-heart');
 				    	$('#'+cid1).removeClass('fa-heart-o');
 				    	//window.location.href='<?=file_path()?>my_wishlist';
@@ -610,7 +610,7 @@ $(document).ready(function(){
 				    }else if(resp=="remove"){
 				    	$('#'+cid1).addClass('fa-heart-o');
 				    	$('#'+cid1).removeClass('fa-heart');
-				    	alert('removed from wishlist.');
+				    	// alert('removed from wishlist.');
 				    }else{
 				    	alert('Something went wrong!');
 				    }

@@ -2108,7 +2108,7 @@ class Web_api extends CI_Controller {
 					$addData['to_name'] = $to_name;
 					$addData['from_name'] = $from_name;
 					$addData['occation_type'] = $occasion_type;
-					$addData['delivery_date'] = $delivery_date;
+					$addData['delivery_date'] = date('Y-m-d', strtotime($delivery_date));
 					$addData['template_message'] = $template_message;
 					$addData['email_id'] = $your_email;
 					$addData['phone_number'] = $your_number;
@@ -3191,6 +3191,107 @@ class Web_api extends CI_Controller {
 		}
 	}
 
+	function sendFeedbackToadminByUser() {
+
+		$getHeaders  = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$name    = filter_data($_REQUEST['name']);
+
+		$mobileno    = filter_data($_REQUEST['mobileno']);
+
+		$emailid    = filter_data($_REQUEST['emailid']);
+
+		$feedback    = filter_data($_REQUEST['feedback']);
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			
+			if($name != "" && $mobileno != "" && $emailid != "" && $feedback != "") {
+
+				$data['usercode']      = $resultUser[0]['usercode'];
+
+				$data['role_type']     = $resultUser[0]['role_type'];
+				
+				$data['name']          = $name;
+				
+				$data['mobileno']       = ($mobileno != '') ? $mobileno : '';
+				
+				$data['emailid']       = ($emailid != '') ? $emailid : '';
+
+				$data['feedback']      = $feedback;
+				
+				$data['create_date']   = date('Y-m-d H:i:s');
+
+				$data['update_date'] = date('Y-m-d h:i:s');
+
+				$data['timedt'] = time();
+
+				$feedback_id = $this->comman_fun->addItem($data, 'feedback');
+
+				if($feedback_id != '') {
+
+					$data_json['validation'] = true;
+
+					$data_json['msg'] = "Feedback Sent Successfully..";
+
+					echo json_encode($data_json);
+
+					exit;
+
+				} else {
+					$data_json['validation'] = false;
+
+					$data_json['msg'] = "Something Wrong..";
+
+					echo json_encode($data_json);
+
+					exit;
+				}
+				
+				
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "All Fields are Required";
+
+				echo json_encode($data_json);
+
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
 
 //-----------------CELEBS API----------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------//
@@ -3363,6 +3464,7 @@ class Web_api extends CI_Controller {
 
 			$data_json['about_career']           = ($resultCelebsDetails[0]['about_career'] != '') ? $resultCelebsDetails[0]['about_career'] : '' ;
 
+			$data_json['hashtag']           = ($resultCelebsDetails[0]['hashtag'] != '') ? $resultCelebsDetails[0]['hashtag'] : '' ;
 			
 			$data_json['validation'] = true;
 
@@ -3562,7 +3664,13 @@ class Web_api extends CI_Controller {
 
 		$accessToken = $getHeaders['Accesstoken'];
 
-		$feedback    = $_REQUEST['feedback'];
+		$name    = filter_data($_REQUEST['name']);
+
+		$mobileno    = filter_data($_REQUEST['mobileno']);
+
+		$emailid    = filter_data($_REQUEST['emailid']);
+
+		$feedback    = filter_data($_REQUEST['feedback']);
 
 		$data_json = array();
 
@@ -3590,8 +3698,12 @@ class Web_api extends CI_Controller {
 
 				$data['role_type']     = $resultUser[0]['role_type'];
 				
-				$data['name']          = $resultUser[0]['fname'].' '.$resultUser[0]['lname'];
+				$data['name']          = $name;
 				
+				$data['mobileno']       = ($mobileno != '') ? $mobileno : '';
+				
+				$data['emailid']       = ($emailid != '') ? $emailid : '';
+
 				$data['feedback']      = $feedback;
 				
 				$data['create_date']   = date('Y-m-d H:i:s');
@@ -3778,9 +3890,9 @@ class Web_api extends CI_Controller {
 
 		if (count($resultUser) > 0) {
 
-			$resultCelebsTask = $this->comman_fun->get_table_data('celebrity_task_master', array('celebrity_id' => $resultUser[0]['celebrity_id'], 'cart_detail_id' => $booking_id, 'status' => 'Active'));
+			$resultCartDetails = $this->comman_fun->get_table_data('celebrity_task_master', array('celebrity_id' => $resultUser[0]['celebrity_id'], 'cart_detail_id' => $booking_id, 'status' => 'Active'));
 
-			if (count($resultCelebsTask) > 0) {
+			if (count($resultCartDetails) > 0) {
 
 				$data['video_status'] = 'Complete';
 
@@ -3793,14 +3905,33 @@ class Web_api extends CI_Controller {
 
 					$data['video_name'] = $_POST['file_name'];
 					
-					$old_file = $resultCelebsTask[0]['video_name'];
+					$old_file = $resultCartDetails[0]['video_name'];
 
 					if ($old_file != "") {
 						$url = base_url(). 'upload/celebrity_video/' . $old_file;
 						unlink($url);
 					}
 
-					$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCelebsTask[0]['id']));
+					$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
+
+					$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
+					if(isset($getUserToken[0])) {
+						if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
+
+							$registatoin_ids = $getUserToken[0]['firebase_token'];
+
+							$noti_title = 'New Video Uploaded';
+							$message = 'Hello check Your New Video Uploaded By Celebrity';
+							if($getUserToken[0]['device_type'] == 'Android') {
+								
+								$this->sendNotificationUsingSeverKeyAndroid([$registatoin_ids], $noti_title, $message);
+							} else {
+								$this->sendNotificationToIOSUsingSeverKey([$registatoin_ids], $noti_title, $message);
+							}
+						
+						}
+					}
+						
 					
 					$data_json['video']      = base_url().'upload/celebrity_video/' . $data['video_name'];
 
@@ -4186,6 +4317,8 @@ class Web_api extends CI_Controller {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); //Remove //multicast_id,success,failure,canonical_ids
+
 		//Send the request
 		$response = curl_exec($ch);
 
@@ -4224,6 +4357,8 @@ class Web_api extends CI_Controller {
 		);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); //Remove //multicast_id,success,failure,canonical_ids
 
 		//Send the request
 		$response = curl_exec($ch);
@@ -4392,5 +4527,85 @@ class Web_api extends CI_Controller {
 
 		}
 	}
-	
+
+	function getSettingForCeleb()
+	{
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+		
+			$result = $this->comman_fun->get_table_data('settings',array('status'=>'Active'));
+			
+			if (isset($result[0])) {
+
+				$arr = array();
+
+				for ($i = 0; $i < count($result); $i++) {
+
+					$data = array();
+
+					
+					
+					$data['access_name'] = $result[$i]['access_name'];
+
+					if($result[$i]['type'] == 'website') {
+						$data['link'] = ($result[$i]['page_name'] != '') ? file_path().$result[$i]['page_name'] : ''; 
+					} else {
+						$data['link'] = ($result[$i]['page_name'] != '') ? $result[$i]['page_name'] : '';
+					}
+
+					$arr[] = $data;
+				}
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $arr;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.!";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
 }

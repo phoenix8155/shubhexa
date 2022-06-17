@@ -136,7 +136,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                         	<li class="<?=$faq?>"><a href="<?=file_path()?>faq">FAQ</a></li>
                             <li class="<?=$contact?>"><a href="<?=file_path()?>contact">Contact</a></li>
                             <?php if ($this->session->userdata['user']) {?>
-                            	<li class="<?=$myBooking?>"><a href="<?=file_path()?>my_account/myBooking">My Bookings</a></li>
+                            	<li class="<?=$myBooking?>"><a href="<?=file_path()?>my_bookings">My Bookings</a></li>
                             <?php }?>
                         </ul>
                     </div>
