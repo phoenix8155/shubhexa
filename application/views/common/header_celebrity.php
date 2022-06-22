@@ -56,7 +56,7 @@
           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
             <ul class="head-list">
 	            <!-- <li> <a href="<?=file_path('admin')?>dashboard/export_database"><i class="demo-pli-data-settings icon-lg icon-fw"></i> Backup Database</a> </li> -->
-				<li> <a href="<?=file_path('admin')?>profile/change_password"><i class="demo-pli-unlock icon-lg icon-fw"></i> Change Password</a> </li>
+				<li> <a href="<?=file_path('celebrity_admin')?>change_password"><i class="demo-pli-unlock icon-lg icon-fw"></i> Change Password</a> </li>
 				<li> <a href="<?=file_path()?>home" target="_blank"><i class="demo-pli-computer-secure icon-lg icon-fw"></i> Go To Website</a> </li>
 	            <li> <a href="<?=file_path()?>login/logout"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a> </li>
             </ul>

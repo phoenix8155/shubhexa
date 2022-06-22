@@ -23,6 +23,7 @@ $(document).ready(function(e) {
 						<th>Mobile No</th>
 						<th>Email ID</th>
 						<th>Order Date</th>
+						<th>Total Order</th>
 						<th>Total Amount</th>
 						<th>Action</th>
 					</tr>
@@ -35,6 +36,11 @@ $(document).ready(function(e) {
 	</div>
 </div>
 <style>
+	.viewDetails {
+		text-decoration: revert;
+		color: #2c43e1;
+		font-weight: 700;
+	}
 	.btn_custom {
 		padding: 3px 15px !important;
 	}

@@ -13,7 +13,7 @@ class Booking_list extends CI_Controller {
 			exit;
 		}
 
-		$this->load->model('admin/booking_model', 'ObjM', true);
+		$this->load->model('admin/booking_list_model', 'ObjM', true);
 	}
 
 	public function view() {
@@ -40,6 +40,8 @@ class Booking_list extends CI_Controller {
 		$html = '';
 
 		for ($i = 0; $i < count($result); $i++) {
+
+			$getCountOrder = $this->comman_fun->count_record('cart_details',array('cart_id' => $result[$i]['cart_id'],'status'=>'Active'));
 			
 			$row = $i + 1;
 			$html .= '<tr>
@@ -48,10 +50,11 @@ class Booking_list extends CI_Controller {
 						<td>' . $result[$i]['mobileno'].'</td>
 						<td>' . $result[$i]['emailid']. '</td>
 						<td>' . date('d-m-Y',strtotime($result[$i]['order_date'])) . '</td>
+						<td><a class="viewDetails" href="'.file_path().'admin/booking_list/bookingDetails/'.$result[$i]['cart_id'].'/'.$result[$i]['usercode'].'">' . $getCountOrder . '</a></td>
 						<td>' . '₹. '.$result[$i]['total_amount'] . '</td>
 						<td><div class="btn-group">
 							<button class="btn btn_custom">
-								<a href="javascript:void(0)">View</a>
+								<a href="'.file_path().'admin/booking_list/bookingDetails/'.$result[$i]['cart_id'].'/'.$result[$i]['usercode'].'">View</a>
 							</button>';
 			$html .= '</td>
 					</tr>';
@@ -59,46 +62,20 @@ class Booking_list extends CI_Controller {
 
 		return $html;
 	}
+	public function bookingDetails($cart_id = Null,$usercode = Null) {
 
-	function status_update($st, $eid) {
+		$data['result'] = $this->ObjM->getBookingDetailsList($cart_id,$usercode);
+		
 
-		$record = $this->comman_fun->get_table_data('membermaster', array('usercode' => $eid));
+		$page_info['menu_id'] = 'menu-Booking-list';
 
-		$data['status'] = $st;
-
-		$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
-
-		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Status ' . $st . ' Successfully.....'));
-
-		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
-	}
-
-	function delete_record($eid) {
-
-		$record = $this->comman_fun->get_table_data('membermaster', array('usercode' => $eid));
-
-		$data['status'] = 'Delete';
-
-		$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
-
-		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
-
-		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
-	}
-
-	public function profileView($usercode = Null) {
-
-		$data['result'] = $this->comman_fun->get_table_data('membermaster', array('usercode' => $usercode));
-
-		$page_info['menu_id'] = 'menu-celebrity-list';
-
-		$page_info['page_title'] = 'Profile View';
+		$page_info['page_title'] = 'Booking Details View';
 
 		$this->load->view('common/topheader');
 
 		$this->load->view('common/header_admin', $page_info);
 
-		$this->load->view('admin/' . $this->uri->rsegment(1) . '_profile_view', $data);
+		$this->load->view('admin/booking_details_view', $data);
 
 		$this->load->view('common/footer_admin');
 	}

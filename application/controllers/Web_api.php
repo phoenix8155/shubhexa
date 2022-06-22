@@ -392,6 +392,8 @@ class Web_api extends CI_Controller {
 
 		$result = $this->ObjM->getCategory();
 
+		
+
 		if (isset($result[0])) {
 			$json_arr = array();
 
@@ -3863,14 +3865,13 @@ class Web_api extends CI_Controller {
 
 	function sendVideoToUser() {
 
+
 		$getHeaders = apache_request_headers();
 
 		$accessToken = $getHeaders['Accesstoken'];
 
 		$booking_id = $_REQUEST['booking_id'];
 
-		
-		
 		$data_json = array();
 
 		if ($accessToken != "") {
@@ -3898,55 +3899,67 @@ class Web_api extends CI_Controller {
 
 				$data['update_date'] = date('Y-m-d h:i:s');
 				
+				$filename= ($_FILES['upload_file']['name']);
+				$file_ext = pathinfo($filename,PATHINFO_EXTENSION);
 				
-				if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+				if($file_ext == 'mp4' || $file_ext == 'avi' || $file_ext == '3gp' || $file_ext == 'flv' || $file_ext == 'flvwmv') 
+				{
+					if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+						$this->handle_upload_videos();
+						$data['video_name'] = $_POST['file_name'];
 
-					$this->handle_upload_videos();
-
-					$data['video_name'] = $_POST['file_name'];
-					
-					$old_file = $resultCartDetails[0]['video_name'];
-
-					if ($old_file != "") {
-						$url = base_url(). 'upload/celebrity_video/' . $old_file;
-						unlink($url);
-					}
-
-					$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
-
-					$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
-					if(isset($getUserToken[0])) {
-						if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
-
-							$registatoin_ids = $getUserToken[0]['firebase_token'];
-
-							$noti_title = 'New Video Uploaded';
-							$message = 'Hello check Your New Video Uploaded By Celebrity';
-							if($getUserToken[0]['device_type'] == 'Android') {
-								
-								$this->sendNotificationUsingSeverKeyAndroid([$registatoin_ids], $noti_title, $message);
-							} else {
-								$this->sendNotificationToIOSUsingSeverKey([$registatoin_ids], $noti_title, $message);
-							}
 						
+						$old_file = $resultCartDetails[0]['video_name'];
+
+						if ($old_file != "") {
+							$url = base_url() . 'upload/celebrity_video/' . $old_file;
+							unlink($url);
 						}
+
+						$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
+
+						$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
+
+						if(isset($getUserToken[0])) {
+							if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
+
+								$registatoin_ids = $getUserToken[0]['firebase_token'];
+
+								$noti_title = 'New Video Uploaded';
+								$message = 'Hello check Your New Video Uploaded By Celebrity';
+								if($getUserToken[0]['device_type'] == 'Android') {
+									
+									$this->sendNotificationUsingSeverKeyAndroid([$registatoin_ids], $noti_title, $message);
+								} else {
+									$this->sendNotificationToIOSUsingSeverKey([$registatoin_ids], $noti_title, $message);
+								}
+							
+							}
+						}
+
+				
+						$data_json['validation'] = true;
+
+						$data_json['msg'] = "Video Sent Successfully";
+
+						echo json_encode($data_json);
+
+						exit;
+
+					} else {
+
+						$data_json['validation'] = false;
+
+						$data_json['msg'] = "Please Select The Video.";
+
+						echo json_encode($data_json);
+						exit;
 					}
-						
-					
-					$data_json['video']      = base_url().'upload/celebrity_video/' . $data['video_name'];
+				}  else {
 
-					$data_json['validation'] = true;
-
-					$data_json['msg'] = "Video Sent Successfully";
-
-					echo json_encode($data_json);
-
-					exit;
-
-				} else {
 					$data_json['validation'] = false;
 
-					$data_json['msg'] = "Please Select The Video.";
+					$data_json['msg'] = "Something Wrong Please Try Again.";
 
 					echo json_encode($data_json);
 					exit;
@@ -3976,11 +3989,12 @@ class Web_api extends CI_Controller {
 		}
 	}
 
+
 	function handle_upload_videos() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 			$config = array();
 			$config['upload_path'] = './upload/celebrity_video';
-			$config['allowed_types'] = 'mp4|avi|3gp';
+			$config['allowed_types'] = '*';
 			$config['max_size'] = '0';
 			$config['overwrite'] = TRUE;
 			$config['remove_spaces'] = TRUE;
@@ -4335,7 +4349,7 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationToIOSUsingSeverKey($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = 'AAAAGWX0hNo:APA91bFlcmGikJg_VBiv7Exiud26VCH4eaTzN1jiaZF3eDX0EDrZ5BFYuUPC9qyGabkgVCpY6WHAvu9xlVVNiRHVpNApTjZPaaSpI-zdWiT2S2pd2-rUpMD5xy6NvKVtknI9U94zrdSn';
+		$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;

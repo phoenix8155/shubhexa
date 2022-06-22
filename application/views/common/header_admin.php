@@ -127,6 +127,8 @@
             <li> <a id="menu-category-list" href="<?=file_path('admin')?>template_list/view/"> <i class="demo-pli-gear"></i> <span class="menu-title"> Template List </span> </a> </li>
             <li> <a id="menu-celebrity-list" href="<?=file_path('admin')?>celebrity_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Celebrity List </span> </a> </li>
             <li> <a id="menu-user-list" href="<?=file_path('admin')?>user_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> User List </span> </a> </li>
+            <li> <a id="menu-booking-list" href="<?=file_path('admin')?>booking_list/view/"> <i class="fa fa-book"></i> <span class="menu-title"> Booking List </span> </a> </li>
+            <li> <a id="menu-report" href="<?=file_path('admin')?>report/view/"> <i class="fa fa-book"></i> <span class="menu-title"> Report </span> </a> </li>
             <li> <a href="#"> <i class="fa fa-desktop" aria-hidden="true"></i> <span class="menu-title">Website CMS</span> <i class="arrow"></i> </a>
               <ul class="collapse">
                	<li><a id="menu-slider-list" href="<?=file_path('admin')?>slider_list/view/">Slider</a></li>

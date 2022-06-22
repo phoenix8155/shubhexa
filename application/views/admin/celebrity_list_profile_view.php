@@ -137,11 +137,11 @@ if ($result[0]['brief_family_bg'] != "") {
                     <p><i class="demo-pli-calendar-4 icon-lg icon-fw"></i> <?=$bday?></p>
 
                     <?php $address_city = $result[0]['address'] . ' ' . $result[0]['city'];?>
-                    <!-- <p><i class="demo-pli-map-marker-2 icon-lg icon-fw"></i></p>
-                    <p><i class="demo-pli-mail icon-lg icon-fw"></i><a href="mailto:" class="btn-link"><?=$result[0]['emailid']?></a></p>
+                    <!-- <p><i class="demo-pli-map-marker-2 icon-lg icon-fw"></i></p> -->
+                    <p><i class="demo-pli-mail icon-lg icon-fw"></i><a href="mailto:" class="btn-link"><?=$result2[0]['emailid']?></a></p>
                     <p><i class="demo-pli-smartphone-3 icon-lg icon-fw"></i>
-                        <a href="tel:" class="btn-link"></a>
-                    </p> -->
+                        <a href="tel:" class="btn-link"><?=$result2[0]['mobileno']?></a>
+                    </p>
                 </div>
                 <div class="fluid fixed-left-border">
                     <div class="text-right">
@@ -150,6 +150,20 @@ if ($result[0]['brief_family_bg'] != "") {
                     <hr>
                     <p class="text-main text-bold" style="padding-top: 10px;">Personal Information</p>
                     <hr>
+                    <div class="row pbt-10">
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="col-lg-4 control-label">Username </label>
+                                <span><?=$result2[0]['username']?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                <label class="col-lg-4 control-label">Password  </label>
+                                <span><?=$result2[0]['password']?></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row pbt-10">
                         <div class="col-md-6">
                             <div class="form-group has-feedback">

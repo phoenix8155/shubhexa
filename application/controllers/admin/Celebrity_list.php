@@ -102,6 +102,7 @@ class Celebrity_list extends CI_Controller {
 	public function profileView($id = Null) {
 
 		$data['result'] = $this->comman_fun->get_table_data('celebrity_master', array('id' => $id, 'status' => 'Active'));
+		$data['result2'] = $this->comman_fun->get_table_data('membermaster', array('celebrity_id' => $id, 'status' => 'Active'));
 
 		$page_info['menu_id'] = 'menu-celebrity-list';
 
