@@ -99,6 +99,7 @@
             <li class="list-header">Navigation</li>
             <li> <a id="menu-dashboard" href="<?=file_path('celebrity_admin')?>dashboard/view/"> <i class="demo-pli-home"></i> <span class="menu-title"> Dashboard </span> </a> </li>
             <li> <a id="menu-req-video-list" href="<?=file_path('celebrity_admin')?>my_requested_video_list/view/"> <i class="demo-pli-gear"></i> <span class="menu-title"> Video Request List </span> </a> </li>
+            <li> <a id="menu-password-change" href="<?=file_path('celebrity_admin')?>change_password/"> <i class="demo-pli-unlock"></i> <span class="menu-title"> Change Password </span> </a> </li>
           </ul>
         </div>
       </div>

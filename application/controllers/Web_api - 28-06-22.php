@@ -2727,6 +2727,14 @@ class Web_api extends CI_Controller {
 						$data['video_path'] = "-";
 					}
 
+					if ($result[$i]['video_thum'] != "") {
+						$data['video_thum'] = $result[$i]['video_name'];
+						$data['video_thum'] = base_url().'upload/celebrity_video/video_thum/' .$result[$i]['video_thum'];
+					} else {
+						$data['video_thum'] = "-";
+						$data['video_thum'] = "-";
+					}
+
 					$$data['video_status'] = $result[$i]['video_status'];
 
 					$arr[] = $data;
@@ -2764,220 +2772,6 @@ class Web_api extends CI_Controller {
 
 		}
 	}
-
-	// function loginWithApple() {
-
-	// 	$f_name = $_REQUEST['f_name'];
-	// 	$l_name = $_REQUEST['l_name'];
-	// 	$emailid = $_REQUEST['email_id'];
-	// 	$firebase_token = $_REQUEST['firebase_token'];
-	// 	$device_type = $_REQUEST['device_type'];
-	// 	$login_type = 'APPLE';
-	// 	$apple_key = $_REQUEST['apple_key'];
-
-	// 	$json_arr = array();
-
-	// 	$checkRecordMM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
-		
-	// 	if (count($checkRecordMM) == 0) {
-			
-	// 		$checkRecordM = $this->ObjM->checkApplyKeyData($apple_key);
-			
-	// 		if (count($checkRecordM) == 0) {
-
-	// 			//insert code
-	// 			$data = array();
-
-	// 			$data['fname'] = filter_data($f_name);
-
-	// 			$data['lname'] = filter_data($l_name);
-
-	// 			$data['emailid'] = filter_data($emailid);
-
-	// 			$data['oauth_provider'] = $login_type;
-
-	// 			$data['apple_key'] = filter_data($apple_key);
-
-	// 			$data['firebase_token'] = filter_data($firebase_token);
-
-	// 			$data['device_type'] = filter_data($device_type);
-
-	// 			$data['accessToken'] = $this->getToken(); //get Token
-
-	// 			$data['celebrity_id'] = "0";
-
-	// 			$data['role_type'] = "3";
-
-	// 			$data['status'] = "Active";
-
-	// 			$data['email_verify'] = "Y";
-
-	// 			$data['create_date'] = date('Y-m-d H:i:s');
-
-	// 			$data['update_date'] = date('Y-m-d h:i:s');
-
-	// 			$data['timedt'] = time();
-
-	// 			$member_id = $this->comman_fun->addItem($data, 'membermaster');
-
-	// 			if ($member_id != "") {
-
-	// 				$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
-	// 				if ($dataRes[0]['profile_pic'] != "") {
-	// 					$image = base_url() . "upload/user/" . $dataRes[0]['profile_pic'];
-
-	// 				} else {
-	// 					$image = base_url() . "upload/user/default.png";
-	// 				}
-
-	// 				$arr = array();
-
-	// 				$datas = array();
-
-	// 				$datas['usercode'] = $dataRes[0]['usercode'];
-	// 				$datas['first_name'] = $dataRes[0]['fname'];
-	// 				$datas['last_name'] = $dataRes[0]['lname'];
-	// 				$datas['emailid'] = $dataRes[0]['emailid'];
-	// 				$datas['accessToken'] = $dataRes[0]['accessToken'];
-	// 				$datas['oauth_provider'] = $dataRes[0]['oauth_provider'];
-	// 				$datas['apple_key'] = $dataRes[0]['apple_key'];
-	// 				$datas['profile_pic'] = $image;
-	// 				$arr[] = $datas;
-
-	// 				$json_arr['data'] = $arr;
-
-	// 				$json_arr['validation'] = true;
-
-	// 				$json_arr['msg'] = "";
-
-	// 				echo json_encode($json_arr);
-
-	// 				exit;
-
-	// 			} else {
-
-	// 				$json_arr['validation'] = false;
-
-	// 				$json_arr['msg'] = "Something went worng.";
-
-	// 				echo json_encode($json_arr);
-	// 				exit;
-	// 			}
-	// 		} else {
-
-	// 			$checkRecordM = $this->ObjM->checkApplyKeyData($apple_key);
-	// 			//update code
-	// 			$updateData = array();
-
-	// 			$updateData['fname'] = filter_data($f_name);
-
-	// 			$updateData['lname'] = filter_data($l_name);
-
-	// 			if($emailid != '') {
-
-	// 				$updateData['emailid'] = filter_data($emailid);
-					
-	// 			}
-
-	// 			$updateData['firebase_token'] = filter_data($firebase_token);
-
-	// 			$updateData['device_type'] = filter_data($device_type);
-
-	// 			$updateData['accessToken'] = $this->getToken(); //get Token
-
-	// 			$updateData['update_date'] = date('Y-m-d h:i:s');
-
-	// 			$this->comman_fun->update($updateData, 'membermaster', array('apple_key' => $checkRecordM[0]['apple_key'], 'status' => 'Active'));
-
-	// 			$dataRes = $this->comman_fun->get_table_data('membermaster', array('apple_key' => $checkRecordM[0]['apple_key']));
-
-	// 			if ($dataRes[0]['profile_pic'] != "") {
-	// 				$image = base_url() . "upload/user/" . $dataRes[0]['profile_pic'];
-
-	// 			} else {
-	// 				$image = base_url() . "upload/user/default.png";
-	// 			}
-
-	// 			$arr = array();
-
-	// 			$datas = array();
-
-	// 			$datas['usercode'] = $dataRes[0]['usercode'];
-	// 			$datas['first_name'] = $dataRes[0]['fname'];
-	// 			$datas['last_name'] = $dataRes[0]['lname'];
-	// 			$datas['emailid'] = $dataRes[0]['emailid'];
-	// 			$datas['accessToken'] = $dataRes[0]['accessToken'];
-	// 			$datas['oauth_provider'] = $dataRes[0]['oauth_provider'];
-	// 			$datas['apple_key'] = $dataRes[0]['apple_key'];
-	// 			$datas['profile_pic'] = $image;
-	// 			$arr[] = $datas;
-
-	// 			$json_arr['data'] = $arr;
-
-	// 			$json_arr['validation'] = true;
-
-	// 			$json_arr['msg'] = "";
-
-	// 			echo json_encode($json_arr);
-
-	// 			exit;
-	// 		}
-
-	// 	} else {
-
-	// 		//update code
-	// 		$updateData = array();
-
-	// 		$updateData['fname'] = filter_data($f_name);
-
-	// 		$updateData['lname'] = filter_data($l_name);
-
-	// 		$updateData['firebase_token'] = filter_data($firebase_token);
-
-	// 		$updateData['device_type'] = filter_data($device_type);
-
-	// 		$updateData['accessToken'] = $this->getToken(); //get Token
-
-	// 		$updateData['update_date'] = date('Y-m-d h:i:s');
-
-	// 		$this->comman_fun->update($updateData, 'membermaster', array('emailid' => $emailid, 'status' => 'Active'));
-
-	// 		$dataRes = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid));
-
-	// 		if ($dataRes[0]['profile_pic'] != "") {
-	// 			$image = base_url() . "upload/user/" . $dataRes[0]['profile_pic'];
-
-	// 		} else {
-	// 			$image = base_url() . "upload/user/default.png";
-	// 		}
-
-	// 		$arr = array();
-
-	// 		$datas = array();
-
-	// 		$datas['usercode'] = $dataRes[0]['usercode'];
-	// 		$datas['first_name'] = $dataRes[0]['fname'];
-	// 		$datas['last_name'] = $dataRes[0]['lname'];
-	// 		$datas['emailid'] = $dataRes[0]['emailid'];
-	// 		$datas['accessToken'] = $dataRes[0]['accessToken'];
-	// 		$datas['oauth_provider'] = $dataRes[0]['oauth_provider'];
-	// 		$datas['apple_key'] = $dataRes[0]['apple_key'];
-	// 		$datas['profile_pic'] = $image;
-	// 		$arr[] = $datas;
-
-	// 		$json_arr['data'] = $arr;
-
-	// 		$json_arr['validation'] = true;
-
-	// 		$json_arr['msg'] = "";
-
-	// 		echo json_encode($json_arr);
-
-	// 		exit;
-	// 	}
-
-	// }
 
 	function loginWithApple() {
 
@@ -3855,6 +3649,7 @@ class Web_api extends CI_Controller {
 					$data['delivery_date']    = date('d-m-Y',strtotime($resultCartDetails[0]['delivery_date']));
 					$data['amount']           = '₹.'.$resultCartDetails[0]['amount'];
 					$data['video']            = ($result[$i]['video_name'] != '') ? base_url().'upload/celebrity_video/' .$result[$i]['video_name'] : '';
+					$data['video_thum']       = ($result[$i]['video_thum'] != '') ? base_url().'upload/celebrity_video/video_thum/' .$result[$i]['video_thum'] : '';
 					
 					$arr[] = $data;
 				}
@@ -4221,7 +4016,7 @@ class Web_api extends CI_Controller {
 				
 				if($file_ext == 'mp4' || $file_ext == 'avi' || $file_ext == '3gp' || $file_ext == 'flv' || $file_ext == 'flvwmv') 
 				{
-					if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
+					if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name']) && isset($_FILES['upload_thum']) && !empty($_FILES['upload_thum']['name'])) {
 						$this->handle_upload_videos();
 						$data['video_name'] = $_POST['file_name'];
 
@@ -4231,6 +4026,17 @@ class Web_api extends CI_Controller {
 						if ($old_file != "") {
 							$url = base_url() . './upload/celebrity_video/' . $old_file;
 							unlink($url);
+						}
+
+						$this->handle_upload_thum();
+						$data['video_thum'] = $_POST['file_names'];
+
+						
+						$old_file_thum = $resultCartDetails[0]['video_thum'];
+
+						if ($old_file_thum != "") {
+							$url1 = './upload/celebrity_video/video_thum/' . $old_file_thum;
+							unlink($url1);
 						}
 
 						$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
@@ -4246,9 +4052,9 @@ class Web_api extends CI_Controller {
 								$message = 'Hello check Your New Video Uploaded By Celebrity';
 								if($getUserToken[0]['device_type'] == 'Android') {
 									
-									//$this->sendNotificationUsingSeverKeyAndroidFromCelebSide([$registatoin_ids], $noti_title, $message);
+									$this->sendNotificationUsingSeverKeyAndroidFromCelebSide([$registatoin_ids], $noti_title, $message);
 								} else {
-									//$this->sendNotificationToIOSUsingSeverKeyFromCelebSide([$registatoin_ids], $noti_title, $message);
+									$this->sendNotificationToIOSUsingSeverKeyFromCelebSide([$registatoin_ids], $noti_title, $message);
 								}
 							
 							}
@@ -4267,7 +4073,7 @@ class Web_api extends CI_Controller {
 
 						$data_json['validation'] = false;
 
-						$data_json['msg'] = "Please Select The Video.";
+						$data_json['msg'] = "Please Select The Video OR Thumbnail.";
 
 						echo json_encode($data_json);
 						exit;
@@ -4939,6 +4745,37 @@ class Web_api extends CI_Controller {
 		}
 	}
 
-	
+	function handle_upload_thum() {
+		if (isset($_FILES['upload_thum']) && !empty($_FILES['upload_thum']['name'])) {
+			$config = array();
+			
+			$config['upload_path'] = './upload/celebrity_video/video_thum';
+			
+			$config['allowed_types'] = 'jpg|jpeg|png|JPG|JPEG|PNG';
+			$config['max_size'] = '0';
+			$config['overwrite'] = TRUE;
+			$config['remove_spaces'] = TRUE;
+			$_FILES['userfile']['name'] = $_FILES['upload_thum']['name'];
+			$_FILES['userfile']['type'] = $_FILES['upload_thum']['type'];
+			$_FILES['userfile']['tmp_name'] = $_FILES['upload_thum']['tmp_name'];
+			$_FILES['userfile']['error'] = $_FILES['upload_thum']['error'];
+			$_FILES['userfile']['size'] = $_FILES['upload_thum']['size'];
+			$rand = md5(uniqid(rand(), true));
+			$fileName = 'my_pic_' . $rand;
+			$fileName = str_replace(" ", "", $fileName);
+			$config['file_name'] = $fileName;
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload()) {
+				$upload_data = $this->upload->data();
+				$_POST['file_names'] = $upload_data['file_name'];
+				return true;
+			} else {
+
+				echo $this->upload->display_errors();
+			}
+		}
+
+	}
 
 }

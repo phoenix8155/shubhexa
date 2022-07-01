@@ -29,6 +29,8 @@ Class Home_model extends CI_Model {
 
 		$this->db->where('status', 'Active');
 
+		$this->db->order_by('id', 'Desc');
+
 		//$this->db->limit(6);
 
 		$query = $this->db->get();

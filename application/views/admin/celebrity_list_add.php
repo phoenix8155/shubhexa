@@ -98,6 +98,22 @@
 					      </select>
                 <?php echo form_error('language_known', '<p class="error_p">', '</p>');} ?> </div>
             </div>
+            
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Mobile Number</label>
+              <div class="col-sm-4">
+                <?php $form_value = set_value('mobileno', isset($result[0]['mobileno']) ? $result[0]['mobileno'] : '');?>
+                <input type="text" class="form-control mobileno" id="mobileno" name="mobileno" value="<?=$form_value?>" placeholder="Mobile Number" required>
+                <label class="error_m"></label>
+                <?php echo form_error('mobileno', '<p class="error_p">', '</p>'); ?>
+              </div>
+              <label class="col-sm-2 control-label">Email Id</label>
+              <div class="col-sm-4">
+                  <?php $form_value = set_value('emailid', isset($result[0]['emailid']) ? $result[0]['emailid'] : '');?>
+                  <input type="email" class="form-control" id="emailid" name="emailid" value="<?=$form_value?>" placeholder="Email id" required>
+                  <label class="error_e"></label>
+                  <?php echo form_error('emailid', '<p class="error_p">', '</p>'); ?> </div>
+              </div>
 
             <div class="form-group">
               <label class="col-sm-2 control-label">Date Of Birth</label>
@@ -300,7 +316,7 @@ if ($form_value == 'No') {
 
             <div class="form-group">
               	<div class="col-sm-offset-2 col-sm-10">
-	                <button type="submit" class="btn btn-primary">Submit</button>
+	                <button type="submit" class="btn btn-primary" id="celeb_add">Submit</button>
 	                <a href="<?=file_path('admin')?><?=$this->uri->rsegment(1)?>/view">
 	                <button type="button" class="btn btn-default">Cancel</button>
 	                </a>
@@ -311,6 +327,21 @@ if ($form_value == 'No') {
   </div>
 </div>
 <style type="text/css">
+.error_m {
+  padding-top: 10px;
+  color: red;
+  font-weight: 600;
+}
+.error_e {
+  padding-top: 10px;
+  color: red;
+  font-weight: 600;
+}
+.error_p {
+  padding-top: 10px;
+  color: red;
+  font-weight: 600;
+}
 div#ui-datepicker-div {
 	top: 248px !important;
 }
@@ -333,7 +364,79 @@ div#ui-datepicker-div {
             // minDate: 0,
             dateFormat: 'yy-mm-dd',
         });
+
+        
+
+
+      $(document).on('keyup', '#mobileno', function(e) { 
+        if (/\D/g.test(this.value))
+        {
+          this.value = this.value.replace(/\D/g, '');
+        }
+        e.preventDefault();  
+        var mobileNo = $(this).val();       
+        var mobileLength = $(this).val().length;        
+          if(parseInt(mobileLength)==10) {  
+            var url = '<?=file_path('admin/celebrity_list/checkMobileNumberExist')?>'+mobileNo;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'html',
+                success: function (res) { 
+                   
+                    if(res==false) {                        
+                        $('.error_m').html('Mobile Number Already Exists');
+                        $('#celeb_add').prop('disabled',true); 
+                    }else {
+                        $('.error_m').html('');
+                        $('#celeb_add').prop('disabled',false); 
+                    }
+                }
+            });
+        } else {
+          $('.error_m').html('Enter 10 Digit Mobile Number');
+          $('#celeb_add').prop('disabled',true); 
+        }
+      });
+
+      $(document).on('focusout', '#emailid', function(e) { 
+        e.preventDefault();  
+        var emailid = $(this).val();
+        var emailValidation = validateEmail(emailid);
+        if(emailValidation == true) {
+            var url = '<?=file_path('admin/celebrity_list/checkEmailIdExist')?>';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data:{emailid:emailid},
+                dataType: 'html',
+                success: function (res) { 
+                    if(res==1) {                        
+                        $('.error_e').html('Email Id Already Exists');
+                        $('#celeb_add').prop('disabled',true); 
+                    }else if(res==2) {
+                      $('.error_e').html('');
+                      $('#celeb_add').prop('disabled',false); 
+                    }else if(res == 0) {
+                      $('.error_e').html('Email Id Required');
+                      $('#celeb_add').prop('disabled',true);
+                    }
+
+                }
+            });
+          } else {
+            $('.error_e').html('Email Id Not Valid');
+            $('#celeb_add').prop('disabled',true);
+          }
+      });
+
     });
+
+function validateEmail(email) {
+  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/; 
+  var test = regex.test(email);
+  return test;
+}
 </script>
 <script type="text/javascript">
     var config = {

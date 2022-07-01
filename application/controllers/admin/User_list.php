@@ -104,7 +104,7 @@ class User_list extends CI_Controller {
 
 		$data['result'] = $this->comman_fun->get_table_data('membermaster', array('usercode' => $usercode));
 
-		$page_info['menu_id'] = 'menu-celebrity-list';
+		$page_info['menu_id'] = 'menu-user-list';
 
 		$page_info['page_title'] = 'Profile View';
 

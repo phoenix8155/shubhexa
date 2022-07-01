@@ -9,6 +9,8 @@ Class Testimonial_model extends CI_Model {
 
 		$this->db->where('status', 'Active');
 
+		$this->db->order_by('id', 'Desc');
+
 		$query = $this->db->get();
 
 		$the_content = $query->result_array();

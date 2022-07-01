@@ -132,9 +132,10 @@
             <li> <a href="#"> <i class="fa fa-desktop" aria-hidden="true"></i> <span class="menu-title">Website CMS</span> <i class="arrow"></i> </a>
               <ul class="collapse">
                	<li><a id="menu-slider-list" href="<?=file_path('admin')?>slider_list/view/">Slider</a></li>
-				<li><a id="menu-contact-list" href="<?=file_path('admin')?>contact_list/view/">Contact</a></li>
-				<li><a id="menu-nl-list" href="<?=file_path('admin')?>newsletter_list/view/">Newsletter List</a></li>
-				<li><a id="menu-career" href="#<?=file_path('admin')?>career/view/">Pages</a></li>
+                <li><a id="menu-contact-list" href="<?=file_path('admin')?>contact_list/view/">Contact</a></li>
+                <li><a id="menu-contact-list" href="<?=file_path('admin')?>feedback_list/view/">Feedback</a></li>
+                <li><a id="menu-nl-list" href="<?=file_path('admin')?>newsletter_list/view/">Newsletter List</a></li>
+                <li><a id="menu-career" href="#<?=file_path('admin')?>career/view/">Pages</a></li>
               </ul>
             </li>
             <li> <a id="menu-testimonial-list" href="<?=file_path('admin')?>testimonial_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> Testimonial List </span> </a> </li>

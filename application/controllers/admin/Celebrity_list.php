@@ -123,6 +123,8 @@ class Celebrity_list extends CI_Controller {
 			$data['form_set'] = array('mode' => 'edit', 'eid' => $eid);
 
 			$data['result'] = $this->ObjM->get_record($eid);
+
+			
 		} else {
 			$data['form_set'] = array('mode' => 'add');
 		}
@@ -154,7 +156,11 @@ class Celebrity_list extends CI_Controller {
 			$this->form_validation->set_rules('last_name', 'last name', 'required|trim');
 			$this->form_validation->set_rules('known_for[]', 'known for', 'required|trim');
 			$this->form_validation->set_rules('category[]', 'category', 'required|trim');
-			//$this->form_validation->set_rules('birth_date', 'date of birth', 'required|trim');
+			$this->form_validation->set_rules('mobileno','Mobile Number','required|trim|callback_checkDuplicateNumber');
+			$this->form_validation->set_message('checkDuplicateNumber','Mobile Number is already exists. Please use another Number.');
+			$this->form_validation->set_rules('emailid','Email Id','required|trim|valid_email|callback_checkDuplicateEmailid');
+			$this->form_validation->set_message('checkDuplicateEmailid','Email is already exists. Please use another Email Id.');
+			
 
 			if ($this->form_validation->run() === false) {
 				$this->addnew($_POST['mode'], $_POST['eid']);
@@ -224,11 +230,6 @@ class Celebrity_list extends CI_Controller {
 
 			$member_id = $this->userCreate($celebrityId);
 
-			//$dataUpdate['member_id'] = $member_id;
-			//$dataUpdate['update_date'] = date('Y-m-d h:i:s');
-
-			//$this->comman_fun->update($dataUpdate, 'celebrity_master', array('id' => $celebrityId));
-
 			$this->session->set_flashdata("success", "Record Insert Successfully.....");
 		}
 		if ($_POST['mode'] == 'edit') {
@@ -236,6 +237,8 @@ class Celebrity_list extends CI_Controller {
 			$data['update_date'] = date('Y-m-d h:i:s');
 
 			$this->comman_fun->update($data, 'celebrity_master', array('id' => $_POST['eid']));
+
+			$member_id = $this->userUpdate($_POST['eid']);
 
 			if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 				$url = './upload/celebrity_profile/' . $_POST['old_file'];
@@ -335,7 +338,8 @@ class Celebrity_list extends CI_Controller {
 	public function userCreate($celebrityId) {
 		$first_name = filter_data($_POST['first_name']);
 		$last_name = filter_data($_POST['last_name']);
-		$username = $first_name . '_' . $last_name . '_' . $celebrityId;
+		// $username = $first_name . '_' . $last_name . '_' . $celebrityId;
+		$username = $_POST['emailid'];
 		$password = "12345";
 
 		$data['role_type'] = '2';
@@ -344,6 +348,10 @@ class Celebrity_list extends CI_Controller {
 		$data['lname'] = $last_name;
 		$data['username'] = $username;
 		$data['password'] = $password;
+
+		$data['mobileno'] = filter_data($_POST['mobileno']);
+		$data['emailid'] = filter_data($_POST['emailid']);
+		
 
 		$data['status'] = 'Active';
 
@@ -355,6 +363,11 @@ class Celebrity_list extends CI_Controller {
 
 		// Send Notification to All Users
 		if($member_id > 0) {
+			if($_POST['email_id'] != '') {
+				
+				$this->sendEmailToCeleb($member_id);
+			
+			}
 
 			$getUsersToken = $this->comman_fun->get_table_data(
 				'membermaster',
@@ -380,6 +393,24 @@ class Celebrity_list extends CI_Controller {
 		
 		return $member_id;
 
+	}
+
+	public function userUpdate($celebrityId) {
+		$first_name = filter_data($_POST['first_name']);
+		$last_name = filter_data($_POST['last_name']);
+		$data['role_type'] = '2';
+		$data['fname'] = $first_name;
+		$data['lname'] = $last_name;
+
+		$data['mobileno'] = filter_data($_POST['mobileno']);
+		$data['emailid'] = filter_data($_POST['emailid']);
+
+		$data['status'] = 'Active';
+
+		$data['update_date'] = date('Y-m-d h:i:s');
+
+		return $this->comman_fun->update($data, 'membermaster', array('celebrity_id' => $_POST['eid']));
+	
 	}
 
 	protected function sendNotificationUsingSeverKeyAndroid($registatoin_ids, $messageTitle, $data) {
@@ -459,4 +490,126 @@ class Celebrity_list extends CI_Controller {
 		//echo $response;
 		//exit;
 	}
+
+
+	function sendEmailToCeleb($member_id) {
+		$getCelebsData = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
+		$name =  $getCelebsData[0]['fname'].' '.$getCelebsData[0]['lname'];
+		$emailData = [
+			'name'     => $name,
+            'username' => $getCelebsData[0]['username'],
+            'password' => $getCelebsData[0]['password']
+        ];
+        
+		$msg = $this->load->view('admin/sendEmailToCeleb_view', $emailData,true);
+        
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('shubhexa@gmail.com', 'SHUBHEXA');
+        $this->email->to($getCelebsData[0]['email_id']);
+        $this->email->subject('Reset Password');
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
+	}
+
+	public function checkDuplicateNumber()
+    {
+        $this->db->select('*');
+        $this->db->from('membermaster');
+        $this->db->where('mobileno', $this->input->post('mobileno'));
+        $this->db->where('status!=', 'Delete');
+        $user = $this->db->get()->row();
+        
+        if (isset($user)) {
+            if ($this->input->post('eid') == "") {
+                return false;
+            }
+            if ($user->celebrity_id == $this->input->post('eid')) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+	public function checkDuplicateEmailid()
+    {
+        $this->db->select('*');
+        $this->db->from('membermaster');
+        $this->db->where('emailid', $this->input->post('emailid'));
+        $this->db->where('status!=', 'Delete');
+        $user = $this->db->get()->row();
+        
+        if (isset($user)) {
+            if ($this->input->post('eid') == "") {
+                return false;
+            }
+            if ($user->celebrity_id == $this->input->post('eid')) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+	public function checkMobileNumberExist($mobileNo)
+    {
+        if ($mobileNo != "") {
+            
+            $customerDetail = $this->comman_fun->get_table_data(
+                'membermaster',
+                array(
+                    'mobileno' => $mobileNo,
+                    'status' => 'Active',
+                )
+            );
+			
+            if (!empty($customerDetail)) {
+                echo false;
+            } else {
+				echo true;
+			}
+        }
+    }
+	public function checkEmailIdExist()
+    {
+		$emailId = $_POST['emailid'];
+        if ($emailId != "") {
+            
+            $customerDetail = $this->comman_fun->get_table_data(
+                'membermaster',
+                array(
+                    'emailid' => $emailId,
+                    'status' => 'Active',
+                )
+            );
+			
+            if (!empty($customerDetail)) {
+                echo 1;
+            } else {
+				echo 2;
+			}
+        } else {
+			echo 0;
+		}
+    }
 }

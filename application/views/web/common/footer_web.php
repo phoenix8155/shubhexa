@@ -377,16 +377,25 @@ $(function() {
 $(document).ready(function(){
 
 	$("#sign_emailid").keyup(function(){
-  	var sign_emailid = $("#sign_emailid").val();
-    var url = '<?=file_path()?>home/checkUserAvailable';
+	
+	var sign_emailid = $("#sign_emailid").val();
+    
+	
+	
+	var url = '<?=file_path()?>home/checkUserAvailable';
 	  $.ajax({
 	        type: "POST",
 	        data: { emailid: sign_emailid},
             url: url,
             dataType: 'json',
 	        success: function(resp) {
+				
 			    if(resp=="false"){
-			    	$('.user-checks').html('This email id is already taken.');
+					if(sign_emailid == '') {
+						$('.user-checks').html('');
+					} else {
+						$('.user-checks').html('This email id is already taken.');
+					}
 			    }else{
 			    	$('.user-checks').html('');
 			    }

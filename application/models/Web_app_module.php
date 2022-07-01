@@ -487,6 +487,8 @@ Class Web_app_module extends CI_Model {
 
 		$this->db->where('celebrity_task_master.status', 'Active');
 
+		$this->db->where('celebrity_task_master.cart_detail_id', 'Desc');
+
 		$query = $this->db->get();
 
 		$the_content = $query->result_array();
@@ -720,6 +722,37 @@ Class Web_app_module extends CI_Model {
 
 		$the_content = $query->result_array();
 
+		return $the_content;
+
+	}
+
+	function get_last_value() {
+		$this->db->select("*");
+		$this->db->from('cart_master');
+		$this->db->where('status', 'Active');
+		$this->db->limit(1);
+		$this->db->order_by('cart_id', 'DESC');
+		$query = $this->db->get();
+		$the_content = $query->result_array();
+		return $the_content;
+	}
+
+	function checkApplyKeyData($apple_key) {
+		
+		$this->db->select('*');
+
+		$this->db->from('membermaster');
+
+		$this->db->where('apple_key IS NOT NULL', $apple_key);
+
+		$this->db->where('role_type', 3);
+
+		$this->db->where('status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+		
 		return $the_content;
 
 	}

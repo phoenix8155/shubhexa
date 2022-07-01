@@ -352,7 +352,7 @@ for ($i = 0; $i < count($res); $i++) {
                                 <div class="form-group">
                                     <label>Your email</label>
                                     <div class="aon-inputicon-box">
-                                        <input class="form-control sf-form-control" maxlength="50" id="your_email" name="your_email" type="text" placeholder="Your email"><span id="your_email_error"></span>
+                                        <input class="form-control sf-form-control" maxlength="50" id="your_email" name="your_email" type="text" placeholder="Your email" value="<?=$emailid;?>"><span id="your_email_error"></span>
                                         <i class="aon-input-icon fa fa-user"></i>
                                     </div>
                                 </div>
@@ -361,7 +361,7 @@ for ($i = 0; $i < count($res); $i++) {
                                 <div class="form-group">
                                     <label>Your mobile number</label>
                                     <div class="aon-inputicon-box">
-                                        <input class="form-control sf-form-control" id="your_number" maxlength="50" name="your_number" type="text" placeholder="Your mobile number"><span id="your_number_error"></span>
+                                        <input class="form-control sf-form-control" id="your_number" maxlength="50" name="your_number" type="text" placeholder="Your mobile number" value="<?=$mobileno;?>"><span id="your_number_error"></span>
                                         <i class="aon-input-icon fa fa-user"></i>
                                     </div>
                                 </div>

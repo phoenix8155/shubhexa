@@ -29,6 +29,8 @@ Class Celebrity_model extends CI_Model {
 
 		$this->db->where("JSON_SEARCH(`celebrity_master`.`category`, 'one', '" . $category_name . "') is not null");
 
+		$this->db->order_by('id', 'Desc');
+
 		$query = $this->db->get();
 
 		$the_content = $query->result_array();
@@ -64,6 +66,22 @@ Class Celebrity_model extends CI_Model {
 		$this->db->where('occasion_value', $occasion_option);
 
 		$this->db->where('message_for', $message_for);
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getUserLoginDetails($usercode) {
+
+		$this->db->select('*');
+
+		$this->db->from('membermaster');
+
+		$this->db->where('usercode', $usercode);
 
 		$query = $this->db->get();
 

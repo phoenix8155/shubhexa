@@ -21,9 +21,13 @@ Class Celebrity_model extends CI_Model {
 
 	function get_record($id) {
 
+		$this->db->select('membermaster.celebrity_id,membermaster.emailid,membermaster.mobileno');
+
 		$this->db->select('celebrity_master.*');
 
 		$this->db->from('celebrity_master');
+
+		$this->db->join('membermaster','membermaster.celebrity_id = celebrity_master.id','left');
 
 		$this->db->where('celebrity_master.status !=', 'Delete');
 

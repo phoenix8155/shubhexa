@@ -43,17 +43,30 @@ class Report extends CI_Controller {
 
 			$getCountOrder = $this->comman_fun->count_record('cart_details',array('cart_id' => $result[$i]['cart_id'],'status'=>'Active'));
 
+			$getCelebId    = $this->comman_fun->get_table_data('cart_details',array('cart_id' => $result[$i]['cart_id'],'status'=>'Active'));
+
+			$arr = [];
+			for($k=0;$k<count($getCelebId);$k++) {
+				
+				$CelebsName = $this->comman_fun->get_table_data('celebrity_master',array('id' => $getCelebId[$k]['celebrity_id']));
+				$arr[] = $CelebsName[0]['fname'].' '.$CelebsName[0]['lname'];
+
+                $getCelebsIds = implode(",", $arr);
+			}
+			
+
 			$row = $i + 1;
 			$html .= '<tr>
 						<td>' . $row . '</td>
 						<td>' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
 						<td>' . $result[$i]['mobileno'].'</td>
 						<td>' . $result[$i]['emailid']. '</td>
+						<td>' . $getCelebsIds. '</td>
 						<td>' . $result[$i]['order_no']. '</td>
 						<td>' . $getCountOrder. '</td>
 						<td>' . date('d-m-Y',strtotime($result[$i]['payment_date'])) . '</td>
 						<td>' . '₹. '.$result[$i]['total_amount'] . '</td>';
-			$html .= '</td>
+			$html .= '</td> 
 					</tr>';
 		}
 
@@ -76,7 +89,7 @@ class Report extends CI_Controller {
 		$output .= '"Payment Date",';
 		$output .= '"Total Amount",';
         $output .="\n";
-
+		$total = 0;
 		for ($i=0; $i<count($result); $i++) {
             
             $getCountOrder = $this->comman_fun->count_record('cart_details',array('cart_id' => $result[$i]['cart_id'],'status'=>'Active'));
@@ -95,8 +108,19 @@ class Report extends CI_Controller {
             $output .='"'.$orderDate.'",';
 			$output .='"'.$result[$i]['total_amount'].'",';
             $output .="\n";
+			$total += $result[$i]['total_amount'];
         }
         
+		$output .= '"Total Amount",';
+		$output .= '"",';
+		$output .= '"",';
+		$output .= '"",';
+		$output .= '"",';
+		$output .= '"",';
+		$output .= '"",';
+		$output .= '"'.$total.'",';
+		
+
         $dt = date("d-F-Y");
         $filename = "user_report_".$dt;
         

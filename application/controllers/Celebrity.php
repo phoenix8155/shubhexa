@@ -5,6 +5,8 @@ class Celebrity extends CI_Controller {
 
 	function __construct() {
 
+		
+
 		parent::__construct();
 
 		$this->load->model('Celebrity_model', 'ObjM', true);
@@ -12,7 +14,11 @@ class Celebrity extends CI_Controller {
 	}
 
 	public function view($cid) {
-
+		
+		$getUserLoginData = $this->ObjM->getUserLoginDetails($this->session->userdata['user']['usercode']);
+		
+		$data['emailid']     = ($getUserLoginData[0]['emailid'] != '') ? $getUserLoginData[0]['emailid'] : '';
+		$data['mobileno']     = ($getUserLoginData[0]['mobileno'] != '') ? $getUserLoginData[0]['mobileno'] : ''; 
 		$data['resCelebirty'] = $this->ObjM->getCelebrityDetails($cid);
 		$data['occasionList'] = $this->ObjM->getOccasions();
 

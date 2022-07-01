@@ -13,11 +13,25 @@ if ($result[0]['birthdate'] != "") {
 } else {
 	$bday = "";
 }
-if ($result[0]['profile_pic'] != "") {
-	$image = '<img src="' . base_url() . 'upload/celebrity_profile/' . $result[0]['profile_pic'] . '" height="100"  alt="Profile Picture"/>';
+// if ($result[0]['profile_pic'] != "") {
+// 	$image = '<img src="' . base_url() . 'upload/celebrity_profile/' . $result[0]['profile_pic'] . '" height="100"  alt="Profile Picture"/>';
+// } else {
+// 	$image = '<img class="img-lg img-circle" src="' . asset_path() . 'panel/images/profile.png" alt="Profile Picture">';
+// }
+
+if ($result[0]['oauth_provider'] != "" & $result[0]['oauth_provider'] == "Facebook") {
+	$image = "<img src='" . $result[0]['profile_pic'] . "'  style='height: 96px; width: 96px;'/>";
+} else if ($result[0]['oauth_provider'] != "" & $result[0]['oauth_provider'] == "Google") {
+	$image = "<img src='" . $result[0]['profile_pic'] . "'  style='height: 96px; width: 96px;'/>";
 } else {
-	$image = '<img class="img-lg img-circle" src="' . asset_path() . 'panel/images/profile.png" alt="Profile Picture">';
+	if ($result[0]['profile_pic'] != "") {
+		$image = "<img src='" . base_url() . "upload/user/" . $result[0]['profile_pic'] . "'  style='height: 96px; width: 96px;'/>";
+
+	} else {
+		$image = "<img src='" . base_url() . "upload/user/default.png'  style='height: 96px; width: 96px;'/>";
+	}
 }
+
 if ($result[0]['emailid'] != "") {
 	$emailid = $result[0]['emailid'];
 } else {
