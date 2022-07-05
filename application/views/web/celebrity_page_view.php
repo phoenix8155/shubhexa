@@ -472,10 +472,20 @@ for ($i = 0; $i < count($res); $i++) {
                       </div>
                       <div class="social-share-cell">
                         <ul class="share-buttons">
-                          <li><a class="fb-share" href="<?=$resCelebirty[0]['fb_link']?>" target="_blank" rel="nofollow"><i class="fa fa-facebook"></i></a></li>
-                          <li><a class="twitter-share" href="<?=$resCelebirty[0]['twitter_link']?>" target="_blank" rel="nofollow"><i class="fa fa-twitter"></i></a></li>
-                          <li><a class="instagram-share" href="<?=$resCelebirty[0]['insta_link']?>" target="_blank" rel="nofollow"><i class="fa fa-instagram"></i></a></li>
-                          <li><a class="youtube-share" href="<?=$resCelebirty[0]['sample_video_link']?>" target="_blank" rel="nofollow"><i class="fa fa-youtube"></i></a></li>
+                          <?php
+                            $fbLink = ($resCelebirty[0]['fb_link'] != '') ? $resCelebirty[0]['fb_link'] : 'javascript:void(0)';
+                            $t1     = ($resCelebirty[0]['fb_link'] != '') ? 'target="_blank"' : '';
+                            $twLink = ($resCelebirty[0]['twitter_link'] != '') ? $resCelebirty[0]['twitter_link'] : 'javascript:void(0)';
+                            $t2     = ($resCelebirty[0]['twitter_link'] != '') ? 'target="_blank"' : '';
+                            $inLink = ($resCelebirty[0]['insta_link'] != '') ? $resCelebirty[0]['insta_link'] : 'javascript:void(0)';
+                            $t3     = ($resCelebirty[0]['insta_link'] != '') ? 'target="_blank"' : '';
+                            $ytLink = ($resCelebirty[0]['sample_video_link'] != '') ? $resCelebirty[0]['sample_video_link'] : 'javascript:void(0)';
+                            $t4     = ($resCelebirty[0]['sample_video_link'] != '') ? 'target="_blank"' : '';
+                          ?>
+                          <li><a class="fb-share" href="<?=$fbLink?>" <?=$t1?> rel="nofollow"><i class="fa fa-facebook"></i></a></li>
+                          <li><a class="twitter-share" href="<?=$twLink?>" <?=$t2?> rel="nofollow"><i class="fa fa-twitter"></i></a></li>
+                          <li><a class="instagram-share" href="<?=$inLink?>" <?=$t3?> rel="nofollow"><i class="fa fa-instagram"></i></a></li>
+                          <li><a class="youtube-share" href="<?=$ytLink?>" <?=$t4?> rel="nofollow"><i class="fa fa-youtube"></i></a></li>
                         </ul>
                       </div>
                     </div>

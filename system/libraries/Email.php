@@ -90,7 +90,7 @@ class CI_Email {
 	 *
 	 * @var	string
 	 */
-	public $smtp_pass = 'Phoenix@125075';
+	public $smtp_pass = 'Shubhexa@125075';
 
 	/**
 	 * SMTP Server port

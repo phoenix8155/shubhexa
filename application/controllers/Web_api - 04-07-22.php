@@ -1200,189 +1200,6 @@ class Web_api extends CI_Controller {
 		}
 	}
 
-	// function loginWith() {
-
-	// 	$f_name = $_REQUEST['f_name'];
-	// 	$l_name = $_REQUEST['l_name'];
-	// 	$emailid = $_REQUEST['email_id'];
-	// 	$profile_pic = $_REQUEST['profile_pic'];
-	// 	$firebase_token = $_REQUEST['firebase_token'];
-	// 	$device_type = $_REQUEST['device_type'];
-	// 	$login_type = $_REQUEST['login_type'];
-	// 	$oauth_id = $_REQUEST['oauth_id'];
-
-	// 	$json_arr = array();
-
-	// 	// $checkRecordM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
-	// 	$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active', 'role_type' => '3'));
-		
-	// 	if (count($checkRecordM) > 0) {
-
-	// 		// $json_arr['validation'] = "false";
-
-	// 		// $json_arr['msg'] = "email is already registered.";
-
-	// 		// echo json_encode($json_arr);
-
-	// 		// exit;
-
-	// 		$ltype_array = array('facebook', 'google');
-
-	// 		if (in_array($login_type, $ltype_array)) {
-
-	// 			if ($login_type == "facebook") {
-	// 				$ltype = 'Facebook';
-	// 			} else if ($login_type == "google") {
-	// 				$ltype = 'Google';
-	// 			} else {
-	// 				$ltype = '';
-	// 			}
-
-	// 			//update
-	// 			$updateData = array();
-
-	// 			$updateData['fname'] = filter_data($f_name);
-
-	// 			$updateData['lname'] = filter_data($l_name);
-
-	// 			//$updateData['emailid'] = filter_data($emailid);
-
-	// 			$updateData['profile_pic'] = filter_data($profile_pic);
-
-	// 			$updateData['oauth_provider'] = $ltype;
-
-	// 			$updateData['oauth_id'] = filter_data($oauth_id);
-
-	// 			$updateData['firebase_token'] = filter_data($firebase_token);
-
-	// 			$updateData['device_type'] = filter_data($device_type);
-
-	// 			$updateData['accessToken'] = $this->getToken(); //get Token
-
-	// 			$updateData['update_date'] = date('Y-m-d h:i:s');
-
-	// 			$this->comman_fun->update($updateData, 'membermaster', array('emailid' => $emailid, 'status' => 'Active'));
-
-	// 			$dataRes = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid));
-
-	// 			$arr = array();
-
-	// 			$datas = array();
-
-	// 			$datas['usercode'] = $dataRes[0]['usercode'];
-	// 			$datas['first_name'] = $dataRes[0]['fname'];
-	// 			$datas['last_name'] = $dataRes[0]['lname'];
-	// 			$datas['emailid'] = $dataRes[0]['emailid'];
-	// 			$datas['accessToken'] = $dataRes[0]['accessToken'];
-	// 			$datas['oauth_provider'] = $dataRes[0]['oauth_provider'];
-	// 			$datas['oauth_id'] = $dataRes[0]['oauth_id'];
-	// 			$datas['profile_pic'] = $dataRes[0]['profile_pic'];
-	// 			$arr[] = $datas;
-
-	// 			$json_arr['data'] = $arr;
-
-	// 			$json_arr['validation'] = true;
-
-	// 			$json_arr['msg'] = "";
-
-	// 			echo json_encode($json_arr);
-
-	// 			exit;
-
-	// 		} else {
-
-	// 			$json_arr['validation'] = false;
-
-	// 			$json_arr['msg'] = "email is already registered.";
-
-	// 			echo json_encode($json_arr);
-	// 			exit;
-	// 		}
-
-	// 	} else {
-
-	// 		if ($login_type == "facebook") {
-	// 			$ltype = 'Facebook';
-	// 		} else if ($login_type == "google") {
-	// 			$ltype = 'Google';
-	// 		} else {
-	// 			$ltype = '';
-	// 		}
-	// 		//insert
-	// 		$data = array();
-
-	// 		$data['fname'] = filter_data($f_name);
-
-	// 		$data['lname'] = filter_data($l_name);
-
-	// 		$data['emailid'] = filter_data($emailid);
-
-	// 		$data['profile_pic'] = filter_data($profile_pic);
-
-	// 		$data['oauth_provider'] = $ltype;
-
-	// 		$data['oauth_id'] = filter_data($oauth_id);
-
-	// 		$data['firebase_token'] = filter_data($firebase_token);
-
-	// 		$data['device_type'] = filter_data($device_type);
-
-	// 		$data['accessToken'] = $this->getToken(); //get Token
-
-	// 		$data['role_type'] = "3";
-
-	// 		$data['status'] = "Active";
-
-	// 		$data['email_verify'] = "Y";
-
-	// 		$data['create_date'] = date('Y-m-d H:i:s');
-
-	// 		$data['update_date'] = date('Y-m-d h:i:s');
-
-	// 		$data['timedt'] = time();
-
-	// 		$member_id = $this->comman_fun->addItem($data, 'membermaster');
-
-	// 		if ($member_id != "") {
-
-	// 			$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
-	// 			$arr = array();
-
-	// 			$datas = array();
-
-	// 			$datas['usercode'] = $dataRes[0]['usercode'];
-	// 			$datas['first_name'] = $dataRes[0]['fname'];
-	// 			$datas['last_name'] = $dataRes[0]['lname'];
-	// 			$datas['emailid'] = $dataRes[0]['emailid'];
-	// 			$datas['accessToken'] = $dataRes[0]['accessToken'];
-	// 			$datas['oauth_provider'] = $dataRes[0]['oauth_provider'];
-	// 			$datas['oauth_id'] = $dataRes[0]['oauth_id'];
-	// 			$datas['profile_pic'] = $dataRes[0]['profile_pic'];
-	// 			$arr[] = $datas;
-
-	// 			$json_arr['data'] = $arr;
-
-	// 			$json_arr['validation'] = true;
-
-	// 			$json_arr['msg'] = "";
-
-	// 			echo json_encode($json_arr);
-
-	// 			exit;
-
-	// 		} else {
-
-	// 			$json_arr['validation'] = false;
-
-	// 			$json_arr['msg'] = "Something went worng.";
-
-	// 			echo json_encode($json_arr);
-	// 			exit;
-	// 		}
-	// 	}
-
-	// }
 	function loginWith() {
 
 		$f_name = $_REQUEST['f_name'];
@@ -1396,8 +1213,7 @@ class Web_api extends CI_Controller {
 
 		$json_arr = array();
 
-		// $checkRecordM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
-		$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active', 'role_type' => '3'));
+		$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
 
 		if (count($checkRecordM) > 0) {
 
@@ -1420,7 +1236,7 @@ class Web_api extends CI_Controller {
 				} else {
 					$ltype = '';
 				}
-				
+
 				//update
 				$updateData = array();
 
@@ -1444,9 +1260,9 @@ class Web_api extends CI_Controller {
 
 				$updateData['update_date'] = date('Y-m-d h:i:s');
 
-				$this->comman_fun->update($updateData, 'membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active'));
+				$this->comman_fun->update($updateData, 'membermaster', array('emailid' => $emailid, 'status' => 'Active'));
 
-				$dataRes = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id));
+				$dataRes = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid));
 
 				$arr = array();
 
@@ -1491,8 +1307,6 @@ class Web_api extends CI_Controller {
 			} else {
 				$ltype = '';
 			}
-
-			
 			//insert
 			$data = array();
 
@@ -2433,20 +2247,12 @@ class Web_api extends CI_Controller {
 					$arr[] = $data;
 				}
 
-				$getSubTotal = $this->ObjM->getSubTotalFromCartDetails($res[0]['cart_id']);
-				
-				$getTotal = $this->ObjM->getTotalFromCart($res[0]['cart_id']);
-				
 				$data_json['validation'] = true;
 
 				$data_json['msg'] = "";
 
 				$data_json['cartId'] = $res[0]['cart_id'];
 
-				$data_json['sub_total'] = $getSubTotal[0]['sub_total'];
-
-				$data_json['total_amount'] = $getTotal[0]['total_amount'];
-				
 				$data_json['data'] = $arr;
 
 				echo json_encode($data_json);
@@ -2704,12 +2510,6 @@ class Web_api extends CI_Controller {
 
 			$this->comman_fun->delete('cart_details', array('id' => $cartItemId));
 
-			$data_json['sub_total'] = $recorddetails[0]['amount'];
-
-			$data_json['total_amount'] =  $recordMaster[0]['total_amount'];
-
-			$data_json['validation'] = true;
-
 			$data_json['validation'] = true;
 
 			$data_json['msg'] = "";
@@ -2870,7 +2670,7 @@ class Web_api extends CI_Controller {
 		if (count($resultUser) > 0) {
 
 			$result = $this->ObjM->getOrderBookingList($resultUser[0]['usercode'], $orderType);
-			
+
 			if (isset($result[0])) {
 
 				$json_arr = array();

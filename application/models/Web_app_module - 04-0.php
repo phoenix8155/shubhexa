@@ -433,42 +433,6 @@ Class Web_app_module extends CI_Model {
 
 	}
 
-	function getSubTotalFromCartDetails($cart_id) {
-
-		$this->db->select('SUM(cart_details.amount) as sub_total');
-
-		$this->db->from('cart_details');
-
-		$this->db->where('cart_details.cart_id', $cart_id);
-
-		$this->db->where('cart_details.status', 'Active');
-
-		$query = $this->db->get();
-
-		$the_content = $query->result_array();
-
-		return $the_content;
-
-	}
-
-	function getTotalFromCart($cart_id) {
-
-		$this->db->select('SUM(cart_master.total_amount) as total_amount');
-
-		$this->db->from('cart_master');
-
-		$this->db->where('cart_master.cart_id', $cart_id);
-
-		$this->db->where('cart_master.status', 'Active');
-
-		$query = $this->db->get();
-
-		$the_content = $query->result_array();
-
-		return $the_content;
-
-	}
-
 	function checkIsFavouriteOrNot($usercode, $celeb_id) {
 
 		$this->db->select('*');
@@ -523,7 +487,7 @@ Class Web_app_module extends CI_Model {
 
 		$this->db->where('celebrity_task_master.status', 'Active');
 
-		$this->db->order_by('celebrity_task_master.cart_detail_id', 'Desc');
+		$this->db->where('celebrity_task_master.cart_detail_id', 'Desc');
 
 		$query = $this->db->get();
 

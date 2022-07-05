@@ -80,29 +80,45 @@ class Email_verification extends CI_Controller {
 
 	function after_varification_email_verify($member_id) {
 
-		$member = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
+		
+		
 		$name = $member[0]['fname'] . ' ' . $member[0]['lname'];
 
 		$toEmail = $member[0]['emailid'];
+		
+		$emailData = [
+			'name'      => $name,
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailWelcome_view', $emailData,true);
+        
+		$subject = 'Welcome to Subheksha!';
+		$email = 'shubhexa@gmail.com';
 
-		$body = 'Dear ' . $name . ',<br><br>
-
-				Welcome to <strong>Shubhexa family</strong>. Thank you for verifying your Account.<br>
-
-				Your account is now active and your login details are below.<br><br>
-				Email: ' . $member[0]['emailid'] . '<br>
-				Password:' . $member[0]['password'] . '<br>
-
-				<br><br> Thank you.';
-
-		$subject = 'Email Verified Successfully';
-		$email = 'arpita8155@gmail.com';
-		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$headers .= 'From:' . $email . '' . "\r\n";
-		mail($toEmail, $subject, $body, $headers);
-
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from($email, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	public function success() {

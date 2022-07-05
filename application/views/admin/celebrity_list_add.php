@@ -188,24 +188,24 @@ if ($form_value == 'No') {
               <label class="col-sm-2 control-label">Twitter Page Link</label>
               <div class="col-sm-4">
                 <?php $form_value = set_value('twitter_link', isset($result[0]['twitter_link']) ? $result[0]['twitter_link'] : '');?>
-                <input type="text" class="form-control" id="twitter_link" name="twitter_link" value="<?=$form_value?>" placeholder="Twitter Page Link">
+                <input type="url" class="form-control" id="twitter_link" name="twitter_link" value="<?=$form_value?>" placeholder="Twitter Page Link">
                 <?php echo form_error('twitter_link', '<p class="error_p">', '</p>'); ?> </div>
                 <label class="col-sm-2 control-label">Facebook Page Link</label>
               <div class="col-sm-4">
                 <?php $form_value = set_value('fb_link', isset($result[0]['fb_link']) ? $result[0]['fb_link'] : '');?>
-                <input type="text" class="form-control" id="fb_link" name="fb_link" value="<?=$form_value?>" placeholder="Facebook Page Link">
+                <input type="url" class="form-control" id="fb_link" name="fb_link" value="<?=$form_value?>" placeholder="Facebook Page Link">
                 <?php echo form_error('fb_link', '<p class="error_p">', '</p>'); ?> </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">Instagram Link</label>
               <div class="col-sm-4">
                 <?php $form_value = set_value('insta_link', isset($result[0]['insta_link']) ? $result[0]['insta_link'] : '');?>
-                <input type="text" class="form-control" id="insta_link" name="insta_link" value="<?=$form_value?>" placeholder="Instagram Link">
+                <input type="url" class="form-control" id="insta_link" name="insta_link" value="<?=$form_value?>" placeholder="Instagram Link">
                 <?php echo form_error('insta_link', '<p class="error_p">', '</p>'); ?> </div>
                 <label class="col-sm-2 control-label">Sample Video Link</label>
               <div class="col-sm-4">
                 <?php $form_value = set_value('sample_video_link', isset($result[0]['sample_video_link']) ? $result[0]['sample_video_link'] : '');?>
-                <input type="text" class="form-control" id="sample_video_link" name="sample_video_link" value="<?=$form_value?>" placeholder="Sample Video Link">
+                <input type="url" class="form-control" id="sample_video_link" name="sample_video_link" value="<?=$form_value?>" placeholder="Sample Video Link">
                 <?php echo form_error('sample_video_link', '<p class="error_p">', '</p>'); ?> </div>
             </div>
 

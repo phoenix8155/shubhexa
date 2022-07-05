@@ -193,7 +193,52 @@ class My_account extends CI_Controller {
 		$data = array();
 		$data['password'] = filter_data($_POST['new_pass']);
 		$this->comman_fun->update($data, 'membermaster', array('usercode' => $this->session->userdata['user']['usercode']));
+		$this->emailChangePassword($this->session->userdata['user']['usercode']);
 
+	}
+
+	function emailChangePassword($member_id) {
+
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
+		
+		
+		$name = $member[0]['fname'] . ' ' . $member[0]['lname'];
+
+		$toEmail = $member[0]['emailid'];
+		
+		$emailData = [
+			'name'      => $name,
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailChangePassword_view', $emailData,true);
+        // echo $msg;
+		// exit;
+		$subject = 'Password changed successfully';
+		$email = 'shubhexa@gmail.com';
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from($email, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	function check_old_password() {

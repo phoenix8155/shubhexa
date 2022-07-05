@@ -244,49 +244,45 @@ class Home extends CI_Controller {
 	}
 
 	function registration_email($member_id) {
-
-		$member = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
 		$verification_code = $this->insert_verification($member_id, $member[0]['emailid']);
-
+		
 		$name = $member[0]['fname'] . ' ' . $member[0]['lname'];
 
 		$toEmail = $member[0]['emailid'];
-
-		$body = 'Dear ' . $name . ',<br><br>
-
-			You have successfully registered an account on Shubhexa. <br><br>
-
-			Email Verification : <a href="' . file_path('email_verification/verify/' . $verification_code) . '">Click Here to Verify your email address</a><br><br>
-
-			<br> Thank you.';
-
-		$subject = 'Registration Successful';
+		$emailData = [
+			'name'    			 => $name,
+			'verification_code'  => $verification_code,
+        ];
+        
+		$msg = $this->load->view('web/email_templates/emailVerification_view', $emailData,true);
+        
+		$subject = 'Confirm your email address';
 		$email = 'shubhexa@gmail.com';
-		// $headers = 'MIME-Version: 1.0' . "\r\n";
-		// $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		// $headers .= 'From:' . $email . '' . "\r\n";
-		// mail($toEmail, $subject, $body, $headers);
 
-		$this->load->library('email');
-		$config = array(
-			'mailtype' => 'html',
-			'charset' => 'utf-8',
-			'priority' => '1',
-		);
-		$this->email->initialize($config);
-		$this->email->set_newline("\r\n");
-
-		$this->email->from($email);
-
-		$this->email->to($toEmail); //shubhexa@gmail.com
-
-		$this->email->subject($subject);
-
-		$this->email->message($body);
-
-		$this->email->send();
-
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from($email, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	protected function insert_verification($member_id, $emailid) {
@@ -519,7 +515,8 @@ class Home extends CI_Controller {
 
 			if (count($res) > 0) {
 				$response = "Already subscribed.";
-				echo json_encode($response);exit;
+				//echo json_encode($response);exit;
+				echo json_encode(0);exit;
 			} else {
 
 				$data = array();
@@ -537,11 +534,12 @@ class Home extends CI_Controller {
 				if ($id != "") {
 
 					$response = "Successfully subscribed.";
-
-					echo json_encode($response);exit;
+					//echo json_encode($response);exit;
+					echo json_encode(1);exit;
 				} else {
 					$response = "Something went wrong!";
-					echo json_encode($response);exit;
+					//echo json_encode($response);exit;
+					echo json_encode(2);exit;
 				}
 
 			}

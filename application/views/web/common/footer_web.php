@@ -14,6 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <button type="submit" class="sf-sb-btn">Submit</button>
                     </div>
                     <span id="email_sn_error"></span>
+                    <span id="email_sn_success"></span>
                 </form>
             </div>
         </div>
@@ -236,6 +237,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	    font-size: 16px;
 	    color: red;
 	}
+	span#email_sn_success {
+	    font-size: 16px;
+	    color: #00b122;
+	}
 </style>
 <!-- JAVASCRIPT  FILES ========================================= -->
 <script src="<?=asset_path('web/')?>js/jquery-3.6.0.min.js"></script><!-- JQUERY.MIN JS -->
@@ -284,9 +289,23 @@ $(function() {
         cache:false,
         async:false,
         success: function(resp) {
-        	$("#email_sn_error").html('');
-        	$('#email_sn_error').html(resp);
-        	$("#email_sn").val('');
+			
+			if(resp == '0') {
+				$("#email_sn_error").html('');
+				$("#email_sn_error").html('Already subscribed.');
+				$("#email_sn_success").html('');
+				$("#email_sn").val('');
+			} else if(resp == '1') {
+				$("#email_sn_error").html('');
+				$("#email_sn_success").html('');
+				$("#email_sn_success").html('Successfully subscribed.');
+				$("#email_sn").val('');
+			} else if(resp == '2') {
+				$("#email_sn_error").html('');
+				$("#email_sn_error").html('Something went wrong');
+				$("#email_sn_success").html('');
+				$("#email_sn").val('');
+			}
 
         }
     });

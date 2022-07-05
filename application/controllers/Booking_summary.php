@@ -86,10 +86,65 @@ class Booking_summary extends CI_Controller {
 
 					$this->comman_fun->delete('wishlist_master', array('celebrity_id' => $resCartDetails[$i]['celebrity_id'], 'usercode' => $this->session->userdata['user']['usercode']));
 
+					if($id > 0) {
+
+						$this->sendBookingDetailsToUser($this->session->userdata['user']['usercode'],$resCartDetails[$i]['id'],$cartId);
+					}
+					
 				}
+				
+				
+				
 			}
 			$this->success();
 		}
+	}
+
+	function sendBookingDetailsToUser($member_id,$carDetailtId,$cartId) {
+
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
+
+		$getBookingDetails = $this->ObjM->getBookingDetails(
+			$member_id,
+			$carDetailtId,
+			$cartId
+		);
+
+		
+		$toEmail = $getBookingDetails[0]['emailid'];
+		
+		$emailData = [
+			'getBookingDetails' => $getBookingDetails[0],
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailBookingDetails_view', $emailData,true);
+        // echo $msg;exit;
+		$subject = 'Great News! Your booking confirmed';
+		$email = 'shubhexa@gmail.com';
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	public function success() {
