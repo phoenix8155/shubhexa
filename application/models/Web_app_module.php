@@ -523,7 +523,7 @@ Class Web_app_module extends CI_Model {
 
 		$this->db->where('celebrity_task_master.status', 'Active');
 
-		$this->db->order_by('celebrity_task_master.cart_detail_id', 'Desc');
+		$this->db->order_by('celebrity_task_master.id', 'Desc');
 
 		$query = $this->db->get();
 
