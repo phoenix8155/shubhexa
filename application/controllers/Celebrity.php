@@ -11,6 +11,8 @@ class Celebrity extends CI_Controller {
 
 		$this->load->model('Celebrity_model', 'ObjM', true);
 
+		
+
 	}
 
 	public function view($cid) {
