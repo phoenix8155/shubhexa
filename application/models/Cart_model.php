@@ -83,7 +83,7 @@ Class Cart_model extends CI_Model {
 
 		$this->db->select('celebrity_task_master.*');
 
-		$this->db->select('cart_details.occation_type,cart_details.delivery_date,cart_details.status');
+		$this->db->select('cart_details.occation_type,cart_details.delivery_date,cart_details.status,cart_details.template_message');
 
 		$this->db->select('cart_master.cart_id as cartIdCM,cart_master.order_no,cart_master.payment_status,cart_master.status');
 

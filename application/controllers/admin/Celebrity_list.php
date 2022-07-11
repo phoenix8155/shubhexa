@@ -192,6 +192,8 @@ class Celebrity_list extends CI_Controller {
 			$data['birthdate'] = "";
 		}
 
+		//$data['mobileno'] = filter_data($_POST['mobileno']);
+		//$data['emailid'] = filter_data($_POST['emailid']);
 		$data['age'] = filter_data($_POST['age']);
 		$data['gender'] = filter_data($_POST['gender']);
 		$data['charge_fees'] = filter_data($_POST['charge_fees']);
@@ -386,7 +388,7 @@ class Celebrity_list extends CI_Controller {
 
 		// Send Notification to All Users
 		if($member_id > 0) {
-			if($_POST['email_id'] != '') {
+			if($_POST['emailid'] != '') {
 				
 				$this->sendEmailToCeleb($member_id);
 			
@@ -513,24 +515,26 @@ class Celebrity_list extends CI_Controller {
 		//echo $response;
 		//exit;
 	}
-
-
 	function sendEmailToCeleb($member_id) {
-		$getCelebsData = $this->comman_fun->get_table_data(
+
+		$member = $this->comman_fun->get_table_data(
 			'membermaster',
 			array(
 				'usercode'=>$member_id,
 			)
 		);
-		$name =  $getCelebsData[0]['fname'].' '.$getCelebsData[0]['lname'];
+
+		$toEmail = $member[0]['emailid'];
+		$name =  $member[0]['fname'].' '.$member[0]['lname'];
 		$emailData = [
 			'name'     => $name,
-            'username' => $getCelebsData[0]['username'],
-            'password' => $getCelebsData[0]['password']
+            'username' => $member[0]['username'],
+            'password' => $member[0]['password']
         ];
         
 		$msg = $this->load->view('admin/sendEmailToCeleb_view', $emailData,true);
-        
+
+		$subject = 'Reset Password';
 
         $this->load->library('email');
         $config = array(
@@ -541,15 +545,15 @@ class Celebrity_list extends CI_Controller {
         
         $this->email->initialize($config);
         $this->email->set_newline("\r\n");
-        $this->email->from('shubhexa@gmail.com', 'SHUBHEXA');
-        $this->email->to($getCelebsData[0]['email_id']);
-        $this->email->subject('Reset Password');
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
         $this->email->message($msg);
         if ($this->email->send()) {
-            return true;
+			return true;
         } else {
-            return false;
-        }
+			return false;
+        }		
 	}
 
 	public function checkDuplicateNumber()
@@ -635,4 +639,43 @@ class Celebrity_list extends CI_Controller {
 			echo 0;
 		}
     }
+	// function sendEmailToCeleb2($member_id) {
+	// 	$getCelebsData = $this->comman_fun->get_table_data(
+	// 		'membermaster',
+	// 		array(
+	// 			'usercode'=>$member_id,
+	// 		)
+	// 	);
+	// 	$name =  $getCelebsData[0]['fname'].' '.$getCelebsData[0]['lname'];
+	// 	$emailData = [
+	// 		'name'     => $name,
+    //         'username' => $getCelebsData[0]['username'],
+    //         'password' => $getCelebsData[0]['password']
+    //     ];
+        
+	// 	$msg = $this->load->view('admin/sendEmailToCeleb_view', $emailData,true);
+        
+	// 	//echo $msg;exit;
+    //     $this->load->library('email');
+    //     $config = array(
+    //         'mailtype' => 'html',
+    //         'charset' => 'utf-8',
+    //         'priority' => '1',
+    //     );
+        
+    //     $this->email->initialize($config);
+    //     $this->email->set_newline("\r\n");
+    //     $this->email->from('shubhexa@gmail.com', 'SHUBHEXA');
+    //     $this->email->to($getCelebsData[0]['email_id']);
+    //     $this->email->subject('Reset Password');
+    //     $this->email->message($msg);
+    //     if ($this->email->send()) {
+    //         echo "send";exit;
+	// 		return true;
+    //     } else {
+	// 		echo $this->email->print_debugger();
+	// 		echo "not send";exit;
+    //         return false;
+    //     }
+	// }
 }

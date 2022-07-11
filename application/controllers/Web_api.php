@@ -2730,6 +2730,10 @@ class Web_api extends CI_Controller {
 					$id = $this->comman_fun->addItem($data, 'celebrity_task_master');
 
 					if($id > 0) {
+						//send email on booking
+							$this->sendBookingDetailsToUser($resultUser[0]['usercode'],$resCartDetails[$i]['id'],$cartId);
+							$this->sendBookingDetailsToCelebrity($resCartDetails[$i]['celebrity_id'],$resultUser[0]['usercode'],$resCartDetails[$i]['id'],$cartId);
+						//end
 						$getCelebsToken = $this->comman_fun->get_table_data('membermaster',array('celebrity_id'=>$resCartDetails[$i]['celebrity_id'],''));
 						if($getCelebsToken[0]['firebase_token'] != '' && $getCelebsToken[0]['device_type'] != '') {
 
@@ -2770,6 +2774,101 @@ class Web_api extends CI_Controller {
 			exit;
 
 		}
+	}
+
+	function sendBookingDetailsToUser($member_id,$carDetailtId,$cartId) {
+
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
+
+		$getBookingDetails = $this->ObjM->getBookingDetails(
+			$member_id,
+			$carDetailtId,
+			$cartId
+		);
+
+		
+		$toEmail = $getBookingDetails[0]['emailid'];
+		
+		$emailData = [
+			'getBookingDetails' => $getBookingDetails[0],
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailBookingDetails_view', $emailData,true);
+        // echo $msg;exit;
+		$subject = 'Great News! Your booking confirmed';
+		$email = 'shubhexa@gmail.com';
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
+	}
+
+	function sendBookingDetailsToCelebrity($celebrity_id,$member_id,$carDetailtId,$cartId) {
+
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'celebrity_id'=>$celebrity_id,
+			)
+		);
+
+		$getBookingDetails = $this->ObjM->getBookingDetails(
+			$member_id,
+			$carDetailtId,
+			$cartId
+		);
+
+		
+		$celebName = $member[0]['fname'] .' '.$member[0]['lname'];
+		$toEmail = $member[0]['emailid'];
+		
+		$emailData = [
+			'celebrity_name' => $celebName,
+			'getBookingDetails' => $getBookingDetails[0],
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailBookingDetailsForCelebView', $emailData,true);
+        //echo $msg;exit;
+		$subject = 'Great News! You received a new booking';
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	function getBookingList() {
@@ -4371,6 +4470,7 @@ class Web_api extends CI_Controller {
 								$dataUpdateStatus['video_status'] = 'Complete';
 								$dataUpdateStatus['update_date'] = date('Y-m-d h:i:s');
 								$this->comman_fun->update($dataUpdateStatus, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
+								$this->sendEmailToUser($resCTM[0]['usercode'],$resCTM[0]['cart_detail_id']);//email send to user for notifying 
 								$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
 								if(isset($getUserToken[0])) {
 									if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
@@ -4421,6 +4521,77 @@ class Web_api extends CI_Controller {
 			echo json_encode($data_json);
 			exit;
 		}
+	}
+	function sendEmailToUser($member_id,$cart_detail_id) {
+
+		$userDetails = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+				'role_type'=>'3',
+			)
+		);
+
+		$resCartDetails = $this->comman_fun->get_table_data(
+			'cart_details',
+			array(
+				'id'=>$cart_detail_id,
+			)
+		);
+
+		$resCartMasterDetails = $this->comman_fun->get_table_data(
+			'cart_master',
+			array(
+				'cart_id'=>$resCartDetails[0]['cart_id'],
+			)
+		);
+
+		$celebDetails = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'celebrity_id'=>$resCartDetails[0]['celebrity_id'],
+				'role_type'=>'2',
+			)
+		);
+		$userName = $userDetails[0]['fname'].' '.$userDetails[0]['lname'];
+		$toEmail = $userDetails[0]['emailid'];
+		$celebName = $celebDetails[0]['fname'].' '.$celebDetails[0]['lname'];
+		$order_no=$resCartMasterDetails[0]['order_no'];
+		$occation_type= str_replace('_', ' ', $resCartDetails[0]['occation_type']);
+		$delivery_date= date('d, M-Y', strtotime($resCartDetails[0]['delivery_date']));
+		$template_message= $resCartDetails[0]['template_message'];
+		
+		$emailData = [
+			'userName' => $userName,
+			'celebName' => $celebName,
+			'order_no' => $order_no,
+			'occation_type' => $occation_type,
+			'delivery_date' => $delivery_date,
+			'template_message' => $template_message,
+		];
+        
+		$msg = $this->load->view('web/email_templates/videoSendToUserView', $emailData,true);
+        // echo $msg;exit;
+		$subject = $celebName.' just sent you a video Message';
+		
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 	function handle_upload_videos() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {

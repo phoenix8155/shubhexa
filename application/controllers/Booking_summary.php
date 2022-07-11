@@ -89,6 +89,8 @@ class Booking_summary extends CI_Controller {
 					if($id > 0) {
 
 						$this->sendBookingDetailsToUser($this->session->userdata['user']['usercode'],$resCartDetails[$i]['id'],$cartId);
+						$this->sendBookingDetailsToCelebrity($resCartDetails[$i]['celebrity_id'],$this->session->userdata['user']['usercode'],$resCartDetails[$i]['id'],$cartId);
+						
 					}
 					
 				}
@@ -126,6 +128,54 @@ class Booking_summary extends CI_Controller {
         // echo $msg;exit;
 		$subject = 'Great News! Your booking confirmed';
 		$email = 'shubhexa@gmail.com';
+
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
+	}
+
+	function sendBookingDetailsToCelebrity($celebrity_id,$member_id,$carDetailtId,$cartId) {
+
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'celebrity_id'=>$celebrity_id,
+			)
+		);
+
+		$getBookingDetails = $this->ObjM->getBookingDetails(
+			$member_id,
+			$carDetailtId,
+			$cartId
+		);
+
+		
+		$celebName = $member[0]['fname'] .' '.$member[0]['lname'];
+		$toEmail = $member[0]['emailid'];
+		
+		$emailData = [
+			'celebrity_name' => $celebName,
+			'getBookingDetails' => $getBookingDetails[0],
+		];
+        
+		$msg = $this->load->view('web/email_templates/emailBookingDetailsForCelebView', $emailData,true);
+        //echo $msg;exit;
+		$subject = 'Great News! You received a new booking';
 
         $this->load->library('email');
         $config = array(
