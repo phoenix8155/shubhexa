@@ -274,7 +274,7 @@ class Home extends CI_Controller {
         
         $this->email->initialize($config);
         $this->email->set_newline("\r\n");
-        $this->email->from($email, 'SHUBHEXA');
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
         $this->email->to($toEmail);
         $this->email->subject($subject);
         $this->email->message($msg);
@@ -394,6 +394,14 @@ class Home extends CI_Controller {
 		$your_gst_number = $_POST['your_gst_number'];
 		$your_gst_state = $_POST['your_gst_state'];
 		$amount = $_POST['amount'];
+
+		// //check gst number
+		// if(!empty($your_gst_number)){
+		// 	if (!preg_match("/^([0-9]){2}([A-Za-z]){5}([0-9]){4}([A-Za-z]){1}([0-9]{1})([A-Za-z0-9]){2}?$/", $your_gst_number)) {
+		// 		$response = "false";
+		// 		echo json_encode($response);exit;
+		// 	}
+		// }
 		
 		//check order with usercode, orderdate and payment status
 		$res = $this->ObjM->checkIsCartAvailable();

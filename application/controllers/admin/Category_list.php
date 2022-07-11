@@ -69,6 +69,7 @@ class Category_list extends CI_Controller {
 
 			$row = $i + 1;
 			$html .= '<tr>
+						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["category_id"] . '></td>
 						<td width="2%">' . $row . '</td>
 						<td width="20%">' . $result[$i]['category_name'] . '</td>
 						<td width="20%">' . $result[$i]['access_name'] . '</td>
@@ -271,6 +272,19 @@ class Category_list extends CI_Controller {
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+
+	public function deleteMultiple() {
+		$id = $_REQUEST['unique_id'];
+		$id = explode(',', $id);
+		$data = array();
+		$data['status'] = 'Delete';
+		for ($i = 0; $i < count($id); $i++) {
+			if ($id[$i] != '') {
+				$this->comman_fun->update($data, 'category_master', array('category_id' => $id[$i]));
+			}
+		}
+
 	}
 
 	function handle_upload() {

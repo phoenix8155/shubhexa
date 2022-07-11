@@ -49,10 +49,29 @@ class Ulogin extends CI_Controller {
 				$current_datetime = date('Y-m-d H:i:s');
 
 				if ($this->ObjM->is_already_register($data['id'])) {
+					//echo "111";exit;
 					if ($this->ObjM->sign_in_validate_user_status($data['id'])) {
+						//echo "222";exit;
 						//update data
 						$user_data = array(
 							'oauth_id' => $data['id'],
+							'oauth_provider' => 'Google',
+							'fname' => $data['given_name'],
+							'lname' => $data['family_name'],
+							'emailid' => $data['email'],
+							'profile_pic' => $data['picture'],
+							'status' => 'Active',
+							'update_date' => $current_datetime,
+						);
+						$this->ObjM->update_google($user_data);
+					} else {
+						//echo "333";exit;
+						// header('Location: ' . file_path() . 'ulogin/msgShow/1');
+						// die();
+						//update data
+						$user_data = array(
+							'oauth_id' => $data['id'],
+							'oauth_provider' => 'Google',
 							'fname' => $data['given_name'],
 							'lname' => $data['family_name'],
 							'emailid' => $data['email'],
@@ -60,17 +79,26 @@ class Ulogin extends CI_Controller {
 							'update_date' => $current_datetime,
 						);
 						$this->ObjM->update_google($user_data);
-					} else {
-						//redirect(base_url('ulogin/msgShow/1'));
-						header('Location: ' . file_path() . 'ulogin/msgShow/1');
-						die();
 					}
 				} else {
 					if ($this->ObjM->sign_in_validate_user_email($data['email'])) {
-						//redirect(base_url('ulogin/msgShow/2'));
-						header('Location: ' . file_path() . 'ulogin/msgShow/2');
-						die();
+						// header('Location: ' . file_path() . 'ulogin/msgShow/2');
+						// die();
+
+						$user_data = array(
+							'oauth_id' => $data['id'],
+							'oauth_provider' => 'Google',
+							'fname' => $data['given_name'],
+							'lname' => $data['family_name'],
+							'emailid' => $data['email'],
+							'profile_pic' => $data['picture'],
+							'update_date' => $current_datetime,
+						);
+						$this->ObjM->update_google_email($user_data);
+						//echo $this->db->last_query();exit;
+						//echo "444";exit;
 					} else {
+						//echo "555";exit;
 						//insert data
 						$user_data = array(
 							'oauth_provider' => 'Google',
@@ -92,6 +120,8 @@ class Ulogin extends CI_Controller {
 				}
 
 				$cust_detail = $this->ObjM->get_by_oauth_id($data['id']);
+				// echo $this->db->last_query();
+				// var_dump($cust_detail);exit;
 
 				if (!empty($cust_detail)) {
 					$usercode = $cust_detail->usercode;
@@ -184,6 +214,7 @@ class Ulogin extends CI_Controller {
 
 						$user_data = array(
 							'oauth_id' => $facebook_user_info['id'],
+							'oauth_provider' => 'Facebook',
 							'fname' => $fname,
 							'lname' => $lname,
 							'emailid' => $facebook_user_info['email'],
@@ -193,17 +224,57 @@ class Ulogin extends CI_Controller {
 						);
 						$this->ObjM->update_google($user_data);
 					} else {
-						// $this->session->set_flashdata('error', 'Oops! your account is blocked. Please contact to customer care.');
-						// redirect(base_url('user/login'));
-						header('Location: ' . file_path() . 'ulogin/msgShow/1');
-						die();
+						$string = $facebook_user_info['name'];
+
+						$splitter = " ";
+
+						$pieces = explode($splitter, $string);
+
+						$fname = $pieces[0];
+
+						$lname = substr($string, strpos($string, " ") + 1);
+
+						$user_data = array(
+							'oauth_id' => $facebook_user_info['id'],
+							'oauth_provider' => 'Facebook',
+							'fname' => $fname,
+							'lname' => $lname,
+							'emailid' => $facebook_user_info['email'],
+							//'profile_pic' => 'http://graph.facebook.com/' . $facebook_user_info['id'] . '/picture',
+							'profile_pic' => 'http://graph.facebook.com/' . $facebook_user_info['id'] . '/picture?width=500&height=500',
+							'status' => 'Active',
+							'update_date' => $current_datetime,
+						);
+						$this->ObjM->update_google($user_data);
+						//header('Location: ' . file_path() . 'ulogin/msgShow/1');
+						//die();
 					}
 				} else {
 					if ($this->ObjM->sign_in_validate_user_email($facebook_user_info['email'])) {
-						// $this->session->set_flashdata('error', 'Oops! email is already registered.');
-						// redirect(base_url('user/login'));
-						header('Location: ' . file_path() . 'ulogin/msgShow/2');
-						die();
+						// header('Location: ' . file_path() . 'ulogin/msgShow/2');
+						// die();
+						$string = $facebook_user_info['name'];
+
+						$splitter = " ";
+
+						$pieces = explode($splitter, $string);
+
+						$fname = $pieces[0];
+
+						$lname = substr($string, strpos($string, " ") + 1);
+
+						$user_data = array(
+							'oauth_id' => $facebook_user_info['id'],
+							'oauth_provider' => 'Facebook',
+							'fname' => $fname,
+							'lname' => $lname,
+							'emailid' => $facebook_user_info['email'],
+							//'profile_pic' => 'http://graph.facebook.com/' . $facebook_user_info['id'] . '/picture',
+							'profile_pic' => 'http://graph.facebook.com/' . $facebook_user_info['id'] . '/picture?width=500&height=500',
+							'status' => 'Active',
+							'update_date' => $current_datetime,
+						);
+						$this->ObjM->update_google_email($user_data);
 					} else {
 						//insert data
 						$string = $facebook_user_info['name'];
@@ -267,21 +338,16 @@ class Ulogin extends CI_Controller {
 					header('Location: ' . file_path() . 'home');
 
 				} else {
-					//$this->session->set_flashdata('error', 'Oops! Something is wrong... Please try again.');
-					//redirect(base_url('user/login'));
 					$this->login_record();
 					header('Location: ' . file_path() . 'ulogin/msgShow/3');
 
 				}
 			} else {
-				// $this->session->set_flashdata('error', 'Oops! Something is wrong... Please try again empty.');
-				// redirect(base_url('user/login'));
-				header('Location: ' . file_path() . 'ulogin/msgShow/2');
+				header('Location: ' . file_path() . 'ulogin/msgShow/3');
 			}
 		} else {
 			$facebook_permissions = ['email'];
 			redirect($facebook_helper->getLoginUrl(file_path() . 'ulogin/facebook_login', $facebook_permissions));
-			//redirect($facebook_helper->getLoginUrl(base_url('user/facebook_login'), $facebook_permissions));
 		}
 	}
 
@@ -291,7 +357,7 @@ class Ulogin extends CI_Controller {
 		if ($id == 1) {
 			$data1['msg'] = 'Oops! your account is blocked. Please contact to customer care.';
 		} else if ($id == 2) {
-			$data1['msg'] = 'Oops! email is already registered.';
+			$data1['msg'] = 'Oops! Email is already registered. You should login with other options.';
 		} else if ($id == 3) {
 			$data1['msg'] = 'Oops! Something is wrong... Please try again.';
 		} else {

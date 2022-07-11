@@ -54,12 +54,13 @@ class User_list extends CI_Controller {
 
 			$row = $i + 1;
 			$html .= '<tr>
-						<td>' . $row . '</td>
-						<td>' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
-						<td>' . $result[$i]['mobileno'] . '</td>
-						<td>' . $result[$i]['emailid'] . '</td>
-						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
-						<td><div class="btn-group">
+						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["usercode"] . '></td>
+						<td width="2%">' . $row . '</td>
+						<td width="15%">' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
+						<td width="10%"' . $result[$i]['mobileno'] . '</td>
+						<td width="10%">' . $result[$i]['emailid'] . '</td>
+						<td width="5%">' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
+						<td width="5%"><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
 							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['usercode'] . '">' . $update_status . '</a></li>
@@ -91,13 +92,25 @@ class User_list extends CI_Controller {
 
 		$record = $this->comman_fun->get_table_data('membermaster', array('usercode' => $eid));
 
-		$data['status'] = 'Delete';
+		//$data['status'] = 'Delete';
 
-		$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
+		//$this->comman_fun->update($data, 'membermaster', array('usercode' => $eid));
+		$this->comman_fun->delete('membermaster', array('usercode' => $eid));
 
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+
+	public function deleteMultiple() {
+		$id = $_REQUEST['unique_id'];
+		$id = explode(',', $id);
+		for ($i = 0; $i < count($id); $i++) {
+			if ($id[$i] != '') {
+				$this->comman_fun->delete('membermaster', array('usercode' => $id[$i]));
+			}
+		}
+
 	}
 
 	public function profileView($usercode = Null) {

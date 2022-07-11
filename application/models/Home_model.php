@@ -189,6 +189,14 @@ Class Home_model extends CI_Model {
 
 	}
 
+	public function update_google_email($data = []) {
+
+		return $this->db->where('emailid', $data['emailid'])
+
+			->update('membermaster', $data);
+
+	}
+
 	public function get_by_oauth_id($oauth_id = null) {
 
 		return $this->db->select("*")

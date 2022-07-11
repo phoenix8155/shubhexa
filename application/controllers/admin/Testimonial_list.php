@@ -55,22 +55,23 @@ class Testimonial_list extends CI_Controller {
 				$cls = 'btn-danger';
 			}
 			if ($result[$i]['img_name'] != "") {
-				$td_image = "<img src='" . base_url() . "upload/testimonial/" . $result[$i]['img_name'] . "' height='50' />";
+				$td_image = "<img src='" . base_url() . "upload/testimonial/" . $result[$i]['img_name'] . "' height='50' widht='50' />";
 			} else {
 				$td_image = "-";
 			}
 
 			$row = $i + 1;
 			$html .= '<tr>
-						<td>' . $row . '</td>
-						<td>' . $result[$i]['first_name'] . ' ' . $result[$i]['last_name'] . '</td>
-						<td>' . $result[$i]['designation'] . '</td>
-						<td>' . $td_image . '</td>
-						<td>' . $result[$i]['feedback_title'] . '</td>
-						<td>' . $result[$i]['feedback_description'] . '</td>
-						<td>' . $result[$i]['rating'] . ' Star</td>
-						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
-						<td><div class="btn-group">
+						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["id"] . '></td>
+						<td width="2%">' . $row . '</td>
+						<td width="5%">' . $result[$i]['first_name'] . ' ' . $result[$i]['last_name'] . '</td>
+						<td width="5%">' . $result[$i]['designation'] . '</td>
+						<td width="3%">' . $td_image . '</td>
+						<td width="8%">' . $result[$i]['feedback_title'] . '</td>
+						<td width="15%">' . $result[$i]['feedback_description'] . '</td>
+						<td width="3%">' . $result[$i]['rating'] . ' Star</td>
+						<td width="5%">' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
+						<td width="3%"><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
 							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['id'] . '">' . $update_status . '</a></li>
@@ -204,6 +205,26 @@ class Testimonial_list extends CI_Controller {
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+
+	public function deleteMultiple() {
+		$id = $_REQUEST['unique_id'];
+		$id = explode(',', $id);
+		$data = array();
+		$data['status'] = 'Delete';
+		for ($i = 0; $i < count($id); $i++) {
+			if ($id[$i] != '') {
+				$this->comman_fun->update($data, 'testimonial_master', array('id' => $id[$i]));
+				$record = $this->comman_fun->get_table_data('testimonial_master', array('id' => $id[$i]));
+				if (count($record) > 0) {
+					$url = './upload/testimonial/' . $record[0]['img_name'];
+					$url2 = './upload/testimonial/thum/' . $record[0]['img_name'];
+					unlink($url);
+					unlink($url2);
+				}
+			}
+		}
+
 	}
 
 	function handle_upload() {

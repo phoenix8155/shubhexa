@@ -24,6 +24,10 @@
                                                             <td>
                                                                 <img src="<?=asset_path()?>web/images/shubhexa-logo-blue.png" class="center-img">
                                                             </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                            </td>
                                                         </tr>	
                                                         <tr>
                                                             <td class="center-text">
@@ -32,17 +36,17 @@
                                                         </tr> 
                                                         <tr>
                                                             <td>
-                                                                Hello <b><?php echo $getBookingDetails['Username'].'</b> ,'; ?>
+                                                                Hello <b><?php echo $getBookingDetails['fname'].''.$getBookingDetails['lname'].'</b> ,'; ?>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                            <p>We are delighted to inform you that your order to book a video message from <b><?php echo $getBookingDetails['celebsName'].'</b> ,'; ?> is just confirmed!</p>
+                                                            <p>We are delighted to inform you that your order to book a video message from <b><?php echo $getBookingDetails['celebsName'].'</b>'; ?> is just confirmed!</p>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <table border="1" width="100%">
+                                                <table border="1" width="80%">
                                                     <tr>
                                                         <td>
                                                             Booking ID

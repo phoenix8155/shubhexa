@@ -123,5 +123,45 @@ Class Member_module extends CI_Model {
 
 	}
 
+	function getTotTemplates() {
+
+		$this->db->select('count(*) as totTemplates');
+
+		$this->db->from('template_master');
+
+		$this->db->where('status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getTotBookings() {
+
+		$this->db->select('count(*) as totBookings');
+
+		$this->db->select('cart_master.cart_id,cart_master.usercode AS cartMasterUsercode,cart_master.order_date,cart_master.total_amount,cart_master.payment_status,cart_master.status');
+
+		$this->db->from('membermaster');
+
+		$this->db->join('cart_master', 'cart_master.usercode=membermaster.usercode', 'left');
+
+		$this->db->where('cart_master.payment_status','confirm');
+
+		$this->db->where('membermaster.status','Active');
+
+		$this->db->where('cart_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
 }
 ?>

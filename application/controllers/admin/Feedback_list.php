@@ -55,13 +55,14 @@ class Feedback_list extends CI_Controller {
 			$userName = $getuserDetails[0]['fname'].' '.$getuserDetails[0]['lname'];
 			$row = $i + 1;
 			$html .= '<tr>
-						<td>' . $row . '</td>
-						<td>' . $userType.' '.$userName . '</td>
-						<td>' . $result[$i]['emailid'] . '</td>
-						<td>' . $result[$i]['mobileno'] . '</td>
-						<td>' . $result[$i]['feedback'] . '</td>
-						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>';
-			$html .= '<td><a class="delete_record btn btn-danger" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['id'] . '">Delete</a></td>';
+						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["id"] . '></td>
+						<td width="2%">' . $row . '</td>
+						<td width="10%">' . $userType.' '.$userName . '</td>
+						<td width="10%">' . $result[$i]['emailid'] . '</td>
+						<td width="10%">' . $result[$i]['mobileno'] . '</td>
+						<td width="10%">' . $result[$i]['feedback'] . '</td>
+						<td width="5%">' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>';
+			$html .= '<td width="5%"><a class="delete_record btn btn-danger" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/delete_record/' . $result[$i]['id'] . '">Delete</a></td>';
 			$html .= '</tr>';
 		}
 
@@ -78,5 +79,17 @@ class Feedback_list extends CI_Controller {
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+	public function deleteMultiple() {
+		$id = $_REQUEST['unique_id'];
+		$id = explode(',', $id);
+		$data = array();
+		$data['status'] = 'Delete';
+		for ($i = 0; $i < count($id); $i++) {
+			if ($id[$i] != '') {
+				$this->comman_fun->update($data, 'feedback', array('id' => $id[$i]));
+			}
+		}
+
 	}
 }

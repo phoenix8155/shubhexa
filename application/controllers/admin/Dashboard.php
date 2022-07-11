@@ -34,6 +34,8 @@ class Dashboard extends CI_Controller {
 		$data['resUser'] = $this->ObjM->getTotUser();
 		$data['resTestimonials'] = $this->ObjM->getTotTestimonials();
 		$data['resPromocode'] = $this->ObjM->getTotPromocode();
+		$data['resTemplates'] = $this->ObjM->getTotTemplates();
+		$data['resBookings'] = $this->ObjM->getTotBookings();
 
 		$this->load->view('common/topheader');
 

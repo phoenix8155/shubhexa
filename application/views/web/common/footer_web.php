@@ -384,7 +384,7 @@ $(function() {
         async:false,
         success: function(resp) {
 		    if(resp=="true"){
-		    	alert('please check email and verify your emailid.');
+		    	alert('Email sent to on your register email id. Kindly please check your email.');
 		    	window.location.reload();
 		    }else{
 		    	$('.error-clss').html(resp);
@@ -413,7 +413,7 @@ $(document).ready(function(){
 					if(sign_emailid == '') {
 						$('.user-checks').html('');
 					} else {
-						$('.user-checks').html('This email id is already taken.');
+						$('.user-checks').html('This email id is already taken, Please try with another email id');
 					}
 			    }else{
 			    	$('.user-checks').html('');
@@ -1120,6 +1120,18 @@ function getTemplateOnLoad(){
 }
 
 $(function() {
+	$("#your_gst_number").on("focusout", function(e) {
+		let gst = $(this).val();
+		if(gst != "")
+		{
+			var reg = /^([0-9]){2}([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}([0-9]){1}([a-zA-Z]){1}([0-9]){1}?$/;
+			if (!reg.test(gst)) {
+				$("#your_gst_number_error").text('Please enter your GST number proper.');				
+			}else{
+				$("#your_gst_number_error").text('');	
+			} 
+		}
+	});
   //$('#add_to_cart').click(function(e) {
   $('#add_cart_from').submit(function(e) {
   	e.preventDefault();
@@ -1206,12 +1218,13 @@ $(function() {
 	  		$("#your_gst_name_error").html('');
 	  	}
 	  	if ($("#your_gst_number").val() == "") {
+			
 	  		//$("#your_gst_number").focus();
 	  		$("#your_gst_number_error").html('Please enter GST No.');
 	  		exit;
-	  	}else{
+	  	}else{			
 	  		$("#your_gst_number_error").html('');
-	  	}
+	  	}		
 	  	if ($("#your_gst_state").val() == "") {
 	  		//$("#your_gst_state").focus();
 	  		$("#your_gst_state_error").html('Please enter state.');
@@ -1235,15 +1248,15 @@ $(function() {
         cache:false,
         async:false,
         success: function(resp) {
-
-		    if(resp=="true"){
+		    if(resp==="true"){
 		    	//alert('added into cart');
 		    	window.location = "<?php echo file_path() ?>cart/view";
 		    	//window.location.reload();
-		    }else{
+		    }else if(resp==="false"){
+				$("#your_gst_number_error").text('Please enter your GST number proper.');
+			}else{
 		    	alert('Something went wrong.!');
 		    }
-
         }
     });
   <?php }?>

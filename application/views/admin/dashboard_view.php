@@ -97,4 +97,34 @@ $(document).ready(function(e) {
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="panel panel-mint panel-colorful media middle pad-all">
+            <div class="media-left">
+                <div class="pad-hor">
+                    <i class="demo-pli-receipt-4 icon-3x" style="font-size: 45px;"></i>
+                </div>
+            </div>
+            <div class="media-body">
+		      <a href="<?=file_path('admin')?>template_list/view" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=$resTemplates[0]['totTemplates'];?></p>
+		          <p class="mar-no">Total Templates</p>
+		      </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info panel-colorful media middle pad-all">
+            <div class="media-left">
+                <div class="pad-hor">
+                    <i class="fa fa-lock icon-3x" style="font-size: 45px;"></i>
+                </div>
+            </div>
+            <div class="media-body">
+		      <a href="<?=file_path('admin')?>booking_list/view" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=$resBookings[0]['totBookings'];?></p>
+		          <p class="mar-no">Total Bookings</p>
+		      </a>
+            </div>
+        </div>
+    </div>
 </div>

@@ -221,52 +221,45 @@ class Web_api extends CI_Controller {
 
 	function registration_email($member_id) {
 
-		$member = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
+		$member = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'usercode'=>$member_id,
+			)
+		);
 		$verification_code = $this->insert_verification($member_id, $member[0]['emailid']);
-
+		
 		$name = $member[0]['fname'] . ' ' . $member[0]['lname'];
 
 		$toEmail = $member[0]['emailid'];
+		$emailData = [
+			'name'    			 => $name,
+			'verification_code'  => $verification_code,
+        ];
+        
+		$msg = $this->load->view('web/email_templates/emailVerification_view', $emailData,true);
+        
+		$subject = 'Confirm your email address';
 
-		$body = 'Dear ' . $name . ',<br><br>
-
-			You have successfully registered an account on Shubhexa. <br><br>
-
-			Email Verification : <a href="' . file_path('email_verification/verify/' . $verification_code) . '">Click Here to Verify your email address</a><br><br>
-
-			<br> Thank you.';
-
-		$subject = 'Registration Successful';
-		$email = 'shubhexa@gmail.com';
-		// $headers = 'MIME-Version: 1.0' . "\r\n";
-		// $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		// $headers .= 'From:' . $email . '' . "\r\n";
-		// mail($toEmail, $subject, $body, $headers);
-
-		$this->load->library('email');
-		$config = array(
-			'mailtype' => 'html',
-			'charset' => 'utf-8',
-			'priority' => '1',
-		);
-		$this->email->initialize($config);
-		$this->email->set_newline("\r\n");
-
-		$this->email->from($email);
-
-		$this->email->to($toEmail); //shubhexa@gmail.com
-
-		$this->email->subject($subject);
-
-		$this->email->message($body);
-
-		$this->email->send();
-
-		return true;
-
+        $this->load->library('email');
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1',
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+        $this->email->to($toEmail);
+        $this->email->subject($subject);
+        $this->email->message($msg);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }		
 	}
-
 	protected function insert_verification($member_id, $emailid) {
 
 		$randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
@@ -1384,7 +1377,6 @@ class Web_api extends CI_Controller {
 
 	// }
 	function loginWith() {
-
 		$f_name = $_REQUEST['f_name'];
 		$l_name = $_REQUEST['l_name'];
 		$emailid = $_REQUEST['email_id'];
@@ -1393,65 +1385,45 @@ class Web_api extends CI_Controller {
 		$device_type = $_REQUEST['device_type'];
 		$login_type = $_REQUEST['login_type'];
 		$oauth_id = $_REQUEST['oauth_id'];
-
 		$json_arr = array();
-
-		// $checkRecordM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
-		$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active', 'role_type' => '3'));
-
+		if($emailid!=""){
+			$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'status' => 'Active', 'role_type' => '3'));
+		}else{
+			$checkRecordM = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active', 'role_type' => '3'));
+		}
 		if (count($checkRecordM) > 0) {
-
-			// $json_arr['validation'] = "false";
-
-			// $json_arr['msg'] = "email is already registered.";
-
-			// echo json_encode($json_arr);
-
-			// exit;
-
 			$ltype_array = array('facebook', 'google');
-
 			if (in_array($login_type, $ltype_array)) {
-
 				if ($login_type == "facebook") {
 					$ltype = 'Facebook';
 				} else if ($login_type == "google") {
 					$ltype = 'Google';
 				} else {
 					$ltype = '';
-				}
-				
+				}				
 				//update
 				$updateData = array();
-
 				$updateData['fname'] = filter_data($f_name);
-
 				$updateData['lname'] = filter_data($l_name);
-
 				//$updateData['emailid'] = filter_data($emailid);
-
+				$updateData['emailid'] = ($emailid!="") ? filter_data($emailid):"-";
 				$updateData['profile_pic'] = filter_data($profile_pic);
-
 				$updateData['oauth_provider'] = $ltype;
-
 				$updateData['oauth_id'] = filter_data($oauth_id);
-
 				$updateData['firebase_token'] = filter_data($firebase_token);
-
 				$updateData['device_type'] = filter_data($device_type);
-
 				$updateData['accessToken'] = $this->getToken(); //get Token
-
 				$updateData['update_date'] = date('Y-m-d h:i:s');
-
-				$this->comman_fun->update($updateData, 'membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active'));
-
-				$dataRes = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id));
-
+				if($emailid!=""){
+					$this->comman_fun->update($updateData, 'membermaster', array('emailid' => $emailid, 'status' => 'Active'));
+					$dataRes = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid));
+				}else{
+					$this->comman_fun->update($updateData, 'membermaster', array('oauth_id' => $oauth_id, 'status' => 'Active'));
+					$dataRes = $this->comman_fun->get_table_data('membermaster', array('oauth_id' => $oauth_id));
+				}
+				
 				$arr = array();
-
 				$datas = array();
-
 				$datas['usercode'] = $dataRes[0]['usercode'];
 				$datas['first_name'] = $dataRes[0]['fname'];
 				$datas['last_name'] = $dataRes[0]['lname'];
@@ -1463,79 +1435,47 @@ class Web_api extends CI_Controller {
 				$arr[] = $datas;
 
 				$json_arr['data'] = $arr;
-
 				$json_arr['validation'] = true;
-
 				$json_arr['msg'] = "";
-
 				echo json_encode($json_arr);
-
 				exit;
-
 			} else {
-
 				$json_arr['validation'] = false;
-
-				$json_arr['msg'] = "email is already registered.";
-
+				$json_arr['msg'] = "email is already registered please try to login with other option.";
 				echo json_encode($json_arr);
 				exit;
 			}
-
 		} else {
-
 			if ($login_type == "facebook") {
 				$ltype = 'Facebook';
 			} else if ($login_type == "google") {
 				$ltype = 'Google';
 			} else {
 				$ltype = '';
-			}
-
-			
+			}			
 			//insert
 			$data = array();
-
 			$data['fname'] = filter_data($f_name);
-
 			$data['lname'] = filter_data($l_name);
-
-			$data['emailid'] = filter_data($emailid);
-
+			//$data['emailid'] = filter_data($emailid);
+			$data['emailid'] = ($emailid!="") ? filter_data($emailid):"-";
 			$data['profile_pic'] = filter_data($profile_pic);
-
 			$data['oauth_provider'] = $ltype;
-
 			$data['oauth_id'] = filter_data($oauth_id);
-
 			$data['firebase_token'] = filter_data($firebase_token);
-
 			$data['device_type'] = filter_data($device_type);
-
 			$data['accessToken'] = $this->getToken(); //get Token
-
 			$data['role_type'] = "3";
-
 			$data['status'] = "Active";
-
 			$data['email_verify'] = "Y";
-
 			$data['create_date'] = date('Y-m-d H:i:s');
-
 			$data['update_date'] = date('Y-m-d h:i:s');
-
 			$data['timedt'] = time();
-
 			$member_id = $this->comman_fun->addItem($data, 'membermaster');
-
 			if ($member_id != "") {
-
 				$dataRes = $this->comman_fun->get_table_data('membermaster', array('usercode' => $member_id));
-
 				$arr = array();
-
 				$datas = array();
-
 				$datas['usercode'] = $dataRes[0]['usercode'];
 				$datas['first_name'] = $dataRes[0]['fname'];
 				$datas['last_name'] = $dataRes[0]['lname'];
@@ -1545,28 +1485,18 @@ class Web_api extends CI_Controller {
 				$datas['oauth_id'] = $dataRes[0]['oauth_id'];
 				$datas['profile_pic'] = $dataRes[0]['profile_pic'];
 				$arr[] = $datas;
-
 				$json_arr['data'] = $arr;
-
 				$json_arr['validation'] = true;
-
 				$json_arr['msg'] = "";
-
 				echo json_encode($json_arr);
-
 				exit;
-
 			} else {
-
 				$json_arr['validation'] = false;
-
 				$json_arr['msg'] = "Something went worng.";
-
 				echo json_encode($json_arr);
 				exit;
 			}
 		}
-
 	}
 
 	function getCelebrityListCategoryWise() {
@@ -2134,8 +2064,6 @@ class Web_api extends CI_Controller {
 
 		$accessToken = $getHeaders['Accesstoken'];
 
-		//$accessToken = $_REQUEST['Accesstoken'];
-
 		$celebrity_id = $_REQUEST['celebrity_id'];
 
 		$msg_for = $_REQUEST['msg_for'];
@@ -2186,11 +2114,17 @@ class Web_api extends CI_Controller {
 
 			exit;
 		}
-
+		//check gst number
+		if(!empty($your_gst_number)){
+			if (!preg_match("/^([0-9]){2}([A-Za-z]){5}([0-9]){4}([A-Za-z]){1}([0-9]{1})([A-Za-z0-9]){2}?$/", $your_gst_number)) {
+				$data_json['validation'] = false;
+				$data_json['msg'] = "Please enter your GST number proper.";
+				echo json_encode($data_json);
+				exit;
+			}
+		}
 		if (count($resultUser) > 0) {
-
 			$usercode = $resultUser[0]['usercode'];
-
 			if ($msg_for == "my_self") {
 				$self_name = $self_name1;
 				$to_name = "";
@@ -2204,25 +2138,21 @@ class Web_api extends CI_Controller {
 				$to_name = "";
 				$from_name = "";
 			}
-
 			if ($public_permission1 != "") {
 				$public_permission = 'Yes';
 			} else {
 				$public_permission = 'No';
 			}
-
 			if ($send_on_wa1 != "") {
 				$send_on_wa = 'Yes';
 			} else {
 				$send_on_wa = 'No';
 			}
-
 			if ($_REQUEST['need_gst'] != "") {
-				$need_gst = 'Yes';
+				$need_gst = 'Yes';				
 			} else {
 				$need_gst = 'No';
 			}
-
 			$res = $this->ObjM->checkIsCartAvailable($usercode);
 
 			if (count($res) > 0) {
@@ -2928,6 +2858,11 @@ class Web_api extends CI_Controller {
 					}
 
 					$$data['video_status'] = $result[$i]['video_status'];
+					if($result[$i]['is_cancelled']=="No"){
+						$data['confirmedSatus'] = 1;
+					}else{
+						$data['confirmedSatus'] = 0;
+					}
 
 					$arr[] = $data;
 				}
@@ -4055,6 +3990,11 @@ class Web_api extends CI_Controller {
 					$data['delivery_date']    = date('d-m-Y',strtotime($resultCartDetails[0]['delivery_date']));
 					$data['amount']           = '₹.'.$resultCartDetails[0]['amount'];
 					$data['video']            = ($result[$i]['video_name'] != '') ? base_url().'upload/celebrity_video/' .$result[$i]['video_name'] : '';
+					if($result[$i]['is_cancelled']=="No"){
+						$data['confirmedSatus'] = 1;
+					}else{
+						$data['confirmedSatus'] = 0;
+					}
 					
 					$arr[] = $data;
 				}
@@ -4407,106 +4347,81 @@ class Web_api extends CI_Controller {
 		}
 
 		if (count($resultUser) > 0) {
-
 			$resultCartDetails = $this->comman_fun->get_table_data('celebrity_task_master', array('celebrity_id' => $resultUser[0]['celebrity_id'], 'cart_detail_id' => $booking_id, 'status' => 'Active'));
-
-			if (count($resultCartDetails) > 0) {
-
-				$data['video_status'] = 'Complete';
-
-				$data['update_date'] = date('Y-m-d h:i:s');
-				
+			if (count($resultCartDetails) > 0) {				
+				$data['update_date'] = date('Y-m-d h:i:s');				
 				$filename= ($_FILES['upload_file']['name']);
-				$file_ext = pathinfo($filename,PATHINFO_EXTENSION);
-				
+				$file_ext = pathinfo($filename,PATHINFO_EXTENSION);				
 				if($file_ext == 'mp4' || $file_ext == 'avi' || $file_ext == '3gp' || $file_ext == 'flv' || $file_ext == 'flvwmv') 
 				{
 					if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 						$this->handle_upload_videos();
-						$data['video_name'] = $_POST['file_name'];
-
-						
+						$data['video_name'] = $_POST['file_name'];						
 						$old_file = $resultCartDetails[0]['video_name'];
-
 						if ($old_file != "") {
-							$url = base_url() . './upload/celebrity_video/' . $old_file;
+							$url = './upload/celebrity_video/' . $old_file;
 							unlink($url);
 						}
-
-						$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
-
-						$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
-
-						if(isset($getUserToken[0])) {
-							if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
-
-								$registatoin_ids = $getUserToken[0]['firebase_token'];
-
-								$noti_title = 'New Video Uploaded';
-								$message = 'Hello check Your New Video Uploaded By Celebrity';
-								if($getUserToken[0]['device_type'] == 'Android') {
-									
-									//$this->sendNotificationUsingSeverKeyAndroidFromCelebSide([$registatoin_ids], $noti_title, $message);
-								} else {
-									//$this->sendNotificationToIOSUsingSeverKeyFromCelebSide([$registatoin_ids], $noti_title, $message);
-								}
-							
+						$res=$this->comman_fun->update($data, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));				
+						$resCTM = $this->comman_fun->get_table_data('celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
+						if($resCTM[0]['video_name']!="" && $data['video_name']!=""){
+							$filePathWithName= './upload/celebrity_video/' .$resCTM[0]['video_name'];
+							if(file_exists($filePathWithName)){								
+								$dataUpdateStatus=array();
+								$dataUpdateStatus['video_status'] = 'Complete';
+								$dataUpdateStatus['update_date'] = date('Y-m-d h:i:s');
+								$this->comman_fun->update($dataUpdateStatus, 'celebrity_task_master', array('id' => $resultCartDetails[0]['id']));
+								$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$resultCartDetails[0]['usercode']));
+								if(isset($getUserToken[0])) {
+									if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
+										$registatoin_ids = $getUserToken[0]['firebase_token'];
+										$noti_title = 'Hello, Celebrity has sent new video.';
+										$message = 'Hello, Celebrity has sent new video. Please check your video.';
+										if($getUserToken[0]['device_type'] == 'Android') {								
+											//$this->sendNotificationUsingSeverKeyAndroidFromCelebSide([$registatoin_ids], $noti_title, $message);//old working
+											$this->sendAndroidNotificationFromCelebrityVideoSend([$registatoin_ids], $noti_title, $message);
+										} else {
+											//$this->sendNotificationToIOSUsingSeverKeyFromCelebSide([$registatoin_ids], $noti_title, $message);//old working
+											$this->sendIOSNotificationFromCelebrityVideoSend([$registatoin_ids], $noti_title, $message);
+										}								
+									}
+								}					
+								$data_json['validation'] = true;
+								$data_json['msg'] = "Video Sent Successfully";
+								echo json_encode($data_json);
+								exit;
+							}else{
+								$data_json['validation'] = false;
+								$data_json['msg'] = "video not uploaded please try again.";
+								echo json_encode($data_json);
+								exit;
 							}
-						}
-
-				
-						$data_json['validation'] = true;
-
-						$data_json['msg'] = "Video Sent Successfully";
-
-						echo json_encode($data_json);
-
-						exit;
-
+						}											
 					} else {
-
 						$data_json['validation'] = false;
-
 						$data_json['msg'] = "Please Select The Video.";
-
 						echo json_encode($data_json);
 						exit;
 					}
 				}  else {
-
 					$data_json['validation'] = false;
-
 					$data_json['msg'] = "Something Wrong Please Try Again.";
-
 					echo json_encode($data_json);
 					exit;
-				}
-
-				
+				}		
 			} else {
-
 				$data_json['validation'] = false;
-
 				$data_json['msg'] = "There is no data";
-
 				echo json_encode($data_json);
 				exit;
 			}
-
 		} else {
-
 			$data_json['validation'] = false;
-
 			$data_json['msg'] = "user not found.!";
-
 			echo json_encode($data_json);
-
 			exit;
-
 		}
 	}
-
-
 	function handle_upload_videos() {
 		if (isset($_FILES['upload_file']) && !empty($_FILES['upload_file']['name'])) {
 			$config = array();
@@ -4820,7 +4735,87 @@ class Web_api extends CI_Controller {
 
 		}
 	}
+	protected function sendAndroidNotificationFromCelebrityVideoSend($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
 
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title,'screen_name' => 'booking_past', 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'data' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); //Remove //multicast_id,success,failure,canonical_ids
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
+	}
+
+	protected function sendIOSNotificationFromCelebrityVideoSend($registatoin_ids, $messageTitle, $data) {
+		$registatoin_ids = implode(',', $registatoin_ids);
+		$url = "https://fcm.googleapis.com/fcm/send";
+		$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+
+		$token = $registatoin_ids; //device token
+		$title = $messageTitle;
+		$body = $data;
+		$notification = array('title' => $title, 'screen_name' => 'booking_past', 'details' => $body, 'sound' => 'default', 'badge' => '1');
+		$arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high');
+		$json = json_encode($arrayToSend);
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/json';
+		$headers[] = 'Authorization: key=' . $serverKey;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt(
+			$ch,
+			CURLOPT_CUSTOMREQUEST,
+			"POST"
+		);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); //Remove //multicast_id,success,failure,canonical_ids
+
+		//Send the request
+		$response = curl_exec($ch);
+
+		//Close request
+		if ($response === false) {
+			die('FCM Send Error: ' . curl_error($ch));
+		}
+		curl_close($ch);
+		return true;
+		//echo $response;
+		//exit;
+	}
 	
 	protected function sendNotificationUsingSeverKeyAndroidFromCelebSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
@@ -4951,7 +4946,7 @@ class Web_api extends CI_Controller {
 			
 			$resultCelebTaskMaster = $this->comman_fun->get_table_data(
 				'celebrity_task_master',
-				 array(
+				array(
 					'cart_detail_id' => $booking_id,
 					'celebrity_id'   => $resultUser[0]['celebrity_id'],
 					'video_status' => 'Initialize',
@@ -4963,7 +4958,7 @@ class Web_api extends CI_Controller {
 
 				$getCartDetailsData = $this->comman_fun->get_table_data(
 					'cart_details',
-					 array(
+					array(
 						'id' => $booking_id,
 						'status'	=> 'Active',
 					)
@@ -4971,7 +4966,7 @@ class Web_api extends CI_Controller {
 				
 				$getCartMasterData = $this->comman_fun->get_table_data(
 					'cart_master',
-					 array(
+					array(
 						'cart_id' => $getCartDetailsData[0]['cart_id'],
 						'status'	=> 'Active',
 					)
@@ -4996,7 +4991,7 @@ class Web_api extends CI_Controller {
 
 					$cancelOrderPaymentDt = $this->comman_fun->get_table_data(
 						'cancel_order_payment',
-						 array(
+						array(
 							'id' => $cancelOrderReturnTb,
 						)
 					);
@@ -5008,13 +5003,34 @@ class Web_api extends CI_Controller {
 
 					$this->comman_fun->update($dataUpdateCart, 'cart_master', array('cart_id' => $cancelOrderPaymentDt[0]['cart_id']));
 
-					$dataUpdate['status'] = 'Delete';
-					$dataUpdate['update_date'] = date('Y-m-d h:i:s');
+					//$dataUpdate['status'] = 'Delete';
+					$dataUpdateCTM['is_cancelled'] = 'Yes';
+					$dataUpdateCTM['video_status'] = 'Complete';
+					$dataUpdateCTM['update_date'] = date('Y-m-d h:i:s');
 					
-					$this->comman_fun->update($dataUpdate,'celebrity_task_master', array('cart_detail_id' => $booking_id));
+					$this->comman_fun->update($dataUpdateCTM,'celebrity_task_master', array('cart_detail_id' => $booking_id));
 
-					$this->comman_fun->update($dataUpdate,'cart_details', array('id' => $booking_id));
+					$dataUpdateCD['status'] = 'Delete';
+					$dataUpdateCD['update_date'] = date('Y-m-d h:i:s');
+					$this->comman_fun->update($dataUpdateCD,'cart_details', array('id' => $booking_id));
 
+					//send notification to user
+					if($getCartMasterData[0]['usercode']!=""){
+						$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$getCartMasterData[0]['usercode']));
+						if(isset($getUserToken[0])) {
+							if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
+								$registatoin_ids = $getUserToken[0]['firebase_token'];
+								$noti_title = 'Hello, Celebrity has cancel your video request.';
+								$message = 'Hello, Celebrity has cancel your video request.';
+								if($getUserToken[0]['device_type'] == 'Android') {								
+									$this->sendAndroidNotificationFromCelebrityVideoSend([$registatoin_ids], $noti_title, $message);
+								} else {
+									$this->sendIOSNotificationFromCelebrityVideoSend([$registatoin_ids], $noti_title, $message);
+								}								
+							}
+						}
+					}					
+					//end
 					$data_json['validation'] = true;
 
 					$data_json['msg'] = "Order Cancel Successfully";

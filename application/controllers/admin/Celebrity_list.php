@@ -78,13 +78,14 @@ class Celebrity_list extends CI_Controller {
 
 			$profileLink = '<a href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/profileView/' . $result[$i]['id'] . '" style="color:red;font-weight: 600;">Click Here</a>';
 			$html .= '<tr>
-						<td>' . $row . '</td>
-						<td>' . $name . '</td>
-						<td>' . $td_image . '</td>
-						<td>' . $bday . '</td>
-						<td>' . $profileLink . '</td>
-						<td>' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
-						<td><div class="btn-group">
+						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["id"] . '></td>
+						<td width="2%">' . $row . '</td>
+						<td width="10%">' . $name . '</td>
+						<td width="10%">' . $td_image . '</td>
+						<td width="5%">' . $bday . '</td>
+						<td width="5%">' . $profileLink . '</td>
+						<td width="5%">' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
+						<td width="10%"><div class="btn-group">
 						<button class="btn dropdown-toggle ' . $cls . ' btn_custom" data-toggle="dropdown">' . $current_status . ' <i class="fa fa-angle-down"></i> </button>
 						<ul class="dropdown-menu pull-right">
 							<li><a class="status_change" href="' . file_path('admin') . '' . $this->uri->rsegment(1) . '/status_update/' . $update_status . '/' . $result[$i]['id'] . '">' . $update_status . '</a></li>
@@ -271,6 +272,7 @@ class Celebrity_list extends CI_Controller {
 		$data['status'] = 'Delete';
 
 		$this->comman_fun->update($data, 'celebrity_master', array('id' => $eid));
+		$this->comman_fun->update($data, 'membermaster', array('celebrity_id' => $eid,'role_type' => '2'));
 
 		if (count($record) > 0) {
 			$url = './upload/celebrity_profile/' . $record[0]['img_name'];
@@ -282,6 +284,27 @@ class Celebrity_list extends CI_Controller {
 		$this->session->set_flashdata('show_msg', array('class' => 'true', 'msg' => 'Record Delete Successfully.....'));
 
 		redirect(file_path('admin') . "" . $this->uri->rsegment(1) . "/view");
+	}
+
+	public function deleteMultiple() {
+		$id = $_REQUEST['unique_id'];
+		$id = explode(',', $id);
+		$data = array();
+		$data['status'] = 'Delete';
+		for ($i = 0; $i < count($id); $i++) {
+			if ($id[$i] != '') {
+				$record = $this->comman_fun->get_table_data('celebrity_master', array('id' => $id[$i]));
+				if (count($record) > 0) {
+					$url = './upload/celebrity_profile/' . $record[0]['img_name'];
+					$url2 = './upload/celebrity_profile/thum/' . $record[0]['img_name'];
+					unlink($url);
+					unlink($url2);
+				}
+				$this->comman_fun->update($data, 'celebrity_master', array('id' => $id[$i]));
+				$this->comman_fun->update($data, 'membermaster', array('celebrity_id' => $id[$i],'role_type' => '2'));
+			}
+		}
+
 	}
 
 	function handle_upload() {

@@ -45,14 +45,14 @@ class Booking_list extends CI_Controller {
 			
 			$row = $i + 1;
 			$html .= '<tr>
-						<td>' . $row . '</td>
-						<td>' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
-						<td>' . $result[$i]['mobileno'].'</td>
-						<td>' . $result[$i]['emailid']. '</td>
-						<td>' . date('d-m-Y',strtotime($result[$i]['order_date'])) . '</td>
-						<td><a class="viewDetails" href="'.file_path().'admin/booking_list/bookingDetails/'.$result[$i]['cart_id'].'/'.$result[$i]['usercode'].'">' . $getCountOrder . '</a></td>
-						<td>' . '₹. '.$result[$i]['total_amount'] . '</td>
-						<td><div class="btn-group">
+						<td width="2%">' . $row . '</td>
+						<td width="10%">' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
+						<td width="8%">' . $result[$i]['mobileno'].'</td>
+						<td width="8%">' . $result[$i]['emailid']. '</td>
+						<td width="5%">' . date('d-m-Y',strtotime($result[$i]['order_date'])) . '</td>
+						<td width="2%"><a class="viewDetails" href="'.file_path().'admin/booking_list/bookingDetails/'.$result[$i]['cart_id'].'/'.$result[$i]['usercode'].'">' . $getCountOrder . '</a></td>
+						<td width="5%">' . '₹. '.$result[$i]['total_amount'] . '</td>
+						<td width="5%"><div class="btn-group">
 							<button class="btn btn_custom">
 								<a href="'.file_path().'admin/booking_list/bookingDetails/'.$result[$i]['cart_id'].'/'.$result[$i]['usercode'].'">View</a>
 							</button>';
