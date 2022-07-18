@@ -17,18 +17,13 @@ if ($this->uri->rsegment(1) == "my_bookings") {
     <meta name="author" content="" />
     <meta name="robots" content="" />
     <meta name="description" content="" />
-
     <!-- FAVICONS ICON -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
-
     <!-- PAGE TITLE HERE -->
     <title>Shubhexa | My Profile</title>
-
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
     <!-- BOOTSTRAP STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/bootstrap.min.css">
     <!-- Bootstrap toggle -->
@@ -61,10 +56,12 @@ if ($this->uri->rsegment(1) == "my_bookings") {
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/slick-theme.css">
     <!-- Main STyle Sheet -->
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/style.css">
-
-
+    <style type="text/css">
+		.sf-banner-heading-wrap {
+		    height: 300px;
+		}
+    </style>
 </head>
-
 <body>
     <!-- LOADING AREA START ===== -->
     <div class="loading-area">
@@ -90,44 +87,34 @@ if ($this->uri->rsegment(1) == "my_bookings") {
         </div>
     </div>
     <!-- LOADING AREA  END ====== -->
-
 	<div class="page-wraper">
-
         <header id="header-admin-wrap" class="header-admin-fixed">
-
             <!-- Header Start -->
             <div id="header-admin">
                 <div class="container">
-
                     <!-- Left Side Content -->
                     <div class="header-left">
-
                         <div class="my-account-logo">
                             <a href="<?=base_url()?>"><img src="<?=asset_path('web/')?>images/logo-light.png" alt=""></a>
                         </div>
-
                         <!-- <div class="header-widget aon-admin-search-box">
                             <div class="aon-admin-search ">
                                 <input class="form-control sf-form-control" name="company_name" type="text" placeholder="Search">
                                 <button class="admin-search-btn"><i class="fs-input-icon feather-search"></i></button>
                             </div>
                         </div> -->
-
                     </div>
                     <!-- Left Side Content End -->
-
                     <!-- Right Side Content -->
                     <div class="header-right">
-
                         <div class="header-menu">
                             <!-- NAV Toggle Button -->
                             <button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed">
                                 <span class="sr-only">Toggle navigation</span>
                                 <span class="icon-bar icon-bar-first"></span>
                                 <span class="icon-bar icon-bar-two"></span>
-                                 <span class="icon-bar icon-bar-three"></span>
+                                <span class="icon-bar icon-bar-three"></span>
                             </button>
-
                             <!-- MAIN Vav -->
                             <div class="nav-animation header-nav navbar-collapse collapse d-flex justify-content-start">
                                 <ul class=" nav navbar-nav">
@@ -140,16 +127,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                                 </ul>
                             </div>
                         </div>
-
                         <ul class="header-widget-wrap">
-                            <li class="header-widget has-toltip">
-                                <div class="aon-admin-notification sf-toogle-btn">
-                                    <i class="feather-bell"></i>
-                                    <!-- <span class="notification-animate">8</span> -->
-                                    <span class="header-toltip">Notification</span>
-                                </div>
-                            </li>
-
                             <li class="header-widget">
                                 <div class="aon-admin-messange sf-toogle-btn">
                                     <span class="feather-user-pic">
@@ -168,8 +146,6 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                                     </ul>
                                 </div>
                             </li>
-
-
                         </ul>
                     </div>
                 </div>

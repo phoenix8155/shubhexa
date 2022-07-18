@@ -1932,7 +1932,7 @@ class Web_api extends CI_Controller {
 				<br> Thank you.';
 
 			$subject = 'Forgot Password';
-			$email = 'shubhexa@gmail.com'; //https://pnxschool.com/shubhexa/
+			$email = SHUBHEXAMAIL; //https://pnxschool.com/shubhexa/
 
 			$this->load->library('email');
 			$config = array(
@@ -3843,9 +3843,6 @@ class Web_api extends CI_Controller {
 		//echo $response;
 		//exit;
 	}
-
-
-
 //-----------------CELEBS API----------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------//
 //-----------------CELEBS API----------------------------------------------------------------------------------------------------------//

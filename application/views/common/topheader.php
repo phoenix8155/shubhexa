@@ -103,6 +103,9 @@
 <body>
 
 <style>
+	body {
+		font-size: 14px;
+	}
 	.menu-title{
 
 		text-transform:uppercase;

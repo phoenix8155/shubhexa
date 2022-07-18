@@ -200,6 +200,8 @@ class Home extends CI_Controller {
 
 			$data['emailid'] = $_POST['sign_emailid'];
 
+			$data['email_verify'] = "N";
+
 			$data['role_type'] = "3";
 
 			$data['status'] = "Active";
@@ -247,42 +249,42 @@ class Home extends CI_Controller {
 		$member = $this->comman_fun->get_table_data(
 			'membermaster',
 			array(
-				'usercode'=>$member_id,
+				'usercode' => $member_id,
 			)
 		);
 		$verification_code = $this->insert_verification($member_id, $member[0]['emailid']);
-		
+
 		$name = $member[0]['fname'] . ' ' . $member[0]['lname'];
 
 		$toEmail = $member[0]['emailid'];
 		$emailData = [
-			'name'    			 => $name,
-			'verification_code'  => $verification_code,
-        ];
-        
-		$msg = $this->load->view('web/email_templates/emailVerification_view', $emailData,true);
-        
+			'name' => $name,
+			'verification_code' => $verification_code,
+		];
+
+		$msg = $this->load->view('web/email_templates/emailVerification_view', $emailData, true);
+
 		$subject = 'Confirm your email address';
 		$email = 'shubhexa@gmail.com';
 
-        $this->load->library('email');
-        $config = array(
-            'mailtype' => 'html',
-            'charset' => 'utf-8',
-            'priority' => '1',
-        );
-        
-        $this->email->initialize($config);
-        $this->email->set_newline("\r\n");
-        $this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
-        $this->email->to($toEmail);
-        $this->email->subject($subject);
-        $this->email->message($msg);
-        if ($this->email->send()) {
-            return true;
-        } else {
-            return false;
-        }
+		$this->load->library('email');
+		$config = array(
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'priority' => '1',
+		);
+
+		$this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+		$this->email->from(SHUBHEXAMAIL, 'SHUBHEXA');
+		$this->email->to($toEmail);
+		$this->email->subject($subject);
+		$this->email->message($msg);
+		if ($this->email->send()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	protected function insert_verification($member_id, $emailid) {
@@ -402,7 +404,7 @@ class Home extends CI_Controller {
 		// 		echo json_encode($response);exit;
 		// 	}
 		// }
-		
+
 		//check order with usercode, orderdate and payment status
 		$res = $this->ObjM->checkIsCartAvailable();
 
@@ -561,21 +563,92 @@ class Home extends CI_Controller {
 
 	public function getOrderNo() {
 
-	    $cartMaster = $this->ObjM->get_last_value();
+		$cartMaster = $this->ObjM->get_last_value();
 
-	    if(empty($cartMaster)) {
-	        $order_no = str_pad(1,4,'0',STR_PAD_LEFT);
+		if (empty($cartMaster)) {
+			$order_no = str_pad(1, 4, '0', STR_PAD_LEFT);
 
-	        
-	        return 'Shub'.$order_no; 
-	        
-	        } else {
-				$removeStText =str_replace('Shub','',$cartMaster[0]['order_no']); 
-	            $lastOrder   = $removeStText;
-	            $number = $lastOrder+1;
-	            $order_no = (str_pad($number,4,'0',STR_PAD_LEFT));
-	            return 'Shub'.$order_no;
-	        }
-	        
+			return 'Shub' . $order_no;
+
+		} else {
+			$removeStText = str_replace('Shub', '', $cartMaster[0]['order_no']);
+			$lastOrder = $removeStText;
+			$number = $lastOrder + 1;
+			$order_no = (str_pad($number, 4, '0', STR_PAD_LEFT));
+			return 'Shub' . $order_no;
+		}
+
+	}
+	public function forgot_password() {
+
+		$this->load->view('web/common/top_header_web');
+
+		$this->load->view('web/forgot_pasword_view', $data);
+
+		$this->load->view('web/common/footer_web');
+
+	}
+
+	function forgotPassword() {
+
+		$emailid = $_POST['email'];
+
+		$data_json = array();
+
+		if ($emailid != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('emailid' => $emailid, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+			$response = "Please enter your email.";
+			echo json_encode(0);exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			$name = $resultUser[0]['fname'] . ' ' . $resultUser[0]['lname'];
+
+			$toEmail = $resultUser[0]['emailid'];
+
+			$body = 'Dear ' . $name . ',<br><br>
+
+				You recently requested to forgot password for your account, your email id : ' . $resultUser[0]['emailid'] . ' and your password : ' . $resultUser[0]['password'] . '<br><br>
+
+				<br> Thank you.';
+			// if($resultUser[0]['password']==""){
+				// $response = "please check your email for credentials.";
+				// echo json_encode(4);exit;
+				// exit;
+			// }	
+			$subject = 'Forgot Password';
+			$email = SHUBHEXAMAIL; 
+			$this->load->library('email');
+			$config = array(
+				'mailtype' => 'html',
+				'charset' => 'utf-8',
+				'priority' => '1',
+			);
+			$this->email->initialize($config);
+			$this->email->set_newline("\r\n");
+			$this->email->from($email);
+			$this->email->to($toEmail); 
+			$this->email->subject($subject);
+			$this->email->message($body);		
+			if ($this->email->send()) {				
+				$response = "please check your email for credentials.";
+				echo json_encode(1);exit;
+				exit;
+			} else {
+				$response = "Something went wrong, please try after sometime.";
+				echo json_encode(2);exit;
+				exit;
+			}
+
+		} else {
+			$response = "Email id is not registered with us! please check your email id.";
+			echo json_encode(3);exit;
+			exit;
+		}
+
 	}
 }

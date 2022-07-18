@@ -53,3 +53,4 @@ $route['admin'] = 'admin/dashboard';
 $route['default_controller'] = 'home';
 $route['404_override'] = 'not_found';
 $route['translate_uri_dashes'] = FALSE;
+$route['forgot-password'] = 'home/forgot_password';

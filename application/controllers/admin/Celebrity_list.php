@@ -639,6 +639,20 @@ class Celebrity_list extends CI_Controller {
 			echo 0;
 		}
     }
+
+	function checkCelebrityAndAdd(){
+
+		// get all celebrity list
+		$celebrityDetail = $this->comman_fun->get_table_data('celebrity_master',array('emailid' => $emailId,'status' => 'Active',));
+		for($i=0;$i<count($celebrityDetail);$i++){
+
+		}
+
+		//check for the record
+
+		//if not found then insert into membermaster table with basic details
+	}
+
 	// function sendEmailToCeleb2($member_id) {
 	// 	$getCelebsData = $this->comman_fun->get_table_data(
 	// 		'membermaster',

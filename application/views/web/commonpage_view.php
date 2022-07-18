@@ -34,6 +34,8 @@
 	    min-height: unset;
 	}
 	p.error-comment{
-		font-size: 16px !important;
+    font-size: 18px !important;
+    font-weight: 600;
+    color: black;
 	}
 </style>

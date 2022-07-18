@@ -14,7 +14,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="aon-bnr-write">
                     	<h2 class="text-bot-line">1000+ ગુજરાતી સેલીબ્રીટી</h2>
                         <h3 class="text-top-line">દ્વારા આપના પ્રિયજનો ને ગુજરાતી અંદાજમાં શુભકામના પાઠવો</h3>
-
                     </div>
                 </div>
             </div>
@@ -22,16 +21,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="aon-find-bar aon-findBar-vertical">
           <div class="container">
             <div class="search-form ">
-              <form class="clearfix search-providers" method="get">
+              <form class="clearfix search-providers" method="get" id="categorysrchform">
                 <input type="hidden" name="s" value="">
                   <div class="aon-searchbar-table">
                   <div class="aon-searchbar-left">
                     <ul class="clearfix sf-searchfileds-count-5">
-                      <li>
+                      <!-- <li>
                         <label>Keyword</label>
                         <input type="text" value="" placeholder="Enter Keyword" id="keyword" name="keyword" class="form-control sf-form-control">
                         <span class="sf-search-icon"><img src="<?=asset_path('web/')?>images/search-bar/keyword.png" alt=""/></span>
-                      </li>
+                      </li> -->
                       <li>
                         <label>Category</label>
                         <select id="categorysrh" name="catid" class="form-control sf-form-control aon-categories-select sf-select-box" title="Select Category">
@@ -42,12 +41,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </option>
                             <?php }?>
                           </select>
+                          <span id="categorysrh_error" style="color:red;"></span>
                         <span class="sf-search-icon"><img src="<?=asset_path('web/')?>images/search-bar/maintenance.png" alt=""/></span>
                       </li>
                     </ul>
                   </div>
                   <div class="aon-searchbar-right">
-                    <button type="button" class="site-button"><i class="fa fa-search"></i> Search</button>
+                    <button type="submit" class="site-button"><i class="fa fa-search"></i> Search</button>
                   </div>
                 </div>
               </form>
@@ -70,7 +70,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="section-content">
                 <div class="owl-carousel categories-carousel-owl aon-owl-arrow">
-
                 	<?php for ($i = 0; $i < count($resCategory); $i++) {?>
                 	<div class="item">
                         <div class="aon-cat-item">
@@ -80,74 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <h4 class="aon-cat-title"><?=$resCategory[$i]['category_name']?></h4>
                         </div>
                     </div>
-                <?php }?>
-
-
-
-                    <!-- <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Actor"><img src="<?=asset_path('web/')?>images/popular-categories/actor.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">એક્ટર</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Lokgayak"><img src="<?=asset_path('web/')?>images/popular-categories/lokgayak.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">લોકગાયક</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Sahityakar"><img src="<?=asset_path('web/')?>images/popular-categories/sahityakar.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">સાહિત્યકાર</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="figure" href="<?=file_path()?>celebrity/list/Dancer"><img src="<?=asset_path('web/')?>images/popular-categories/dancer.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">ડાન્સર</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Hasyakalakar"><img src="<?=asset_path('web/')?>images/popular-categories/hasykalakar.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">હાસ્યકલાકાર</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Mahanubhavo"><img src="<?=asset_path('web/')?>images/popular-categories/mahanubhavo.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">મહાનુભાવો</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Sangitkar"><img src="<?=asset_path('web/')?>images/popular-categories/sangitkar.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">સંગીતકાર</h4>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="aon-cat-item">
-                            <div class="aon-cat-pic media-bg-animate shine-hover">
-                                <a class="shine-box" href="<?=file_path()?>celebrity/list/Sportman"><img src="<?=asset_path('web/')?>images/popular-categories/sportman.png" alt=""></a>
-                            </div>
-                            <h4 class="aon-cat-title">સ્પોર્ટમેન</h4>
-                        </div>
-                    </div> -->
+                <?php }?>                    
                 </div>
             </div>
         </div>

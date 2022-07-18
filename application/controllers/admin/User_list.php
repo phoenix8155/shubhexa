@@ -36,6 +36,7 @@ class User_list extends CI_Controller {
 	function listing() {
 
 		$result = $this->ObjM->getAllUser();
+		//var_dump($result);exit;
 
 		$html = '';
 
@@ -49,15 +50,14 @@ class User_list extends CI_Controller {
 				$update_status = 'Active';
 				$cls = 'btn-danger';
 			}
-
 			// <td>'.$result[$i]['amount'].'</td>
-
+			$user_name =$result[$i]['fname'] . ' ' . $result[$i]['lname'] ;
 			$row = $i + 1;
 			$html .= '<tr>
 						<td width="2%"><input type="checkbox" class="wall_chk" name="checkbox[]" value=' . $result[$i]["usercode"] . '></td>
 						<td width="2%">' . $row . '</td>
-						<td width="15%">' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
-						<td width="10%"' . $result[$i]['mobileno'] . '</td>
+						<td width="15%">' . $user_name. '</td>
+						<td width="10%">' . $result[$i]['mobileno'] . '</td>
 						<td width="10%">' . $result[$i]['emailid'] . '</td>
 						<td width="5%">' . date('d-m-Y', strtotime($result[$i]['create_date'])) . '</td>
 						<td width="5%"><div class="btn-group">

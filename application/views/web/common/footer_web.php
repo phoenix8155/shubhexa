@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		                                            </div>
 		                                        </div> -->
 		                                        <div class="aon-login-opright">
-		                                            <a href="#">Forget Password</a>
+		                                            <a href="<?=file_path()?>forgot-password">Forget Password</a>
 		                                        </div>
 		                                    </div>
 		                                </div>
@@ -270,6 +270,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script src="<?=asset_path('web/')?>js/bootstrap-slider.min.js"></script><!-- Form js -->
 <script>
 $(function() {
+  $('#forgotpasswordform').submit(function(e) {
+  	e.preventDefault();
+  	if ($("#email").val() == "") {
+  		$("#email" ).focus();
+		$("#email_success").text('');
+  		$("#email_error").text('Please enter emailid.');
+  	}
+  	$.ajax({
+        type: "POST",
+        url: "<?php echo file_path(); ?>home/forgotPassword",
+        dataType: 'json',
+        data:new FormData(this),
+        processData:false,
+        contentType:false,
+        cache:false,
+        async:false,
+        success: function(resp) {			
+			if(resp == '0') {
+				$("#email_error").text('');
+				$("#email_error").text('Please enter your email.');
+				$("#email_success").text('');
+				$("#email").val('');
+			} else if(resp == '1') {
+				$("#email_error").text('');
+				$("#email_success").text('');
+				$("#email_success").text('Please check your email for credentials.');
+				$("#email").val('');
+			} else if(resp == '2') {
+				$("#email_error").text('');
+				$("#email_error").text('Something went wrong, please try after sometime.');
+				$("#email_success").text('');
+				$("#email").val('');
+			} else if(resp == '3') {
+				$("#email_error").text('');
+				$("#email_error").text('Email id is not registered with us! please check your email id.');
+				$("#email_success").text('');
+				$("#email").val('');
+			}
+        }
+    });
+  });
+});
+$(function() {
   $('#newsletterform').submit(function(e) {
   	e.preventDefault();
   	if ($("#email_sn").val() == "") {
@@ -277,8 +320,6 @@ $(function() {
   		$("#email_sn_error").html('Please enter emailid.');
   		exit;
   	}
-
-
   	$.ajax({
         type: "POST",
         url: "<?php echo file_path(); ?>home/subscribeNewsLetter",
@@ -289,7 +330,6 @@ $(function() {
         cache:false,
         async:false,
         success: function(resp) {
-			
 			if(resp == '0') {
 				$("#email_sn_error").html('');
 				$("#email_sn_error").html('Already subscribed.');
@@ -306,7 +346,6 @@ $(function() {
 				$("#email_sn_success").html('');
 				$("#email_sn").val('');
 			}
-
         }
     });
   });
@@ -314,15 +353,12 @@ $(function() {
 $(function() {
   $('#login-form').submit(function(e) {
   	e.preventDefault();
-
   	if ($("#emailid").val() == "") {
   		$( "#emailid" ).focus();
   	}
-
   	if ($("#password").val()== "") {
   		$( "#password" ).focus();
   	}
-
   	$.ajax({
         type: "POST",
         url: "<?php echo file_path(); ?>home/checkLogin",
@@ -333,14 +369,12 @@ $(function() {
         cache:false,
         async:false,
         success: function(resp) {
-
 		    if(resp=="true"){
 		    	window.location.reload();
 		    }else{
 		    	alert('invalid email id or password.!');
 		    	$('.error-clss-login').html('invalid email id or password.!');
 		    }
-
         }
     });
   });
@@ -352,17 +386,14 @@ $(function() {
   		$( "#first_name" ).focus();
   		alert('First name is mandatory');
   	}
-
   	if ($("#last_name").val()== "") {
   		alert('Last name is mandatory');
   		$( "#last_name" ).focus();
   	}
-
   	if ($("#sign_emailid").val()== "") {
   		alert('Email Id is mandatory');
   		$( "#sign_emailid" ).focus();
   	}
-
   	if ($("#sign_password").val()== "") {
   		alert('Password is mandatory');
   		$( "#sign_password" ).focus();
@@ -371,8 +402,6 @@ $(function() {
   		alert('Please accept the terms and conditions');
   		$( "#agree_checkbox" ).focus();
   	}
-
-
   	$.ajax({
         type: "POST",
         url: "<?php echo file_path(); ?>home/insertUser",
@@ -769,9 +798,6 @@ $(document).ready(function(){
 		var user = $('#to_name').val();
 		var data_id = $('#to_name').data('id');
 		var myMsg = $('#message_help').val();
-
-		//alert(user);
-
 		if(data_id != ""){
 			var replace_with_receipt = data_id;
 		}else{
@@ -810,17 +836,13 @@ $(document).ready(function(){
 	        $(this).text(text.replace(replace_with_receipt, user));
 	    });
 	    $('#to_name').data('id',user);
-
 	});
 
 	var exSenderName = '';
 	$('input[name="from_name"]').blur(function(){
-
 		var user1 = $('#from_name').val();
 		var data_id = $('#from_name').data('id');
 		var myMsg1 = $('#message_help').val();
-
-		//alert(user1);
 		if(data_id != ""){
 			var replace_with_sender = data_id;
 		}else{
@@ -860,24 +882,9 @@ $(document).ready(function(){
 	        $(this).text(text.replace(replace_with_sender, user1));
 	    });
 	    $('#from_name').data('id',user1);
-
-  //   	var senderVal="";
-		// var sender=$(this).val();
-
-		// if(sender!=""){
-		// 	senderVal=$(this).val();
-		// }else{
-		// 	senderVal="_sender_name_";
-		// }
-
-		// $('.sender_name').html(senderVal);
-	 //    $('#template_div').css('display','block');
-  //   	$('#message_div').css('display','none');
-
 	});
 
 	$("input[name$='need_gst']").click(function() {
-
         var checkbox_val = $(this).val();
         var checked_value_need_gst = $('.need_gst').is(":checked");
         if(checked_value_need_gst==true){
@@ -892,9 +899,7 @@ $(document).ready(function(){
     });
 
     $('#occasion_type').change(function(){
-
     	var option = $('#occasion_type :selected').val();
-
     	if(option=='Customize_Your_Message'){
     		$('#template_div').css('display','none');
 	    	$('#message_div').css('display','block');
@@ -943,9 +948,25 @@ $(document).ready(function(){
 		        }
 		    });
     	}
-
 	});
-
+	//for category search
+	$('#categorysrchform').submit(function(e) {
+  		e.preventDefault();
+	    var option = $('#categorysrh :selected').val();
+		console.log('hi');
+		console.log(option);		
+		if (option == "") {
+			$("#categorysrh_error").text('Please choose category.');
+			$("#categorysrh").focus();
+			return false;
+		}else{
+			$("#categorysrh_error").text('');
+		}
+		let url= '<?php echo file_path() ?>celebrity/list/';
+		if (option != undefined && option != null) {
+			window.location = url + option;
+		}			
+  	});
 });
 
 function onOccasionChangeGetRecieptNameSelf(){

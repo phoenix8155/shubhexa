@@ -40,7 +40,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="content-block">
-                                                    Your Credential
+                                                    Your Credentials
                                                 </td>
                                             </tr>
                                             <tr>
@@ -67,6 +67,11 @@
                                             <tr>
                                                 <td class="content-block aligncenter">
                                                     <a href="<?=file_path('celebrity_admin')?>change_password/" class="btn-primary" itemprop="url">Reset Your Password</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:red;font-size:12px">
+                                                    <b>Note:</b> For reset your password, you need to login into app or celebrity admin using above credentials. 
                                                 </td>
                                             </tr>
                                         </tbody></table>

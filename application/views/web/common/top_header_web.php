@@ -83,6 +83,11 @@ if ($this->uri->rsegment(1) == "my_bookings") {
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/slick-theme.css">
     <!-- Main STyle Sheet -->
     <link rel="stylesheet" type="text/css" href="<?=asset_path('web/')?>css/style.css">
+    <style type="text/css">
+		.sf-banner-heading-wrap {
+		    height: 300px;
+		}
+    </style>
 </head>
 <body>
     <div class="loading-area">

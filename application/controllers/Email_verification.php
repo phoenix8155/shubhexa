@@ -58,7 +58,7 @@ class Email_verification extends CI_Controller {
 
 			$data1 = array();
 
-			$data1['msg'] = 'Email Verified Successfully<br /><br />';
+			$data1['msg'] = '<b>Email Verified Successfully</b><br /><br />';
 
 			$data1['msg'] .= 'Dear, ' . $member[0]['fname'] . ' ' . $member[0]['lname'] . ', <br><br>  Thank you for verifying your Account,<br /> Welcome to Shubhexa .<br />Your Account is now Active and you can login.';
 
