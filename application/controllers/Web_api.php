@@ -2669,6 +2669,8 @@ class Web_api extends CI_Controller {
 
 		$cartId = $_REQUEST['cart_id'];
 
+		$payment_id = $_REQUEST['payment_id'];
+
 		//echo $cartId;exit;
 		$data_json = array();
 
@@ -2692,6 +2694,8 @@ class Web_api extends CI_Controller {
 			$UpdateData = array();
 
 			$UpdateData['payment_status'] = 'confirm';
+
+			$UpdateData['payment_id'] = $payment_id;
 
 			$UpdateData['order_date'] = date('Y-m-d h:i:s');
 
@@ -3798,9 +3802,9 @@ class Web_api extends CI_Controller {
 			die('FCM Send Error: ' . curl_error($ch));
 		}
 		curl_close($ch);
-		return true;
-		//echo $response;
-		//exit;
+		//return true;
+		echo $response;
+		exit;
 	}
 
 	protected function sendNotificationToIOSUsingSeverKeyFromUserSide($registatoin_ids, $messageTitle, $data) {
@@ -5074,7 +5078,8 @@ class Web_api extends CI_Controller {
 		$message = "simply dummy text of the printing and typesetting";
 		//$countTot = "1";
 
-		$this->sendNotificationUsingSeverKeyAndroidFromCelebSide($registatoin_ids, $noti_title, $message);
+		//$this->sendNotificationUsingSeverKeyAndroidFromCelebSide($registatoin_ids, $noti_title, $message);
+		$this->sendNotificationUsingSeverKeyAndroidFromUserSide($registatoin_ids, $noti_title, $message);
 	}
 
 	function cancelOrderByCelebs()
