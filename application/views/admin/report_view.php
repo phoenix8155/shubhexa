@@ -1,11 +1,10 @@
 <script>
 $(document).ready(function(e) {
 	$('#data-table').dataTable({
-		"bProcessing": true,
+		"bProcessing": false,
 		"iDisplayLength": 25,
-		"responsive": true,
-		"bDestroy": true,
-		"responsive": true
+		"bDestroy": false,
+		
 	});
 });
 </script>
@@ -67,11 +66,12 @@ $(document).ready(function(e) {
 			<a href="<?=file_path('admin')?><?=$this->uri->rsegment(1)?>/export" class="btn btn-sm btn-mint">Export</a>
 		</div>
 		<div class="panel-body">
-			<table class="table  table-bordered responsive" id="data-table" width="100%">
+			<table class="table  table-bordered responsive" id="data-table">
 				<thead>
 					<tr>
 						<th>Sr. No</th>
 						<th>Name</th>
+						<th>Payment Id</th>
 						<th>Mobile No</th>
 						<th>Email ID</th>
 						<th>Celebrity</th>
@@ -127,16 +127,19 @@ $(document).ready(function(e) {
 	});
 
 function displayTextboxOnLoad(selectType) {
+	
 	if(selectType == 'datewise') {
 		$('.dateWise').css('display','block');
 		$('.allType').css('display','none');		
 		$('#all_type').val('');
 		$('#filter').prop('disabled',false);
 	} else if(selectType == 'all_type') { 
-		$('#date_filter').val('');
-		$('.dateWise').css('display','none');
-		$('.allType').css('display','block');		
-		$('#filter').prop('disabled',false);
+		
+			$('#date_filter').val('');
+			$('.dateWise').css('display','none');
+			$('.allType').css('display','block');		
+			$('#filter').prop('disabled',false);
+		
 	} else  { 
 		$('#all_type').val('');
 		$('#date_filter').val('');
@@ -144,6 +147,14 @@ function displayTextboxOnLoad(selectType) {
 		$('.dateWise').css('display','none');
 		$('.allType').css('display','none');		
 	}
+
+	$(document).on('change','#all_type',function() {
+		if($('#all_type').val() != '') {
+			$('#date_filter').val('');			
+		}
+	});
+
+	
 }
 </script>
 

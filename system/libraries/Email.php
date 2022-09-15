@@ -76,28 +76,28 @@ class CI_Email {
 	 *
 	 * @var	string
 	 */
-	public $smtp_host = 'smtp.ionos.com';
+	public $smtp_host = 'ssl://smtp.googlemail.com';
 
 	/**
 	 * SMTP Username
 	 *
 	 * @var	string
 	 */
-	public $smtp_user = 'info@shubhexa.com';
+	public $smtp_user = 'mauliknai8155@gmail.com';
 
 	/**
 	 * SMTP Password
 	 *
 	 * @var	string
 	 */
-	public $smtp_pass = 'Shubhexa@125075';
+	public $smtp_pass = 'plfcdbmedzwhrhqx';
 
 	/**
 	 * SMTP Server port
 	 *
 	 * @var	int
 	 */
-	public $smtp_port = 587; //25;
+	public $smtp_port = '465'; //25;
 
 	/**
 	 * SMTP connection timeout in seconds
@@ -177,7 +177,7 @@ class CI_Email {
 	 * @link	http://www.ietf.org/rfc/rfc822.txt
 	 * @var	string	"\r\n" or "\n"
 	 */
-	public $newline = "\n"; // Default newline. "\r\n" or "\n" (Use "\r\n" to comply with RFC 822)
+	public $newline = "\r\n"; // Default newline. "\r\n" or "\n" (Use "\r\n" to comply with RFC 822)
 
 	/**
 	 * CRLF character sequence

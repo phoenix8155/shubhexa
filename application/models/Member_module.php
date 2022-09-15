@@ -143,15 +143,17 @@ Class Member_module extends CI_Model {
 
 		$this->db->select('count(*) as totBookings');
 
-		$this->db->select('cart_master.cart_id,cart_master.usercode AS cartMasterUsercode,cart_master.order_date,cart_master.total_amount,cart_master.payment_status,cart_master.status');
+		$this->db->select('cart_master.cart_id,cart_master.payment_status,cart_master.status');
 
-		$this->db->from('membermaster');
+		$this->db->from('cart_details');
 
-		$this->db->join('cart_master', 'cart_master.usercode=membermaster.usercode', 'left');
+		$this->db->join('cart_master', 'cart_master.cart_id=cart_details.cart_id', 'left');
+
+		$this->db->where('cart_master.payment_id !=','');
 
 		$this->db->where('cart_master.payment_status','confirm');
 
-		$this->db->where('membermaster.status','Active');
+		$this->db->where('cart_details.status','Active');
 
 		$this->db->where('cart_master.status', 'Active');
 
@@ -160,6 +162,88 @@ Class Member_module extends CI_Model {
 		$the_content = $query->result_array();
 
 		return $the_content;
+
+	}
+
+	function getTodaysTotBookings() {
+
+		$this->db->select('count(*) as totTodaysBookings');
+
+		$this->db->select('cart_master.cart_id,cart_master.order_date,cart_master.payment_date,cart_master.payment_status,cart_master.status');
+
+		$this->db->from('cart_details');
+
+		$this->db->join('cart_master', 'cart_master.cart_id=cart_details.cart_id', 'left');
+
+		$this->db->where('cart_master.payment_date = CURDATE()');
+
+		$this->db->where('cart_master.payment_id !=','');
+
+		$this->db->where('cart_master.payment_status','confirm');
+
+		$this->db->where('cart_details.status','Active');
+
+		$this->db->where('cart_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getTotAmountsReceived() {
+
+		$this->db->select_sum('cart_details.amount');
+
+		$this->db->select('cart_master.cart_id,cart_master.order_date,cart_master.payment_date,cart_master.payment_status,cart_master.status');
+
+		$this->db->from('cart_details');
+
+		$this->db->join('cart_master', 'cart_master.cart_id=cart_details.cart_id', 'left');
+
+		$this->db->where('cart_master.payment_id !=','');
+
+		$this->db->where('cart_master.payment_status','confirm');
+
+		$this->db->where('cart_details.status','Active');
+
+		$this->db->where('cart_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content[0]['amount'];
+
+	}
+
+	function getTodayTotAmountsReceived() {
+
+		$this->db->select_sum('cart_details.amount');
+
+		$this->db->select('cart_master.cart_id,cart_master.order_date,cart_master.payment_date,cart_master.payment_status,cart_master.status');
+
+		$this->db->from('cart_details');
+
+		$this->db->join('cart_master', 'cart_master.cart_id=cart_details.cart_id', 'left');
+
+		$this->db->where('cart_master.payment_date = CURDATE()');
+
+		$this->db->where('cart_master.payment_id !=','');
+
+		$this->db->where('cart_master.payment_status','confirm');
+
+		$this->db->where('cart_details.status','Active');
+
+		$this->db->where('cart_master.status', 'Active');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content[0]['amount'];
 
 	}
 

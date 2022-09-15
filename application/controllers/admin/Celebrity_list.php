@@ -421,20 +421,38 @@ class Celebrity_list extends CI_Controller {
 	}
 
 	public function userUpdate($celebrityId) {
-		$first_name = filter_data($_POST['first_name']);
-		$last_name = filter_data($_POST['last_name']);
-		$data['role_type'] = '2';
-		$data['fname'] = $first_name;
-		$data['lname'] = $last_name;
 
-		$data['mobileno'] = filter_data($_POST['mobileno']);
-		$data['emailid'] = filter_data($_POST['emailid']);
+		$checkCelebAvailble = $this->comman_fun->get_table_data(
+			'membermaster',
+			array(
+				'celebrity_id'=>$celebrityId,
+			)
+		);
 
-		$data['status'] = 'Active';
+		if(empty($checkCelebAvailble)) {
+			
+			return $this->userCreate($celebrityId);
 
-		$data['update_date'] = date('Y-m-d h:i:s');
+		} else {
 
-		return $this->comman_fun->update($data, 'membermaster', array('celebrity_id' => $_POST['eid']));
+			$first_name = filter_data($_POST['first_name']);
+			$last_name = filter_data($_POST['last_name']);
+			$data['role_type'] = '2';
+			$data['fname'] = $first_name;
+			$data['lname'] = $last_name;
+
+			$data['mobileno'] = filter_data($_POST['mobileno']);
+			$data['emailid'] = filter_data($_POST['emailid']);
+
+			$data['status'] = 'Active';
+
+			$data['update_date'] = date('Y-m-d h:i:s');
+
+			return $this->comman_fun->update($data, 'membermaster', array('celebrity_id' => $_POST['eid']));
+
+		}
+
+		
 	
 	}
 

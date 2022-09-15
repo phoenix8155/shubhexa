@@ -22,33 +22,54 @@
                     			<div class="row working-hours-admin m-b10 staff-schedule-item-row">
 		                            <div class="row">
 		                            	<?php if (count($cartResult) < 1) {
-	echo "<h4 style='color:red;'>Booking summary is empty</h4>";}?>
+											echo "<h4 style='color:red;'>Booking summary is empty</h4>";}?>
+										<?php 
+											$totalAmount = 0;
+											for ($i = 0; $i < count($cartResult); $i++) {
+													$getCelebMasterDt = $this->comman_fun->get_table_data('celebrity_task_master',array(
+														'cart_detail_id' => $cartResult[$i]['id'],
+														'video_status'	 =>'Complete',
+														'is_cancelled'	 => 'No',
+														'status'		 => 'Active'
+													));
 
-		                            	<?php $totalAmount = 0;for ($i = 0; $i < count($cartResult); $i++) {?>
-		                            		<?php if (count($cartResult) < 2) {?>
-		                            			<div class="col-md-12">
-		                            		<?php } else if (count($cartResult) < 3) {?>
-		                            			<div class="col-md-6">
-		                            		<?php } else {?>
-		                            			<div class="col-md-4">
-		                            		<?php }?>
-
-	                            				<div class="sf-provi-art-pic"><img src="<?=upload_path()?>celebrity_profile/thum/<?=$cartResult[$i]['profile_pic']?>" class="img-min-heght" alt=""></div>
-	                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title"><?=$cartResult[$i]['fname']?> <?=$cartResult[$i]['lname']?></h4></div>
-	                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title">Delivery date: <?=date('d-m-Y', strtotime($cartResult[$i]['delivery_date']))?></h4></div>
-	                                            <?php 
-													$videoDownload = '<a class="video-download" href='.upload_path().'celebrity_video/'.$cartResult[$i]['video_name'].' Download>Download</a>';
-													$videoLink = ($cartResult[$i]['video_name'] != '') ? $videoDownload : '-'; 
-													  
 												?>
-												<div class="sf-provi-art-date"><h4 class="sf-provi-art-title">Video Link: <?=$videoLink?> </h4></div>
-	                                            <div class="sf-provi-art-comment"><span style="float: left;color: #062279;font-weight: 900;font-size: 15px;">Price : ₹ <?=$cartResult[$i]['amount']?></span></div>
+												<?php if (count($cartResult) < 2) { ?>
+													<div class="col-md-12">
+														<?php } else if (count($cartResult) < 3) {?>
+															<div class="col-md-6">
+														<?php } else {?>
+																<div class="col-md-4">
+																	<?php }?>
 
-
-	                                        </div>
-		<?php $totalAmount = $totalAmount + $cartResult[$i]['amount'];}?>
-									</div>
-		                        </div>
+																	<div class="sf-provi-art-pic">
+																		<img src="<?=upload_path()?>celebrity_profile/thum/<?=$cartResult[$i]['profile_pic']?>" class="img-min-heght" alt="">
+																	</div>
+																	<div class="sf-provi-art-date">
+																		<h4 class="sf-provi-art-title">
+																			<?=$cartResult[$i]['fname']?> <?=$cartResult[$i]['lname']?>
+																		</h4>
+																	</div>
+																	<div class="sf-provi-art-date">
+																		<h4 class="sf-provi-art-title">Delivery date: <?=date('d-m-Y', strtotime($cartResult[$i]['delivery_date']))?></h4>
+																	</div>
+																	<?php 
+																		$videoDownload = '<a class="video-download" href='.upload_path().'celebrity_video/'.$getCelebMasterDt[0]['video_name'].' Download>Download</a>';
+																		$videoLink = ($getCelebMasterDt[0]['video_name'] != '') ? $videoDownload : '-'; 
+																		
+																	?>
+																	<div class="sf-provi-art-date">
+																		<h4 class="sf-provi-art-title">Video Link: <?=$videoLink?> </h4>
+																	</div>
+																	<div class="sf-provi-art-comment">
+																		<span style="float: left;color: #062279;font-weight: 900;font-size: 15px;">Price : ₹ <?=$cartResult[$i]['amount']?></span>
+																	</div>
+																</div>
+															<?php $totalAmount = $totalAmount + $cartResult[$i]['amount'];
+											}
+											?>
+														</div>
+													</div>
                     		</div>
                     		<div class="col-md-4">
                     			<?php if (count($cartResult) > 0) {?>

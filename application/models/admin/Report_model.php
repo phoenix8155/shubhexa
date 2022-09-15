@@ -7,13 +7,15 @@ Class Report_model extends CI_Model {
         $date_filter = $this->input->get('date_filter');
 		$this->db->select('membermaster.*');
 
-		$this->db->select('cart_master.cart_id,cart_master.payment_date,cart_master.order_no,cart_master.usercode AS cartMasterUsercode,cart_master.order_date,cart_master.total_amount,cart_master.payment_status,cart_master.status');
+		$this->db->select('cart_master.cart_id,cart_master.payment_date,cart_master.order_no,cart_master.usercode AS cartMasterUsercode,cart_master.order_date,cart_master.total_amount,cart_master.payment_status,cart_master.status,cart_master.payment_id');
 
 		$this->db->from('membermaster');
 
 		$this->db->join('cart_master', 'cart_master.usercode=membermaster.usercode', 'left');
 
 		$this->db->where('cart_master.payment_status','confirm');
+       
+        $this->db->where('cart_master.payment_id !=','');
 
         if($date_filter != '') {
             

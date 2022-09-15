@@ -656,7 +656,7 @@ Class Web_app_module extends CI_Model {
 		$this->db->select('SUM(cart_details.amount) as total_earning');
 		$this->db->select('cart_details.*');
 
-		$this->db->select('cart_master.cart_id as cart_master_id,cart_master.payment_status,cart_master.payment_date');
+		$this->db->select('cart_master.cart_id as cart_master_id,cart_master.payment_status,cart_master.payment_date,cart_master.payment_id');
 
 		$this->db->from('cart_details');
 
@@ -683,6 +683,8 @@ Class Web_app_module extends CI_Model {
 		}
 		$this->db->where('cart_master.payment_status','confirm');
 
+		$this->db->where('cart_master.payment_id !=','');
+
 		$this->db->where('cart_details.status', 'Active');
 
 		$query = $this->db->get();
@@ -697,7 +699,7 @@ Class Web_app_module extends CI_Model {
 
 		$this->db->select('cart_details.*');
 
-		$this->db->select('cart_master.cart_id as cart_master_id,cart_master.payment_status,cart_master.payment_date');
+		$this->db->select('cart_master.cart_id as cart_master_id,cart_master.payment_status,cart_master.payment_date,cart_master.payment_id');
 
 		$this->db->from('cart_details');
 
@@ -725,6 +727,8 @@ Class Web_app_module extends CI_Model {
 		}
 		
 		$this->db->where('cart_master.payment_status','confirm');
+
+		$this->db->where('cart_master.payment_id !=','');
 
 		$this->db->where('cart_details.status', 'Active');
 
@@ -767,7 +771,6 @@ Class Web_app_module extends CI_Model {
 	function get_last_value() {
 		$this->db->select("*");
 		$this->db->from('cart_master');
-		$this->db->where('status', 'Active');
 		$this->db->limit(1);
 		$this->db->order_by('cart_id', 'DESC');
 		$query = $this->db->get();

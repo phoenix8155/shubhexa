@@ -19,14 +19,22 @@
         <div class="row">
             <div class="page-notfound datanotfound">
                 <div class="page-notfound-content m-b30">
-                    <h3 class="error-comment">Payment successfully done</h3>
-            		<a href="<?=file_path()?>home" class="site-button">Back to Home</a>
+                    <h3 class="error-comment green-color">Payment Successfully!!</h3>
+                    <i class="fa fa-check-circle custom-fa-check"></i>
+            		<!-- <a href="<?=file_path()?>home" class="site-button">Back to Home</a> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
 <style type="text/css">
+  .custom-fa-check {
+    font-size: 60px;
+    color: #029f65;
+  }
+  .green-color {
+    color: #029f65;
+  }
 	.datanotfound {
 	    width: 100%;
 	}

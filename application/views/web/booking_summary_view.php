@@ -22,8 +22,8 @@
                     			<div class="row working-hours-admin m-b10 staff-schedule-item-row">
 		                            <div class="row">
 		                            	<?php if (count($cartRes) < 1) {
-	echo "<h4 style='color:red;'>Booking summary is empty</h4>";}?>
-	<?php $cartResult = $this->ObjM->getCartDetailsList($cartRes[0]['cart_id']);?>
+											echo "<h4 style='color:red;'>Booking summary is empty</h4>";}?>
+											<?php $cartResult = $this->ObjM->getCartDetailsList($cartRes[0]['cart_id']);?>
 		                            	<?php for ($i = 0; $i < count($cartResult); $i++) {?>
 		                            		<?php if (count($cartResult) < 2) {?>
 		                            			<div class="col-md-12">

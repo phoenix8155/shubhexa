@@ -129,6 +129,7 @@
             <li> <a id="menu-user-list" href="<?=file_path('admin')?>user_list/view/"> <i class="fa fa-user"></i> <span class="menu-title"> User List </span> </a> </li>
             <li> <a id="menu-booking-list" href="<?=file_path('admin')?>booking_list/view/"> <i class="fa fa-book"></i> <span class="menu-title"> Booking List </span> </a> </li>
             <li> <a id="menu-report" href="<?=file_path('admin')?>report/view/"> <i class="fa fa-book"></i> <span class="menu-title"> Report </span> </a> </li>
+            <li> <a id="menu-refund-report" href="<?=file_path('admin')?>refund_report/view/"> <i class="fa fa-book"></i> <span class="menu-title"> Refund Report </span> </a> </li>
             <li> <a href="#"> <i class="fa fa-desktop" aria-hidden="true"></i> <span class="menu-title">Website CMS</span> <i class="arrow"></i> </a>
               <ul class="collapse">
                	<li><a id="menu-slider-list" href="<?=file_path('admin')?>slider_list/view/">Slider</a></li>

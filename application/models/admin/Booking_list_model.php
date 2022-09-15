@@ -11,6 +11,14 @@ Class Booking_list_model extends CI_Model {
 
 		$this->db->join('cart_master', 'cart_master.usercode=membermaster.usercode', 'left');
 
+		if($_GET['today'] != '') {
+
+			$this->db->where('cart_master.payment_date = CURDATE()');
+		}
+
+
+		$this->db->where('cart_master.payment_id !=','');
+
 		$this->db->where('cart_master.payment_status','confirm');
 
 		$this->db->where('membermaster.status','Active');
@@ -41,6 +49,8 @@ Class Booking_list_model extends CI_Model {
 		$this->db->where('cart_master.usercode',$usercode);
 
 		$this->db->where('cart_details.cart_id',$cart_id);
+
+		$this->db->where('cart_master.payment_id !=','');
 
 		$this->db->where('cart_master.payment_status','confirm');
 

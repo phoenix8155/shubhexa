@@ -30,12 +30,25 @@ class Dashboard extends CI_Controller {
 		$page_info['page_title'] = 'Dashboard';
 
 		$data['resCategory'] = $this->ObjM->getTotCategory();
+		
 		$data['resCelebrity'] = $this->ObjM->getTotCelebrity();
+		
 		$data['resUser'] = $this->ObjM->getTotUser();
+		
 		$data['resTestimonials'] = $this->ObjM->getTotTestimonials();
+
+		
 		$data['resPromocode'] = $this->ObjM->getTotPromocode();
+		
 		$data['resTemplates'] = $this->ObjM->getTotTemplates();
+		
 		$data['resBookings'] = $this->ObjM->getTotBookings();
+
+		$data['resTodayBookings'] = $this->ObjM->getTodaysTotBookings();
+
+		$data['resTotAmtReceived'] = $this->ObjM->getTotAmountsReceived();
+
+		$data['resTodayTotAmtReceived'] = $this->ObjM->getTodayTotAmountsReceived();
 
 		$this->load->view('common/topheader');
 

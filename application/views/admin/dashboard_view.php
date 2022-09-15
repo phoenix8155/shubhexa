@@ -127,4 +127,53 @@ $(document).ready(function(e) {
             </div>
         </div>
     </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-mint panel-colorful media middle pad-all">
+            <div class="media-left">
+                <div class="pad-hor">
+                    <i class="fa fa-inr icon-3x" style="font-size: 45px;"></i>
+                </div>
+            </div>
+            <div class="media-body">
+		      <a href="<?=file_path('admin')?>booking_list/view" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=round($resTotAmtReceived);?></p>
+		          <p class="mar-no">Total Amount Received</p>
+		      </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-warning panel-colorful media middle pad-all">
+            <div class="media-left">
+                <div class="pad-hor">
+                    <i class="fa fa-shopping-cart icon-3x" style="font-size: 45px;"></i>
+                </div>
+            </div>
+            <div class="media-body">
+		      <a href="<?=file_path('admin')?>booking_list/view?today=<?=date('Y-m-d')?>" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=$resTodayBookings[0]['totTodaysBookings'];?></p>
+		          <p class="mar-no">Today's Bookings</p>
+		      </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-info panel-colorful media middle pad-all">
+            <div class="media-left">
+                <div class="pad-hor">
+                    <i class="fa fa-inr icon-3x" style="font-size: 45px;"></i>
+                </div>
+            </div>
+            <div class="media-body">
+		      <a href="<?=file_path('admin')?>booking_list/view?today=<?=date('Y-m-d')?>" style="color:#fff;">
+		          <p class="text-2x mar-no text-semibold"><?=round($resTodayTotAmtReceived);?></p>
+		          <p class="mar-no">Today Amount Received</p>
+		      </a>
+            </div>
+        </div>
+    </div>
+
 </div>

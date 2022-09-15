@@ -40,7 +40,7 @@ class My_bookings extends CI_Controller {
 		if ($cart_id != "") {
 			$data['cartResult'] = $this->ObjM->getCartDetailsList($cart_id);
 		}
-
+		//var_dump(count($data['cartResult']));exit;
 		$this->load->view('web/common/top_header_user');
 
 		$this->load->view('web/common/sidebar_user');

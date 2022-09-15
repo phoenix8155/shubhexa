@@ -58,13 +58,14 @@ class Report extends CI_Controller {
 			$row = $i + 1;
 			$html .= '<tr>
 						<td>' . $row . '</td>
+						<td>' . $result[$i]['payment_id'] . '</td>
 						<td>' . $result[$i]['fname'] . ' ' . $result[$i]['lname'] . '</td>
 						<td>' . $result[$i]['mobileno'].'</td>
 						<td>' . $result[$i]['emailid']. '</td>
 						<td>' . $getCelebsIds. '</td>
-						<td>' . $result[$i]['order_no']. '</td>
+						<td>' . $result[$i]['payment_date']. '</td>
 						<td>' . $getCountOrder. '</td>
-						<td>' . date('d-m-Y',strtotime($result[$i]['payment_date'])) . '</td>
+						<td>' . date('d-m-Y',strtotime($result[$i]['order_date'])) . '</td>
 						<td>' . '₹. '.$result[$i]['total_amount'] . '</td>';
 			$html .= '</td> 
 					</tr>';
@@ -81,6 +82,7 @@ class Report extends CI_Controller {
         mysqli_query("SET NAMES utf8");
         
         $output .= '"Sr No",';
+		$output .= '"Payment Id",';
         $output .= '"Name",';
         $output .= '"Mobile No",';
         $output .= '"Email ID",';
@@ -100,6 +102,7 @@ class Report extends CI_Controller {
 
             $rowcount=$i+1;
             $output .='"'.$rowcount.'",';
+			$output .='"'.$result[$i]['payment_id'].'",';
             $output .='"'.ucwords(strtolower($userName)).'",';
             $output .='"'.$result[$i]['mobileno'].'",';
             $output .='"'.$result[$i]['emailid'].'",';
@@ -112,6 +115,7 @@ class Report extends CI_Controller {
         }
         
 		$output .= '"Total Amount",';
+		$output .= '"",';
 		$output .= '"",';
 		$output .= '"",';
 		$output .= '"",';

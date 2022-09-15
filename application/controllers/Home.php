@@ -5,13 +5,15 @@ class Home extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-
+		
 		$this->load->model('Home_model', 'ObjM', true);
 		$this->load->model('Member_module', 'Member_module', true);
 
 	}
 
 	public function index() {
+
+		
 
 		$data['resTestimonial'] = $this->ObjM->getRecentTestimonials();
 
@@ -648,6 +650,29 @@ class Home extends CI_Controller {
 			$response = "Email id is not registered with us! please check your email id.";
 			echo json_encode(3);exit;
 			exit;
+		}
+
+	}
+
+	function sendMail()
+	{
+		$message = '';
+		$this->load->library('email');
+		$config = array(
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'priority' => '1',
+		);
+		$this->email->initialize($config);
+		$this->email->set_newline("\r\n");
+		$this->email->from(SHUBHEXAMAIL); // change it to yours
+		$this->email->to('mauliknai8155@gmail.com');// change it to yours
+		$this->email->subject('Resume from JobsBuddy for your Job posting');
+		$this->email->message($message);
+		if($this->email->send()) {
+			echo 'Email sent.';
+		} else {
+		echo ($this->email->print_debugger());
 		}
 
 	}

@@ -2,9 +2,14 @@
 	exit('No direct script access allowed');
 }
 
+require_once APPPATH . "libraries/razorpay/razorpay-php/Razorpay.php";
+use Razorpay\Api\Api;
+use Razorpay\Api\Errors\SignatureVerificationError;
+
 class Web_api extends CI_Controller {
 
 	function __construct() {
+
 		parent::__construct();
 
 		$this->load->model('web_app_module', 'ObjM', true);
@@ -13,6 +18,7 @@ class Web_api extends CI_Controller {
 		$this->load->library('image_lib');
 		$this->load->library('email');
 		//$this->load->model('EmailModel');
+
 	}
 	protected function getToken() {
 
@@ -2661,6 +2667,91 @@ class Web_api extends CI_Controller {
 		}
 	}
 
+	function getOrder() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$cartId = $_REQUEST['cart_id'];
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array(
+				'accessToken' => $accessToken,
+				'role_type' => '3',
+				'status' => 'Active'
+			)
+		);
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+		if (count($resultUser) > 0) {
+
+			// update payment status later
+			
+			$resCartMaster = $this->comman_fun->get_table_data('cart_master',
+				array(
+					'cart_id' => $cartId,
+					'payment_status'=>'pending',
+					'status' => 'Active',
+				)
+			);
+
+			if(count($resCartMaster) > 0) {
+
+				$data_json = array();
+
+				$api = new Api(RAZOR_KEY, RAZOR_KEY_SECRET);
+
+				$razorpayOrder = $api->order->create(array(
+					'receipt' => rand(),
+					'amount' =>   $resCartMaster[0]['total_amount'] * 100,
+					'currency' => 'INR',
+					'payment_capture' => 1, // auto capture
+				));
+				
+				$data_json['total_amount']   = $resCartMaster[0]['total_amount'];
+				$data_json['order_id']   	 = $razorpayOrder['id'];
+				$data_json['validation'] 	 =true;
+				$data_json['msg'] = "";
+				echo json_encode($data_json);
+
+
+			} else {
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "Cart Data not found.";
+
+				echo json_encode($data_json);
+
+				exit;
+			}
+			
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
 	function checkOut() {
 
 		$getHeaders = apache_request_headers();
@@ -2670,6 +2761,8 @@ class Web_api extends CI_Controller {
 		$cartId = $_REQUEST['cart_id'];
 
 		$payment_id = $_REQUEST['payment_id'];
+
+		$razorpay_order_id = $_REQUEST['razorpay_order_id'];
 
 		//echo $cartId;exit;
 		$data_json = array();
@@ -2709,6 +2802,22 @@ class Web_api extends CI_Controller {
 
 			if (count($resCartDetails) > 0) {
 
+				// Add Booking Transaction
+
+				$getCartMater = $this->comman_fun->get_table_data('cart_master', array('cart_id' => $cartId));
+
+				$dataBookTransData = array();
+
+				$dataBookTransData['razorpay_payment_id'] = $payment_id;
+				$dataBookTransData['razorpay_order_id'] = $razorpay_order_id;
+				$dataBookTransData['razorpay_refund_id'] = null;
+				$dataBookTransData['cart_master_id'] = $cartId;
+				$dataBookTransData['amount'] = $getCartMater[0]['total_amount'];
+				$dataBookTransData['entity'] = 'payment';
+				$dataBookTransData['payment_date'] = date('Y-m-d H:i:s');
+
+				$bookingTrans = $this->comman_fun->addItem($dataBookTransData, 'booking_transaction');
+
 				for ($i = 0; $i < count($resCartDetails); $i++) {
 
 					$data = array();
@@ -2732,6 +2841,8 @@ class Web_api extends CI_Controller {
 					$data['update_date'] = date('Y-m-d h:i:s');
 
 					$id = $this->comman_fun->addItem($data, 'celebrity_task_master');
+
+
 
 					if($id > 0) {
 						//send email on booking
@@ -2760,7 +2871,16 @@ class Web_api extends CI_Controller {
 
 				$data_json['validation'] = true;
 
-				$data_json['msg'] = "";
+				$data_json['msg'] = "Booking successfully..!";
+
+				echo json_encode($data_json);
+
+				exit;
+				
+			} else {
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "cart data not found.";
 
 				echo json_encode($data_json);
 
@@ -3769,7 +3889,7 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationUsingSeverKeyAndroidFromUserSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -3802,9 +3922,9 @@ class Web_api extends CI_Controller {
 			die('FCM Send Error: ' . curl_error($ch));
 		}
 		curl_close($ch);
-		//return true;
-		echo $response;
-		exit;
+		return true;
+		//echo $response;
+		//exit;
 	}
 
 	protected function sendNotificationToIOSUsingSeverKeyFromUserSide($registatoin_ids, $messageTitle, $data) {
@@ -5145,8 +5265,42 @@ class Web_api extends CI_Controller {
 					)
 				); 
 
-				// Insert Record For Return Money To User
+				$api = new Api(RAZOR_KEY, RAZOR_KEY_SECRET);
+
+				
+
+				$paymentId = $getCartMasterData[0]['payment_id'];
+				
+				$payment = $api->payment->fetch($paymentId); // Returns a particular payment
+				$refund  = $api->payment->fetch($paymentId)->refund(
+					array(
+						"amount"=> (int)$getCartDetailsData[0]['amount'] * 100,
+						)
+					);
+
+				$getBookTransData = $this->comman_fun->get_table_data('booking_transaction',
+				array(
+					'razorpay_payment_id' =>$payment->id,
+					'cart_master_id' 	  =>$getCartDetailsData[0]['cart_id'],
+				));
+				
+				$bookingTrnsDataUpdate = array(
+					'razorpay_refund_id' => $refund->id,
+					'cart_master_id' 	 => $getCartDetailsData[0]['cart_id'],
+					'amount' 			 =>	$getCartDetailsData[0]['amount'],
+					'entity'			 => 'refund',
+					'refund_date' 		 => date('Y-m-d H:i:s'),
+				);
+				
+				$this->comman_fun->update($bookingTrnsDataUpdate, 'booking_transaction',array(
+					'id' => $getBookTransData[0]['id']
+				));
+
+				
+				//Insert Record For Return Money To User
 				$dataInsertCancel['cart_id'] 		     =  $getCartDetailsData[0]['cart_id'];
+
+				$dataInsertCancel['razorpay_refund_id']  =  $refund->id;
 
 				$dataInsertCancel['cart_details_id']     =  $booking_id;
 
@@ -5157,6 +5311,10 @@ class Web_api extends CI_Controller {
 				$dataInsertCancel['grand_total'] 		 =  $getCartMasterData[0]['total_amount'] - $getCartDetailsData[0]['amount'];
 
 				$dataInsertCancel['create_date'] 		 = date('Y-m-d h:i:s');
+
+				$dataInsertCancel['return_money'] 		 = '1';
+
+				
 
 				$cancelOrderReturnTb = $this->comman_fun->addItem($dataInsertCancel, 'cancel_order_payment');
 
@@ -5169,16 +5327,22 @@ class Web_api extends CI_Controller {
 						)
 					);
 
-					// Update Amount
+					//Update Amount
+
+					if($cancelOrderPaymentDt[0]['grand_total'] == 0.00) {
+						$dataUpdateCart['status'] 	= 'Delete';
+					}
+					
+					
 					$dataUpdateCart['total_amount'] = $cancelOrderPaymentDt[0]['grand_total'];
 					
 					$dataUpdateCart['update_date'] = date('Y-m-d h:i:s');
 
 					$this->comman_fun->update($dataUpdateCart, 'cart_master', array('cart_id' => $cancelOrderPaymentDt[0]['cart_id']));
 
-					//$dataUpdate['status'] = 'Delete';
+					$dataUpdateCTM['status'] = 'Delete';
 					$dataUpdateCTM['is_cancelled'] = 'Yes';
-					$dataUpdateCTM['video_status'] = 'Complete';
+					$dataUpdateCTM['video_status'] = 'Initialize';
 					$dataUpdateCTM['update_date'] = date('Y-m-d h:i:s');
 					
 					$this->comman_fun->update($dataUpdateCTM,'celebrity_task_master', array('cart_detail_id' => $booking_id));
@@ -5189,6 +5353,9 @@ class Web_api extends CI_Controller {
 
 					//send notification to user
 					if($getCartMasterData[0]['usercode']!=""){
+
+						
+
 						$getUserToken = $this->comman_fun->get_table_data('membermaster',array('usercode'=>$getCartMasterData[0]['usercode']));
 						if(isset($getUserToken[0])) {
 							if($getUserToken[0]['firebase_token'] != '' && $getUserToken[0]['device_type'] != '') {
@@ -5202,7 +5369,7 @@ class Web_api extends CI_Controller {
 								}								
 							}
 						}
-					}					
+					}
 					//end
 					$data_json['validation'] = true;
 
