@@ -87,7 +87,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('GOOGLE_CAPTCHA_SITE_KEY')   or define('GOOGLE_CAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI');//Local
 defined('GOOGLE_CAPTCHA_SECRET_KEY') or define('GOOGLE_CAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');//Local
 
-defined('SHUBHEXAMAIL') or define('SHUBHEXAMAIL', 'info@shubhexa.com');//Live
+defined('SHUBHEXAMAIL') or define('SHUBHEXAMAIL', 'shubhexa@gmail.com');//Live
 
 // defined('GOOGLE_CAPTCHA_SITE_KEY')   or define('GOOGLE_CAPTCHA_SITE_KEY', '6LeSI3UgAAAAAGxDPTssYyf6qTXWKjJD1NXJVw5m');//Live
 //defined('GOOGLE_CAPTCHA_SECRET_KEY') or define('GOOGLE_CAPTCHA_SECRET_KEY', '6LeSI3UgAAAAAIgYdemdrjpWQdJKhqxm7L_c6C2h');//Live
