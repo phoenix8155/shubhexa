@@ -30,13 +30,11 @@ class Ulogin extends CI_Controller {
 		//Secret : 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
 		// $google_client->setClientId('94035372350-soj2raalg651702bf2ef1oftb4fs2asd.apps.googleusercontent.com'); //Define your ClientID
 		// $google_client->setClientSecret('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'); //Define your Client Secret Key
-		$google_client->setClientId('305675268827-fci7f1fl5grij2krmbnjp5bsd580g723.apps.googleusercontent.com'); //Define your ClientID
-		// mauliknai8155
+		$google_client->setClientId('80744806355-pn3g6tr04g2gaedvq46chbgnp2ohnhnp.apps.googleusercontent.com'); //Define your ClientID
 
-		$google_client->setClientSecret('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'); //Define your Client Secret Key
-		// mauliknai8155
+		$google_client->setClientSecret('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'); //Define your Client Secret Key
 		//$google_client->setRedirectUri('https://shubhexa.com/ulogin/google_login/');
-		$google_client->setRedirectUri('https://phoenixdepo.com/shubhexa/ulogin/google_login/');
+		$google_client->setRedirectUri('https://www.shubhexa.in/ulogin/google_login');
 		
 		$google_client->addScope('email');
 		$google_client->addScope('profile');
@@ -177,8 +175,8 @@ class Ulogin extends CI_Controller {
 		include_once APPPATH . "libraries/vendor/autoload.php";
 		// Call Facebook API
 		$facebook = new \Facebook\Facebook([
-			'app_id' => '3208059266095070',
-			'app_secret' => 'a4efb0c8e328bf36414bfa899698061c',
+			'app_id' => '1953993141631921',
+			'app_secret' => '8791a13f859195f588b25c8415a96f77',
 			'default_graph_version' => 'v2.10',
 		]);
 
