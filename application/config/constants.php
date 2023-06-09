@@ -98,8 +98,16 @@ defined('SHUBHEXAMAIL') or define('SHUBHEXAMAIL', 'shubhexa@gmail.com');//Live
 //define('RAZOR_KEY_SECRET', 'f4v6D8Tqa1Zrtjy6fTRVdOoT');
 
 //test
-define('RAZOR_KEY', 'rzp_test_trJngq3l4EjgzU');
-define('RAZOR_KEY_SECRET', 'xV57lPvdRIbpULLJgRiu77Cm');
+
+
+define('RAZOR_KEY', 'rzp_test_gdKI8QN3QlmQlk');
+
+define('RAZOR_KEY_SECRET', 'Fw3eJusMfqt5h2K985I7y6iu');
+
+// Old
+// define('RAZOR_KEY', 'rzp_test_trJngq3l4EjgzU');
+
+// define('RAZOR_KEY_SECRET', 'xV57lPvdRIbpULLJgRiu77Cm');
 
 //For API live
 //define('RAZOR_KEY_APP', 'rzp_live_4zchDnOmK8uF1V');

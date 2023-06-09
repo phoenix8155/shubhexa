@@ -105,7 +105,7 @@ class Contact extends CI_Controller {
 
 		$this->email->from($email, $name);
 
-		$this->email->to('shubhexa@gmail.com'); //shubhexa@gmail.com
+		$this->email->to(SHUBHEXAMAIL); //shubhexa@gmail.com
 
 		$this->email->subject($subject);
 

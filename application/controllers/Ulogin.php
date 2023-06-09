@@ -28,10 +28,16 @@ class Ulogin extends CI_Controller {
 		//shubhexa gmail account
 		//ClientId : 94035372350-soj2raalg651702bf2ef1oftb4fs2asd.apps.googleusercontent.com
 		//Secret : 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
-		$google_client->setClientId('94035372350-soj2raalg651702bf2ef1oftb4fs2asd.apps.googleusercontent.com'); //Define your ClientID
-		$google_client->setClientSecret('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'); //Define your Client Secret Key
-		$google_client->setRedirectUri('https://shubhexa.com/ulogin/google_login/');
+		// $google_client->setClientId('94035372350-soj2raalg651702bf2ef1oftb4fs2asd.apps.googleusercontent.com'); //Define your ClientID
+		// $google_client->setClientSecret('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'); //Define your Client Secret Key
+		$google_client->setClientId('305675268827-fci7f1fl5grij2krmbnjp5bsd580g723.apps.googleusercontent.com'); //Define your ClientID
+		// mauliknai8155
 
+		$google_client->setClientSecret('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'); //Define your Client Secret Key
+		// mauliknai8155
+		//$google_client->setRedirectUri('https://shubhexa.com/ulogin/google_login/');
+		$google_client->setRedirectUri('https://phoenixdepo.com/shubhexa/ulogin/google_login/');
+		
 		$google_client->addScope('email');
 		$google_client->addScope('profile');
 
