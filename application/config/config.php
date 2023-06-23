@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
  */
-//$config['base_url'] = 'http://192.168.0.106/shubhexa/';
-$config['base_url'] = 'http://localhost/shubhexa2/';
+$config['base_url'] = 'http://192.168.0.113/shubhexa/';
+//$config['base_url'] = 'http://localhost/shubhexa2/';
 //$config['base_url'] = 'https://shubhexa.com/';
 //$config['base_url'] = 'https://phoenixdepo.com/shubhexa/';
 

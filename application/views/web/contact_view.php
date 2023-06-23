@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="sf-contact-info">
                                     <h4 class="sf-title">Mailing Address</h4>
-                                    <p>121 King Street, Melbourne
+                                    <p class="min-height-txt">121 King Street, Melbourne
                                         Victoria 3000 Australia</p>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="sf-contact-info">
                                     <h4 class="sf-title">Email Info</h4>
-                                    <p>shubhexa@gmail.com</p>
+                                    <p class="min-height-txt"><a href="mailto:shubhexa@gmail.com" class="contact-fnt-clr">shubhexa@gmail.com</a></p>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="sf-contact-info">
                                     <h4 class="sf-title">Phone Number</h4>
-                                    <p>+91 90999 32018</p>
+                                    <p class="min-height-txt"><a href="tel:+919099932018" class="contact-fnt-clr">+91 90999 32018</a></p>
                                 </div>
                             </div>
                         </div>
@@ -192,4 +192,12 @@ if (is_array($top_msg)) {
 	.error_p{
 		color: red;
 	}
+    a.contact-fnt-clr {
+        color: #626262;
+    }
+    @media (min-width: 768px) {
+        .min-height-txt{
+            min-height: 54px;
+        }
+    }
 </style>

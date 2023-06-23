@@ -173,7 +173,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		                                <div class="col-md-12">
 		                                    <div class="form-group">
 		                                        <div class="aon-inputicon-box">
-		                                            <input class="form-control sf-form-control" name="phone" id="phone" type="number" placeholder="Phone">
+		                                            <input class="form-control sf-form-control" name="phone" id="phone" type="number" min="1000000000" max="9999999999" maxlength="10" onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" pattern="[0-9]{10}" placeholder="Phone">
 		                                            <i class="aon-input-icon fa fa-phone"></i>
 		                                        </div>
 		                                        <span class="user-checks-phone" style="color:red;"></span>

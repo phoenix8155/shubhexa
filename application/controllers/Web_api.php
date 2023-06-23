@@ -2687,11 +2687,11 @@ class Web_api extends CI_Controller {
 		if ($accessToken != "") {
 
 			$resultUser = $this->comman_fun->get_table_data('membermaster', array(
-				'accessToken' => $accessToken,
-				'role_type' => '3',
-				'status' => 'Active'
-			)
-		);
+					'accessToken' => $accessToken,
+					'role_type' => '3',
+					'status' => 'Active'
+				)
+			);
 
 		} else {
 
@@ -3030,6 +3030,262 @@ class Web_api extends CI_Controller {
 		if (count($resultUser) > 0) {
 
 			$result = $this->ObjM->getOrderBookingList($resultUser[0]['usercode'], $orderType);
+			
+			if (isset($result[0])) {
+
+				$json_arr = array();
+
+				$arr = array();
+
+				for ($i = 0; $i < count($result); $i++) {
+
+					$resultCelebrityMaster = $this->comman_fun->get_table_data('celebrity_master', array('id' => $result[$i]['celebrity_id']));
+
+					$resultCartMaster = $this->comman_fun->get_table_data('cart_master', array('cart_id' => $result[$i]['cart_id']));
+
+					$resultCartDetails = $this->comman_fun->get_table_data('cart_details', array('id' => $result[$i]['cart_detail_id']));
+
+					$data = array();
+
+					$data['id'] = $result[$i]['id'];
+					$data['celebrity_id'] = $result[$i]['celebrity_id'];
+					$data['celebrity_name'] = $resultCelebrityMaster[0]['fname'] . ' ' . $resultCelebrityMaster[0]['lname'];
+					if ($resultCelebrityMaster[0]['profile_pic'] != "") {
+						$img_file_path = base_url() . "upload/celebrity_profile/" . $resultCelebrityMaster[0]['profile_pic'];
+					} else {
+						$img_file_path = "-";
+					}
+
+					$category = json_decode($resultCelebrityMaster[0]['category'], true);
+
+					$resultCategoryMaster = $this->comman_fun->get_table_data('category_master', array('access_name' => $category[0]));
+					$data['category_access_name'] = $category[0];
+					$data['category_name'] = $resultCategoryMaster[0]['category_name'];
+					// $arrCate = array();
+					// $dataCate = array();
+					// for ($i = 0; $i < count($category); $i++) {
+
+					// 	$dataCate['category'] = $category[$i];
+					// 	$arrCate[] = $dataCate;
+					// }
+
+					$data['celebrity_profile_pic'] = $img_file_path;
+					$data['usercode'] = $result[$i]['usercode'];
+					$data['cart_id'] = $result[$i]['cart_id'];
+					$data['order_no'] = $resultCartMaster[0]['order_no'];
+					$data['delivery_date'] = date('d-m-Y', strtotime($resultCartDetails[0]['delivery_date']));
+					$data['occation'] = str_replace('_',' ',$resultCartDetails[0]['occation_type']);
+					$data['amount'] = '₹.'.$resultCartDetails[0]['amount'];
+					$data['total_amount'] = '₹.'.$resultCartMaster[0]['total_amount'];
+					$data['cart_detail_id'] = $result[$i]['cart_detail_id'];
+
+					if ($result[$i]['video_name'] != "") {
+						$data['video_name'] = $result[$i]['video_name'];
+						$data['video_path'] = base_url().'upload/celebrity_video/' .$result[$i]['video_name'];
+					} else {
+						$data['video_name'] = "-";
+						$data['video_path'] = "-";
+					}
+
+					$$data['video_status'] = $result[$i]['video_status'];
+					if($result[$i]['is_cancelled']=="No"){
+						$data['confirmedSatus'] = 1;
+					}else{
+						$data['confirmedSatus'] = 0;
+					}
+
+					$arr[] = $data;
+				}
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $arr;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
+	function getBookingListNew() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$orderType = $_REQUEST['orderType']; //Initialize //Complete
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			$result = $this->ObjM->getOrderBookingListNew($resultUser[0]['usercode'], $orderType);
+			
+			if (isset($result[0])) {
+
+				$json_arr = array();
+
+				$arr = array();
+
+				for ($i = 0; $i < count($result); $i++) {
+
+					$resultCelebrityMaster = $this->comman_fun->get_table_data('celebrity_master', array('id' => $result[$i]['celebrity_id']));
+
+					$resultCartMaster = $this->comman_fun->get_table_data('cart_master', array('cart_id' => $result[$i]['cart_id']));
+
+					$resultCartDetails = $this->comman_fun->get_table_data('cart_details', array('id' => $result[$i]['cart_detail_id']));
+
+					$data = array();
+
+					$data['id'] = $result[$i]['id'];
+					$data['celebrity_id'] = $result[$i]['celebrity_id'];
+					$data['celebrity_name'] = $resultCelebrityMaster[0]['fname'] . ' ' . $resultCelebrityMaster[0]['lname'];
+					if ($resultCelebrityMaster[0]['profile_pic'] != "") {
+						$img_file_path = base_url() . "upload/celebrity_profile/" . $resultCelebrityMaster[0]['profile_pic'];
+					} else {
+						$img_file_path = "-";
+					}
+
+					$category = json_decode($resultCelebrityMaster[0]['category'], true);
+
+					$resultCategoryMaster = $this->comman_fun->get_table_data('category_master', array('access_name' => $category[0]));
+					$data['category_access_name'] = $category[0];
+					$data['category_name'] = $resultCategoryMaster[0]['category_name'];
+					// $arrCate = array();
+					// $dataCate = array();
+					// for ($i = 0; $i < count($category); $i++) {
+
+					// 	$dataCate['category'] = $category[$i];
+					// 	$arrCate[] = $dataCate;
+					// }
+
+					$data['celebrity_profile_pic'] = $img_file_path;
+					$data['usercode'] = $result[$i]['usercode'];
+					$data['cart_id'] = $result[$i]['cart_id'];
+					$data['order_no'] = $resultCartMaster[0]['order_no'];
+					$data['delivery_date'] = date('d-m-Y', strtotime($resultCartDetails[0]['delivery_date']));
+					$data['occation'] = str_replace('_',' ',$resultCartDetails[0]['occation_type']);
+					$data['amount'] = '₹.'.$resultCartDetails[0]['amount'];
+					$data['total_amount'] = '₹.'.$resultCartMaster[0]['total_amount'];
+					$data['cart_detail_id'] = $result[$i]['cart_detail_id'];
+
+					if ($result[$i]['video_name'] != "") {
+						$data['video_name'] = $result[$i]['video_name'];
+						$data['video_path'] = base_url().'upload/celebrity_video/' .$result[$i]['video_name'];
+					} else {
+						$data['video_name'] = "-";
+						$data['video_path'] = "-";
+					}
+
+					$$data['video_status'] = $result[$i]['video_status'];
+					if($result[$i]['is_cancelled']=="No"){
+						$data['confirmedSatus'] = 1;
+					}else{
+						$data['confirmedSatus'] = 0;
+					}
+
+					$arr[] = $data;
+				}
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $arr;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+
+		}
+	}
+
+	function getCancelBookingList() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		//$orderType = $_REQUEST['orderType']; //Initialize //Complete
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			$result = $this->ObjM->getCancelOrderBookingList($resultUser[0]['usercode']);
 			
 			if (isset($result[0])) {
 

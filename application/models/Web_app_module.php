@@ -533,6 +533,51 @@ Class Web_app_module extends CI_Model {
 
 	}
 
+	function getOrderBookingListNew($usercode, $orderType) {
+
+		$this->db->select('celebrity_task_master.*');
+
+		$this->db->from('celebrity_task_master');
+
+		$this->db->where('celebrity_task_master.usercode', $usercode);
+
+		$this->db->where('celebrity_task_master.video_status', $orderType); //Initialize //Complete
+
+		$this->db->where('celebrity_task_master.is_cancelled', 'No');
+
+		$this->db->where('celebrity_task_master.status', 'Active');
+
+		$this->db->order_by('celebrity_task_master.id', 'Desc');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+	function getCancelOrderBookingList($usercode) {
+
+		$this->db->select('celebrity_task_master.*');
+
+		$this->db->from('celebrity_task_master');
+
+		$this->db->where('celebrity_task_master.usercode', $usercode);
+
+		$this->db->where('celebrity_task_master.is_cancelled', 'Yes');
+
+		$this->db->where('celebrity_task_master.status', 'Active');
+
+		$this->db->order_by('celebrity_task_master.id', 'Desc');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
 	function getCelebrity($accessToken) {
 
 		$this->db->select('membermaster.*');

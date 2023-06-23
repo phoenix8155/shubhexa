@@ -374,15 +374,19 @@ for ($i = 0; $i < count($res); $i++) {
                                                 <input id="public_permission" class="public_permission" name="public_permission" value="public_permission" type="checkbox">
                                                 <label for="public_permission">Don’t make this video public on Shubhexa</label>
                                             </div>
-                                            <div class="checkbox sf-radio-checkbox sf-radio-check-2 sf-raChe-6">
+                                            <!-- <div class="checkbox sf-radio-checkbox sf-radio-check-2 sf-raChe-6">
                                                 <input id="send_on_wa" class="send_on_wa" name="send_on_wa" value="send_on_wa" type="checkbox" checked>
                                                 <label for="send_on_wa">Send me updates on WhatsApp</label>
+                                            </div> -->
+                                            <div class="checkbox sf-radio-checkbox sf-radio-check-2 sf-raChe-6">
+                                                <input id="need_gst" class="need_gst" name="need_gst" value="need_gst" type="checkbox">
+                                                <label for="need_gst">Need GST Invoice</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 breck-w1400">
+                            <!-- <div class="col-md-6 breck-w1400">
                                 <div class="form-group">
                                     <div class="aon-inputicon-box">
                                         <div class="radio-inline-box sf-radio-check-row">
@@ -393,7 +397,7 @@ for ($i = 0; $i < count($res); $i++) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-4" id="your_gst_name_id">
                                 <div class="form-group">
                                     <label>Name</label>
