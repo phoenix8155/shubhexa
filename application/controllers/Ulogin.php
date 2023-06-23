@@ -174,9 +174,23 @@ class Ulogin extends CI_Controller {
 
 		include_once APPPATH . "libraries/vendor/autoload.php";
 		// Call Facebook API
+		// $facebook = new \Facebook\Facebook([
+		// 	// 'app_id' => '1953993141631921',
+		// 	// 'app_secret' => '8791a13f859195f588b25c8415a96f77',
+		// 	'app_id' => '407847867830258',
+		// 	'app_secret' => '0f5ea364c4188b8ff4529b65b3143013',
+		// 	'default_graph_version' => 'v2.10',
+		// ]);
+
+		// $facebook = new \Facebook\Facebook([
+		// 	'app_id' => '517136557063426',
+		// 	'app_secret' => '686a9641295dc7722c88c018392d842b',
+		// 	'default_graph_version' => 'v2.10',
+		// ]);
+
 		$facebook = new \Facebook\Facebook([
-			'app_id' => '1953993141631921',
-			'app_secret' => '8791a13f859195f588b25c8415a96f77',
+			'app_id' => '407847867830258',
+			'app_secret' => '0f5ea364c4188b8ff4529b65b3143013',
 			'default_graph_version' => 'v2.10',
 		]);
 

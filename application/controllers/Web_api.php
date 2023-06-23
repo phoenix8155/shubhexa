@@ -46,7 +46,13 @@ class Web_api extends CI_Controller {
 
 			if ($result[0]['status'] == 'Active') {
 
-				if ($result[0]['email_verify'] == 'Y') {
+				// $json_arr['validation'] = false;
+
+				// $json_arr['msg'] = $result[0];
+
+				// echo json_encode($json_arr);
+				// exit;
+				// if ($result[0]['email_verify'] == 'Y') {
 
 					$updateData['firebase_token'] = filter_data($firebase_token);
 
@@ -73,14 +79,15 @@ class Web_api extends CI_Controller {
 
 					echo json_encode($json_arr);
 					exit;
-				} else {
-					$json_arr['validation'] = false;
+				// }
+				//  else {
+				// 	$json_arr['validation'] = false;
 
-					$json_arr['msg'] = "Please verify your emailid";
+				// 	$json_arr['msg'] = "Please verify your emailid";
 
-					echo json_encode($json_arr);
-					exit;
-				}
+				// 	echo json_encode($json_arr);
+				// 	exit;
+				// }
 			} else {
 				$json_arr['validation'] = false;
 
