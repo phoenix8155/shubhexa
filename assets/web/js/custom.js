@@ -79,15 +79,31 @@ All JavaScript fuctions Start
 		jQuery('.page-content').toggleClass('active-view-map');
 		e.preventDefault();
 	});	  
+
+	// $(document).ready(function() {
+	// 	var myElement = $(".sf-qestion-line");
+	// 	if (myElement.hasClass("nav-active")) {
+
+	// 	}
+	// });
     
     //  Question & Answer	
-	jQuery('.sf-qestion-line  i').on('click', function(e){
-		jQuery(this).parent().next(".sf-answer-line").slideDown(500);
-        jQuery(this).parent().toggleClass("nav-active");
-        jQuery(this).closest(".sf-qes-answer-list li").siblings(".sf-qes-answer-list li").children(".sf-answer-line").slideUp(500);
-        jQuery(this).closest(".sf-qes-answer-list li").siblings(".sf-qes-answer-list li").children(".sf-qestion-line").removeClass('nav-active');
-		e.preventDefault();
-	});	    
+	// jQuery('.sf-qestion-line  i').on('click', function(e){
+	// 	jQuery(this).parent().next(".sf-answer-line").slideDown(500);
+    //     jQuery(this).parent().toggleClass("nav-active");
+    //     jQuery(this).closest(".sf-qes-answer-list li").siblings(".sf-qes-answer-list li").children(".sf-answer-line").slideUp(500);
+    //     jQuery(this).closest(".sf-qes-answer-list li").siblings(".sf-qes-answer-list li").children(".sf-qestion-line").removeClass('nav-active');
+	// 	e.preventDefault();
+		
+	// });
+	
+	// FAQ
+	$('.sf-qestion-line').on('click', function(e){
+		$(this).toggleClass("nav-active");
+		$("[class^=sf-answer-line]").not($(this).next()).slideUp();
+  		$(this).next().slideToggle();
+		$(this).closest(".sf-qes-answer-list li").siblings(".sf-qes-answer-list li").children(".sf-qestion-line").removeClass('nav-active');
+	});
     
     //  Services Description Show Hide
 	jQuery('.sf-provi-toggle-btn').on('click', function(e){
@@ -497,7 +513,7 @@ All JavaScript fuctions Start
 	});	 
 	
 	
-		jQuery('.owl-caty-carousel').owlCarousel({
+	jQuery('.owl-caty-carousel').owlCarousel({
         loop:true,
 		margin:30,
 		nav:true,

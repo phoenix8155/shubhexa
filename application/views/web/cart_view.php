@@ -39,7 +39,7 @@
 			                                    	<div class="sf-provi-art-left col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
 			                                        	<div class="sf-provi-art-pic"><img src="<?=upload_path()?>celebrity_profile/thum/<?=$cartResult[$i]['profile_pic']?>" alt=""></div>
 			                                            <div class="sf-provi-art-date"><h4 class="sf-provi-art-title"><?=$cartResult[$i]['fname']?> <?=$cartResult[$i]['lname']?></h4></div>
-			                                            <div class="sf-provi-art-comment"><span style="float: left;color: #062279;font-weight: 900;">Price : ₹ <?=$cartResult[$i]['amount']?></span> <span style="float: right;padding-right: 20px;color: #062279;"><a href="#" id="val_<?=$cartResult[$i]['id']?>" data-value="<?=$cartResult[$i]['id']?>" class="removeCart"><i class="fa fa-trash-o"></i></a></span></div>
+			                                            <div class="sf-provi-art-comment"><span style="float: left;color: #062279;font-weight: 900;">Price : ₹ <?=$cartResult[$i]['amount']?></span> <span style="float: right;padding-right: 20px;color: #062279;"><a href="<?=file_path()?>celebrity/editView/<?=$cartResult[$i]['id']?>"><i class="fa fa-pencil"></i></a></span><span style="float: right;padding-right: 20px;color: #062279;"><a href="#" id="val_<?=$cartResult[$i]['id']?>" data-value="<?=$cartResult[$i]['id']?>" class="removeCart"><i class="fa fa-trash-o"></i></a></span></div>
 			                                        </div><!-- d-flex flex-wrap -->
 			                                        <div class="sf-provi-art-right custom-padding col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7">
 			                                        	<div class="row">

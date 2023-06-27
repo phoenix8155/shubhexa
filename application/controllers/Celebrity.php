@@ -152,4 +152,20 @@ class Celebrity extends CI_Controller {
 		}
 
 	}
+
+	public function editView($cdid) {
+		$cartDetailsResult = $this->comman_fun->get_table_data('cart_details', array('id' => $cdid));
+		$cartResult = $this->comman_fun->get_table_data('cart_master', array('cart_id' => $cartDetailsResult[0]['cart_id']));
+		$getUserLoginData = $this->ObjM->getUserLoginDetails($cartResult[0]['usercode']);		
+		$data['emailid']     = ($getUserLoginData[0]['emailid'] != '') ? $getUserLoginData[0]['emailid'] : '';
+		$data['mobileno']     = ($getUserLoginData[0]['mobileno'] != '') ? $getUserLoginData[0]['mobileno'] : ''; 		
+		$data['resCelebirty'] = $this->ObjM->getCelebrityDetails($cartDetailsResult[0]['celebrity_id']);
+		$data['occasionList'] = $this->ObjM->getOccasions();
+		$data['cartDetailsResult'] = $cartDetailsResult;
+		$data['cartDetailsId'] = $cdid;
+		$data['cartId'] = $cartDetailsResult[0]['cart_id'];
+		$this->load->view('web/common/top_header_web');
+		$this->load->view('web/celebrity_page_edit_view', $data);
+		$this->load->view('web/common/footer_web');
+	}
 }

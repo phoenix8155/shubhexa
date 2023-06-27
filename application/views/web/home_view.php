@@ -283,7 +283,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="media-bg-animate">
                             <div class="aon-blog-section-1 shine-hover">
                                 <div class="aon-post-media shine-box">
-                                    <a href="#"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/why-shubhexa.png" alt=""></a>
+                                    <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/why-shubhexa.png" alt=""></a>
                                 </div>
                                 <!-- <div class="aon-post-meta">
                                     <ul>
@@ -292,7 +292,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </ul>
                                 </div> -->
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="#">Why Shubhexa? Largest Gujarati Start Platform</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Why Shubhexa? Largest Gujarati Start Platform</a></h4>
                                     <div class="aon-post-text">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</p>
                                     </div>
@@ -306,7 +306,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="aon-blog-section-1 shine-hover">
 
                                 <div class="aon-post-media shine-box">
-                                    <a href="#"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/easy-to-access.png" alt=""></a>
+                                    <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/easy-to-access.png" alt=""></a>
                                 </div>
 
                                 <!-- <div class="aon-post-meta">
@@ -317,7 +317,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div> -->
 
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="#">Easy to access your choicest Star</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Easy to access your choicest Star</a></h4>
                                     <div class="aon-post-text">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod </p>
                                     </div>
@@ -331,7 +331,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="media-bg-animate">
                             <div class="aon-blog-section-1  shine-hover">
                                 <div class="aon-post-media shine-box">
-                                    <a href="#"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/quick-response.png" alt=""></a>
+                                    <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/quick-response.png" alt=""></a>
                                 </div>
                                 <!-- <div class="aon-post-meta">
                                     <ul>
@@ -340,7 +340,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </ul>
                                 </div> -->
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="#">Quick response</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Quick response</a></h4>
                                     <div class="aon-post-text">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod </p>
                                     </div>

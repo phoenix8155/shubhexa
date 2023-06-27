@@ -31,6 +31,16 @@ class Home extends CI_Controller {
 
 	}
 
+	public function newsDetails() {
+
+		$this->load->view('web/common/top_header_web');
+
+		$this->load->view('web/news_detail_view');
+
+		$this->load->view('web/common/footer_web');
+
+	}
+
 	public function checkLogin() {
 
 		$result = $this->Member_module->checkWebLogin();
@@ -510,6 +520,82 @@ class Home extends CI_Controller {
 		}
 	}
 
+	public function updateToCart() {
+
+		$celebrity_id = $_POST['celebrity_id'];
+		$msg_for = $_POST['msg_for'];
+		if ($msg_for == "my_self") {
+			$myself = $_POST['myselftext'];
+			$to_name = "";
+			$from_name = "";
+		} else if ($msg_for == "someone_else") {
+			$to_name = $_POST['to_name'];
+			$from_name = $_POST['from_name'];
+			$myself = "";
+		} else {
+			$myself = "";
+			$to_name = "";
+			$from_name = "";
+		}
+
+		$occasion_type = $_POST['occasion_type'];
+		$delivery_date = $_POST['delivery_date'];
+		$message_help = $_POST['message_help'];
+		$your_email = $_POST['your_email'];
+		$your_number = $_POST['your_number'];
+		if ($_POST['public_permission'] != "") {
+			$public_permission = 'Yes';
+		} else {
+			$public_permission = 'No';
+		}
+		if ($_POST['send_on_wa'] != "") {
+			$send_on_wa = 'Yes';
+		} else {
+			$send_on_wa = 'No';
+		}
+		if ($_POST['need_gst'] != "") {
+			$need_gst = 'Yes';
+		} else {
+			$need_gst = 'No';
+		}
+		$your_gst_name = $_POST['your_gst_name'];
+		$your_gst_number = $_POST['your_gst_number'];
+		$your_gst_state = $_POST['your_gst_state'];
+		$amount = $_POST['amount'];
+
+		$cart_detail_id = $_POST['cart_detail_id'];
+		$cart_id = $_POST['cart_id'];			
+		$data = array();
+		//$data['celebrity_id'] = $celebrity_id;
+		//$data['cart_id'] = $cart_id;
+		$data['create_for'] = $msg_for;
+		$data['self_name'] = $myself;
+		$data['to_name'] = $to_name;
+		$data['from_name'] = $from_name;
+		$data['occation_type'] = $occasion_type;
+		$data['delivery_date'] = date('Y-m-d', strtotime($delivery_date));
+		$data['template_message'] = $message_help;
+		$data['email_id'] = $your_email;
+		$data['phone_number'] = $your_number;
+		$data['allow_to_public'] = $public_permission;
+		$data['send_to_wa'] = $send_on_wa;
+		$data['need_gst'] = $need_gst;
+		$data['gst_name'] = $your_gst_name;
+		$data['gst_no'] = $your_gst_number;
+		$data['gst_state'] = $your_gst_state;
+		//$data['amount'] = $amount;
+		$data['status'] = "Active";
+		$data['create_date'] = date('Y-m-d H:i:s');
+		$data['update_date'] = date('Y-m-d h:i:s');
+		$this->comman_fun->update($data, 'cart_details', array('id' => $cart_detail_id));
+
+		$UpdateUData = array();
+		$UpdateUData['update_date'] = date('Y-m-d h:i:s');
+		$this->comman_fun->update($UpdateUData, 'cart_master', array('cart_id' => $cart_id));
+		$response = "true";
+		echo json_encode($response);exit;
+	}
+
 	public function calculateTotalCartAmount($cart_id) {
 
 		$res = $this->ObjM->getCartTotAmount($cart_id);
@@ -674,6 +760,32 @@ class Home extends CI_Controller {
 		} else {
 		echo ($this->email->print_debugger());
 		}
+
+	}
+
+	public function export_database() {
+
+		$this->load->dbutil();
+
+		$prefs = array(
+
+			'format' => 'zip',
+			'filename' => 'shubhexa.sql',
+		);
+
+		$backup = &$this->dbutil->backup($prefs);
+
+		$db_name = 'shubhexa-db-' . date("Y-m-d-H-i-s") . '.zip';
+
+		$save = 'database_backup/' . $db_name;
+
+		$this->load->helper('file');
+
+		write_file($save, $backup);
+
+		$this->load->helper('download');
+
+		force_download($db_name, $backup);
 
 	}
 }

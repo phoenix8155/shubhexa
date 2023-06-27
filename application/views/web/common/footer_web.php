@@ -425,30 +425,26 @@ $(function() {
 $(document).ready(function(){
 
 	$("#sign_emailid").keyup(function(){
-	
-	var sign_emailid = $("#sign_emailid").val();
-    
-	
-	
-	var url = '<?=file_path()?>home/checkUserAvailable';
-	  $.ajax({
-	        type: "POST",
-	        data: { emailid: sign_emailid},
-            url: url,
-            dataType: 'json',
-	        success: function(resp) {
+		var sign_emailid = $("#sign_emailid").val();
+		var url = '<?=file_path()?>home/checkUserAvailable';
+		$.ajax({
+			type: "POST",
+			data: { emailid: sign_emailid},
+			url: url,
+			dataType: 'json',
+			success: function(resp) {
 				
-			    if(resp=="false"){
+				if(resp=="false"){
 					if(sign_emailid == '') {
 						$('.user-checks').html('');
 					} else {
 						$('.user-checks').html('This email id is already taken, Please try with another email id');
 					}
-			    }else{
-			    	$('.user-checks').html('');
-			    }
-	        }
-	    });
+				}else{
+					$('.user-checks').html('');
+				}
+			}
+		});
 	});
 
 	$("#phone").keyup(function(){
@@ -1283,6 +1279,122 @@ $(function() {
   <?php }?>
   });
 
+	$('#edit_cart_from').submit(function(e) {
+		e.preventDefault();
+		<?php if (!isset($this->session->userdata['user'])) {?>
+			$('#login-signup-model').modal('show');
+		<?php } else {?>
+			var checked_value_self = $('.msg_for_self').is(":checked");
+			var checked_value_else = $('.msg_for_else').is(":checked");
+
+			if(checked_value_self==true){
+				if ($("#myselftext").val() == "") {
+					//$("#myselftext").focus();
+					$("#myselftext_error").html('This field is required');
+					exit;
+				}else{
+					$("#myselftext_error").html('');
+				}
+			}
+
+			if(checked_value_else==true){
+				if ($("#to_name").val() == "") {
+					//$("#to_name").focus();
+					$("#to_name_error").html('Please enter name');
+					exit;
+				}else{
+					$("#to_name_error").html('');
+				}
+				if ($("#from_name").val() == "") {
+					//$("#from_name").focus();
+					$("#from_name_error").html('Please enter from name');
+					exit;
+				}else{
+					$("#from_name_error").html('');
+				}
+			}
+
+			if ($("#message_help").val() == "") {
+				$("#message_help_error").html('Please choose template.');
+				exit;
+			}else{
+				$("#message_help_error").html('');
+			}
+
+			if ($("#occasion_type").val() == "") {
+				//$("#occasion_type").focus();
+				$("#occasion_type_error").html('Please choose occasion.');
+				exit;
+			}else{
+				$("#occasion_type_error").html('');
+			}
+			if ($("#delivery_date").val() == "") {
+				$("#delivery_date_error").html('Please choose delivery date.');
+				exit;
+			}else{
+				$("#delivery_date_error").html('');
+			}
+			if ($("#your_email").val() == "") {
+				$("#your_email_error").html('Please enter email.');
+				exit;
+			}else{
+				$("#your_email_error").html('');
+			}
+
+			if ($("#your_number").val() == "") {
+				$("#your_number_error").html('Please enter your number.');
+				exit;
+			}else{
+				$("#your_number_error").html('');
+			}
+
+			var checked_value_need_gst = $('.need_gst').is(":checked");
+			if(checked_value_need_gst==true){
+				if ($("#your_gst_name").val() == "") {
+					$("#your_gst_name_error").html('Please enter name.');
+					exit;
+				}else{
+					$("#your_gst_name_error").html('');
+				}
+				if ($("#your_gst_number").val() == "") {
+					$("#your_gst_number_error").html('Please enter GST No.');
+					exit;
+				}else{			
+					$("#your_gst_number_error").html('');
+				}		
+				if ($("#your_gst_state").val() == "") {
+					$("#your_gst_state_error").html('Please enter state.');
+					exit;
+				}else{
+					$("#your_gst_state_error").html('');
+				}
+			}else{
+				$("#your_gst_name_error").html('');
+				$("#your_gst_number_error").html('');
+				$("#your_gst_state_error").html('');
+			}
+			$.ajax({
+				type: "POST",
+				url: "<?php echo file_path(); ?>home/updateToCart",
+				dataType: 'json',
+				data:new FormData(this),
+				processData:false,
+				contentType:false,
+				cache:false,
+				async:false,
+				success: function(resp) {
+					if(resp==="true"){
+						window.location = "<?php echo file_path() ?>cart/view";
+					}else if(resp==="false"){
+						$("#your_gst_number_error").text('Please enter your GST number proper.');
+					}else{
+						alert('Something went wrong.!');
+					}
+				}
+			});
+		<?php }?>
+	});
+
 });
 
 $(document).on('click', '#book_now', function (e) {
@@ -1294,102 +1406,102 @@ $(document).on('click', '#book_now', function (e) {
 		$('#login-signup-model').modal('show');
 	<?php } else {?>
 
-    e.preventDefault();
-    var checked_value_self = $('.msg_for_self').is(":checked");
-	var checked_value_else = $('.msg_for_else').is(":checked");
+		e.preventDefault();
+		var checked_value_self = $('.msg_for_self').is(":checked");
+		var checked_value_else = $('.msg_for_else').is(":checked");
 
-	if(checked_value_self==true){
-		if ($("#myselftext").val() == "") {
-	  		$("#myselftext").focus();
-	  		$("#myselftext_error").html('This field is required');
-	  		exit;
-	  	}else{
-	  		$("#myselftext_error").html('');
-	  	}
-	}
+		if(checked_value_self==true){
+			if ($("#myselftext").val() == "") {
+				$("#myselftext").focus();
+				$("#myselftext_error").html('This field is required');
+				exit;
+			}else{
+				$("#myselftext_error").html('');
+			}
+		}
 
-	if(checked_value_else==true){
-		if ($("#to_name").val() == "") {
-	  		$("#to_name").focus();
-	  		$("#to_name_error").html('Please enter name');
-	  		exit;
-	  	}else{
-	  		$("#to_name_error").html('');
-	  	}
-	  	if ($("#from_name").val() == "") {
-	  		$("#from_name").focus();
-	  		$("#from_name_error").html('Please enter from name');
-	  	}else{
-	  		$("#from_name_error").html('');
-	  	}
-	}
+		if(checked_value_else==true){
+			if ($("#to_name").val() == "") {
+				$("#to_name").focus();
+				$("#to_name_error").html('Please enter name');
+				exit;
+			}else{
+				$("#to_name_error").html('');
+			}
+			if ($("#from_name").val() == "") {
+				$("#from_name").focus();
+				$("#from_name_error").html('Please enter from name');
+			}else{
+				$("#from_name_error").html('');
+			}
+		}
 
-	if ($("#message_help").val() == "") {
-  		$("#message_help_error").html('Please choose template.');
-  		exit;
-  	}else{
-  		$("#message_help_error").html('');
-  	}
+		if ($("#message_help").val() == "") {
+			$("#message_help_error").html('Please choose template.');
+			exit;
+		}else{
+			$("#message_help_error").html('');
+		}
 
-  	if ($("#occasion_type").val() == "") {
-  		$("#occasion_type").focus();
-  		$("#occasion_type_error").html('Please choose occasion.');
-  		exit;
-  	}else{
-  		$("#occasion_type_error").html('');
-  	}
-  	if ($("#delivery_date").val() == "") {
-  		$("#delivery_date").focus();
-  		$("#delivery_date_error").html('Please choose delivery date.');
-  		exit;
-  	}else{
-  		$("#delivery_date_error").html('');
-  	}
+		if ($("#occasion_type").val() == "") {
+			$("#occasion_type").focus();
+			$("#occasion_type_error").html('Please choose occasion.');
+			exit;
+		}else{
+			$("#occasion_type_error").html('');
+		}
+		if ($("#delivery_date").val() == "") {
+			$("#delivery_date").focus();
+			$("#delivery_date_error").html('Please choose delivery date.');
+			exit;
+		}else{
+			$("#delivery_date_error").html('');
+		}
 
-  	if ($("#your_email").val() == "") {
-  		$("#your_email").focus();
-  		$("#your_email_error").html('Please enter email.');
-  		exit;
-  	}else{
-  		$("#your_email_error").html('');
-  	}
+		if ($("#your_email").val() == "") {
+			$("#your_email").focus();
+			$("#your_email_error").html('Please enter email.');
+			exit;
+		}else{
+			$("#your_email_error").html('');
+		}
 
-  	if ($("#your_number").val() == "") {
-  		$("#your_number").focus();
-  		$("#your_number_error").html('Please enter your number.');
-  		exit;
-  	}else{
-  		$("#your_number_error").html('');
-  	}
+		if ($("#your_number").val() == "") {
+			$("#your_number").focus();
+			$("#your_number_error").html('Please enter your number.');
+			exit;
+		}else{
+			$("#your_number_error").html('');
+		}
 
-  	var checked_value_need_gst = $('.need_gst').is(":checked");
-    if(checked_value_need_gst==true){
-    	if ($("#your_gst_name").val() == "") {
-	  		//$("#your_gst_name").focus();
-	  		$("#your_gst_name_error").html('Please enter name.');
-	  		exit;
-	  	}else{
-	  		$("#your_gst_name_error").html('');
-	  	}
-	  	if ($("#your_gst_number").val() == "") {
-	  		//$("#your_gst_number").focus();
-	  		$("#your_gst_number_error").html('Please enter GST No.');
-	  		exit;
-	  	}else{
-	  		$("#your_gst_number_error").html('');
-	  	}
-	  	if ($("#your_gst_state").val() == "") {
-	  		//$("#your_gst_state").focus();
-	  		$("#your_gst_state_error").html('Please enter state.');
-	  		exit;
-	  	}else{
-	  		$("#your_gst_state_error").html('');
-	  	}
-    }else{
-    	$("#your_gst_name_error").html('');
-    	$("#your_gst_number_error").html('');
-    	$("#your_gst_state_error").html('');
-    }
+		var checked_value_need_gst = $('.need_gst').is(":checked");
+		if(checked_value_need_gst==true){
+			if ($("#your_gst_name").val() == "") {
+				//$("#your_gst_name").focus();
+				$("#your_gst_name_error").html('Please enter name.');
+				exit;
+			}else{
+				$("#your_gst_name_error").html('');
+			}
+			if ($("#your_gst_number").val() == "") {
+				//$("#your_gst_number").focus();
+				$("#your_gst_number_error").html('Please enter GST No.');
+				exit;
+			}else{
+				$("#your_gst_number_error").html('');
+			}
+			if ($("#your_gst_state").val() == "") {
+				//$("#your_gst_state").focus();
+				$("#your_gst_state_error").html('Please enter state.');
+				exit;
+			}else{
+				$("#your_gst_state_error").html('');
+			}
+		}else{
+			$("#your_gst_name_error").html('');
+			$("#your_gst_number_error").html('');
+			$("#your_gst_state_error").html('');
+		}
 
     	var celebrity_id=$("#celebrity_id").val();
 		var msg_for=$('input[name="msg_for"]').val();
@@ -1409,25 +1521,91 @@ $(document).on('click', '#book_now', function (e) {
 		var our_gst_state =$('input[name="your_gst_state"]').val();
 		var amount=$('input[name="amount"]').val();
 
-    $.ajax({
-        type: "post",
-        dataType: 'json',
-        url: '<?php echo file_path() ?>home/addToCart',
-        data: {celebrity_id : celebrity_id,msg_for : msg_for,myselftext : myself,to_name : to_name,from_name : from_name,occasion_type : occasion_type,delivery_date : delivery_date,message_help : message_help,your_email : your_email,your_number : your_number,public_permission : public_permission,send_on_wa : send_on_wa,need_gst : need_gst,your_gst_name : your_gst_name,your_gst_number : your_gst_number,our_gst_state : our_gst_state,amount : amount},
-        success:function(resp) {
-            if(resp=="true"){
-		    	//window.location('<?php echo file_path() ?>home/payment');
-		    	window.location = "<?php echo file_path() ?>booking_summary/view";
-		    }else{
-		    	alert('Something went wrong.!');
-		    }
-        },
-        error:function() {
-            //alert('failed');
-        }
-    });
+		$.ajax({
+			type: "post",
+			dataType: 'json',
+			url: '<?php echo file_path() ?>home/addToCart',
+			data: {celebrity_id : celebrity_id,msg_for : msg_for,myselftext : myself,to_name : to_name,from_name : from_name,occasion_type : occasion_type,delivery_date : delivery_date,message_help : message_help,your_email : your_email,your_number : your_number,public_permission : public_permission,send_on_wa : send_on_wa,need_gst : need_gst,your_gst_name : your_gst_name,your_gst_number : your_gst_number,our_gst_state : our_gst_state,amount : amount},
+			success:function(resp) {
+				if(resp=="true"){
+					//window.location('<?php echo file_path() ?>home/payment');
+					window.location = "<?php echo file_path() ?>booking_summary/view";
+				}else{
+					alert('Something went wrong.!');
+				}
+			},
+			error:function() {
+				//alert('failed');
+			}
+		});
 
 <?php }?>
+});
+
+$(document).ready(function() {
+	onOccasionChangeGetRecieptNameSelf();
+	onOccasionChangeGetRecieptName();
+	onOccasionChangeGetSenderName();
+	var checked_value_need_gst = $('.need_gst').is(":checked");
+	if(checked_value_need_gst==true){
+		$('#your_gst_name_id').css('display','block');
+		$('#gst_number_id').css('display','block');
+		$('#your_gst_state_id').css('display','block');
+	}else{
+		$('#your_gst_name_id').css('display','none');
+		$('#gst_number_id').css('display','none');
+		$('#your_gst_state_id').css('display','none');
+	}
+	var occationOption = $('#occasion_type :selected').val();
+	if(occationOption=='Customize_Your_Message'){
+		$('#template_div').css('display','none');
+		$('#message_div').css('display','block');
+		$('.hide-custom').css('display','none');
+		//$("#message_help").prop("readonly", false);
+		$("#message_help").prop("required", true);
+		$('#message_help').val('');
+		var maxLength = 350;
+		var textlen = maxLength - $("#message_help").val().length;
+		$('#word_count_id').text('Text Limit: '+textlen);
+
+	}else{
+
+		$('#message_help').val('');
+		$('#template_div').css('display','block');
+		$('#message_div').css('display','none');
+		$('.hide-custom').css('display','block');
+
+		var checked_value_self = $('.msg_for_self').is(":checked");
+		var checked_value_else = $('.msg_for_else').is(":checked");
+
+		if(checked_value_self==true){
+			var message_for="self";
+		}else{
+			var message_for="other";
+		}
+		var celeb_name = $('#celeb_name').text();
+
+		$.ajax({
+			type: "post",
+			dataType: 'html',
+			url: '<?php echo file_path() ?>celebrity/getListOfTemplate',
+			data: {occasion_option : occationOption,message_for : message_for,celeb_name:celeb_name},
+			success:function(resp) {
+				$('#template_list').html(resp);
+				if(checked_value_else==true){
+					onOccasionChangeGetRecieptName();
+					onOccasionChangeGetSenderName();
+				}
+				if(checked_value_self==true){
+					onOccasionChangeGetRecieptNameSelf();
+				}
+			},
+			error:function() {
+				//alert('failed');
+			}
+		});
+	}
+		
 });
 </script>
 

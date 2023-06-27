@@ -566,7 +566,7 @@ Class Web_app_module extends CI_Model {
 
 		$this->db->where('celebrity_task_master.is_cancelled', 'Yes');
 
-		$this->db->where('celebrity_task_master.status', 'Active');
+		//$this->db->where('celebrity_task_master.status', 'Active');
 
 		$this->db->order_by('celebrity_task_master.id', 'Desc');
 
@@ -627,6 +627,54 @@ Class Web_app_module extends CI_Model {
 		$this->db->where('celebrity_task_master.video_status', $orderType); //Initialize //Complete
 
 		$this->db->where('celebrity_task_master.status', 'Active');
+
+		$this->db->order_by('celebrity_task_master.id', 'Desc');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getOrderBookingUserListNew($celebrity_id, $orderType) {
+
+		$this->db->select('celebrity_task_master.*');
+
+		$this->db->from('celebrity_task_master');
+
+		$this->db->where('celebrity_task_master.celebrity_id', $celebrity_id);
+
+		$this->db->where('celebrity_task_master.video_status', $orderType); //Initialize //Complete
+
+		$this->db->where('celebrity_task_master.status', 'Active');
+
+		$this->db->where('celebrity_task_master.is_cancelled', 'No');
+
+		$this->db->order_by('celebrity_task_master.id', 'Desc');
+
+		$query = $this->db->get();
+
+		$the_content = $query->result_array();
+
+		return $the_content;
+
+	}
+
+	function getOrderBookingUserCancelList($celebrity_id) {
+
+		$this->db->select('celebrity_task_master.*');
+
+		$this->db->from('celebrity_task_master');
+
+		$this->db->where('celebrity_task_master.celebrity_id', $celebrity_id);
+
+		//$this->db->where('celebrity_task_master.video_status', $orderType); //Initialize //Complete
+
+		//$this->db->where('celebrity_task_master.status', 'Active');
+
+		$this->db->where('celebrity_task_master.is_cancelled', 'Yes');
 
 		$this->db->order_by('celebrity_task_master.id', 'Desc');
 
