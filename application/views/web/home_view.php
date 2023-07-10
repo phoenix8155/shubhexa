@@ -265,8 +265,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="section-head">
                 <div class="row">
                     <div class="col-lg-6 col-md-12">
-                        <span class="aon-sub-title">News</span>
-                        <h2 class="sf-title">Recent News Articles</h2>
+                        <span class="aon-sub-title">Blog </span>
+                        <h2 class="sf-title">Recent Blogs </h2>
                     </div>
                     <div class="col-lg-6 col-md-12">
                         <p></p>
@@ -274,83 +274,148 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
             <!--Title Section End-->
-
             <div class="section-content">
                 <div class="row">
-
-                    <!-- COLUMNS 1 -->
+                    <div class="owl-carousel aon-featurd-provider-carousel aon-owl-arrow">
+                        <div class="item">
+                            <div class="col-md-12">
+                                <div class="media-bg-animate">
+                                    <div class="aon-blog-section-1 shine-hover">
+                                        <div class="aon-post-media shine-box">
+                                            <a href="<?=file_path()?>blog-details/1"><img src="<?=asset_path('web/')?>images/blog/blog1.jpg" alt=""></a>
+                                        </div>
+                                        <div class="aon-post-info">
+                                            <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/1">બુશર્ટ ટી-શર્ટ</a></h4>
+                                            <div class="aon-post-text">
+                                                <p>In the world of the Pandyas, chaos is the norm and laughter is the solution to every</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="col-md-12">
+                                <div class="media-bg-animate">
+                                    <div class="aon-blog-section-1 shine-hover">
+                                        <div class="aon-post-media shine-box">
+                                            <!-- <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/easy-to-access.png" alt=""></a> -->
+                                            <a href="<?=file_path()?>blog-details/2"><img src="<?=asset_path('web/')?>images/blog/blog2.jpg" alt=""></a>
+                                        </div>
+                                        <div class="aon-post-info">
+                                            <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/2">શુ થયુ </a></h4>
+                                            <div class="aon-post-text">
+                                                <p>Manan wants to marry Dipali and with great difficulty he has convinced Dipali's parents.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="item">
+                            <div class="col-md-12">
+                                <div class="media-bg-animate">
+                                    <div class="aon-blog-section-1  shine-hover">
+                                        <div class="aon-post-media shine-box">
+                                            <!-- <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/quick-response.png" alt=""></a> -->
+                                            <a href="<?=file_path()?>blog-details/3"><img src="<?=asset_path('web/')?>images/blog/blog3.jpg" alt=""></a>
+                                        </div>
+                                        <div class="aon-post-info">
+                                            <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/3">લવ ની ભવાઈ</a></h4>
+                                            <div class="aon-post-text">
+                                                <p>The Mr. Dependable, Aaditya Shah, who loves his tuxedo as much as his piano,</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="col-md-12">
+                                <div class="media-bg-animate">
+                                    <div class="aon-blog-section-1  shine-hover">
+                                        <div class="aon-post-media shine-box">
+                                            <a href="<?=file_path()?>blog-details/4"><img src="<?=asset_path('web/')?>images/blog/blog5.jpg" alt=""></a>
+                                        </div>
+                                        <div class="aon-post-info">
+                                            <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/4">છેલ્લો દિવસ: એક નવી શરૂઆત</a></h4>
+                                            <div class="aon-post-text">
+                                                <p>The movie revolves around the lives of eight friends and their journey of growing up</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="col-md-12">
+                                <div class="media-bg-animate">
+                                    <div class="aon-blog-section-1  shine-hover">
+                                        <div class="aon-post-media shine-box">
+                                            <a href="<?=file_path()?>blog-details/5"><img src="<?=asset_path('web/')?>images/blog/blog4.jpg" alt=""></a>
+                                        </div>
+                                        <div class="aon-post-info">
+                                            <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/5">નાડી દોષ</a></h4>
+                                            <div class="aon-post-text">
+                                                <p>New generation love birds, Riddhi and Kevin, shrewdly tackle the issue of 'Naadi Dosh',</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="section-content">
+                <div class="row">
                     <div class="col-md-4">
                         <div class="media-bg-animate">
                             <div class="aon-blog-section-1 shine-hover">
                                 <div class="aon-post-media shine-box">
                                     <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/why-shubhexa.png" alt=""></a>
                                 </div>
-                                <!-- <div class="aon-post-meta">
-                                    <ul>
-                                        <li class="aon-post-category">Latest</li>
-                                        <li class="aon-post-author"><a href="#">By |<span>Admin</span></a> </li>
-                                    </ul>
-                                </div> -->
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Why Shubhexa? Largest Gujarati Start Platform</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/1">બુશર્ટ ટી-શર્ટ</a></h4>
                                     <div class="aon-post-text">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</p>
+                                        <p>In the world of the Pandyas, chaos is the norm and laughter is the solution to every problem!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- COLUMNS 2 -->
                     <div class="col-md-4">
                         <div class="media-bg-animate">
                             <div class="aon-blog-section-1 shine-hover">
-
                                 <div class="aon-post-media shine-box">
                                     <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/easy-to-access.png" alt=""></a>
                                 </div>
-
-                                <!-- <div class="aon-post-meta">
-                                    <ul>
-                                        <li class="aon-post-category">Latest</li>
-                                        <li class="aon-post-author"><a href="#">By |<span>Admin</span></a> </li>
-                                    </ul>
-                                </div> -->
-
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Easy to access your choicest Star</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/2">શુ થયુ </a></h4>
                                     <div class="aon-post-text">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod </p>
+                                        <p>Manan wants to marry Dipali and with great difficulty he has convinced Dipali's parents.</p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <!-- COLUMNS 3 -->
                     <div class="col-md-4">
                         <div class="media-bg-animate">
                             <div class="aon-blog-section-1  shine-hover">
                                 <div class="aon-post-media shine-box">
                                     <a href="<?=file_path()?>news-details"><img src="<?=asset_path('web/')?>images/blog/latest-blog1/quick-response.png" alt=""></a>
                                 </div>
-                                <!-- <div class="aon-post-meta">
-                                    <ul>
-                                        <li class="aon-post-category">Latest</li>
-                                        <li class="aon-post-author"><a href="#">By |<span>Admin</span></a> </li>
-                                    </ul>
-                                </div> -->
                                 <div class="aon-post-info">
-                                    <h4 class="aon-post-title"><a href="<?=file_path()?>news-details">Quick response</a></h4>
+                                    <h4 class="aon-post-title"><a href="<?=file_path()?>blog-details/3">લવ ની ભવાઈ</a></h4>
                                     <div class="aon-post-text">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod </p>
+                                        <p>The Mr. Dependable, Aaditya Shah, who loves his tuxedo as much as his piano,</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- Latest Blog END -->

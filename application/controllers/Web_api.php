@@ -148,6 +148,8 @@ class Web_api extends CI_Controller {
 
 		$password = $_REQUEST['password'];
 
+		$mobile_number = $_REQUEST['mobile_number'];
+
 		$firebase_token = $_REQUEST['firebase_token'];
 
 		$device_type = $_REQUEST['device_type']; //'IOS'// 'Android'
@@ -2151,17 +2153,17 @@ class Web_api extends CI_Controller {
 				$to_name = "";
 				$from_name = "";
 			}
-			if ($public_permission1 != "") {
+			if ($public_permission1 == "Yes") {
 				$public_permission = 'Yes';
 			} else {
 				$public_permission = 'No';
 			}
-			if ($send_on_wa1 != "") {
+			if ($send_on_wa1 == "Yes") {
 				$send_on_wa = 'Yes';
 			} else {
 				$send_on_wa = 'No';
 			}
-			if ($_REQUEST['need_gst'] != "") {
+			if ($_REQUEST['need_gst'] == "Yes") {
 				$need_gst = 'Yes';				
 			} else {
 				$need_gst = 'No';
@@ -2345,6 +2347,8 @@ class Web_api extends CI_Controller {
 					$data = array();
 
 					$data['id'] = $resultCDetails[$i]['id'];
+
+					$data['celebrity_id'] = $resultCDetails[$i]['celeb_id'];
 
 					$data['fname'] = $resultCDetails[$i]['fname'];
 
@@ -3836,9 +3840,7 @@ class Web_api extends CI_Controller {
 
 				for ($i = 0; $i < count($result); $i++) {
 
-					$data = array();
-
-					
+					$data = array();					
 					
 					$data['access_name'] = $result[$i]['access_name'];
 
@@ -3854,6 +3856,12 @@ class Web_api extends CI_Controller {
 				$data_json['validation'] = true;
 
 				$data_json['msg'] = "";
+
+				$data_json['razor_key'] = RAZOR_KEY;
+
+				$data_json['razor_seceret_key'] = RAZOR_KEY_SECRET;
+
+				$data_json['firebase_server_key'] = FIREBASE_SERVER_KEY;
 
 				$data_json['data'] = $arr;
 
@@ -4152,8 +4160,9 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationUsingSeverKeyAndroidFromUserSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
-
+		//$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		$serverKey = FIREBASE_SERVER_KEY;
+		
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
 		$body = $data;
@@ -4193,7 +4202,8 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationToIOSUsingSeverKeyFromUserSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		//$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		$serverKey = FIREBASE_SERVER_KEY;
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -5477,7 +5487,8 @@ class Web_api extends CI_Controller {
 	protected function sendAndroidNotificationFromCelebrityVideoSend($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+		//$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+		$serverKey = FIREBASE_SERVER_KEY;
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -5518,7 +5529,8 @@ class Web_api extends CI_Controller {
 	protected function sendIOSNotificationFromCelebrityVideoSend($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		//$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		$serverKey = FIREBASE_SERVER_KEY;
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -5559,7 +5571,8 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationUsingSeverKeyAndroidFromCelebSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+		//$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
+		$serverKey = FIREBASE_SERVER_KEY;
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -5600,7 +5613,8 @@ class Web_api extends CI_Controller {
 	protected function sendNotificationToIOSUsingSeverKeyFromCelebSide($registatoin_ids, $messageTitle, $data) {
 		$registatoin_ids = implode(',', $registatoin_ids);
 		$url = "https://fcm.googleapis.com/fcm/send";
-		$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		//$serverKey = 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7';
+		$serverKey = FIREBASE_SERVER_KEY;
 
 		$token = $registatoin_ids; //device token
 		$title = $messageTitle;
@@ -5897,8 +5911,6 @@ class Web_api extends CI_Controller {
 
 					$data = array();
 
-					
-					
 					$data['access_name'] = $result[$i]['access_name'];
 
 					if($result[$i]['type'] == 'website') {
@@ -5909,10 +5921,16 @@ class Web_api extends CI_Controller {
 
 					$arr[] = $data;
 				}
-
+				
 				$data_json['validation'] = true;
 
 				$data_json['msg'] = "";
+
+				$data_json['razor_key'] = RAZOR_KEY;
+
+				$data_json['razor_seceret_key'] = RAZOR_KEY_SECRET;
+
+				$data_json['firebase_server_key'] = FIREBASE_SERVER_KEY;
 
 				$data_json['data'] = $arr;
 
@@ -5942,6 +5960,353 @@ class Web_api extends CI_Controller {
 		}
 	}
 
+	function updateCart() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$cart_detail_id = $_REQUEST['cart_detail_id'];
+
+		$cart_id = $_REQUEST['cart_id'];
+
+		$celebrity_id = $_REQUEST['celebrity_id'];
+
+		$msg_for = $_REQUEST['msg_for'];
+
+		$self_name1 = $_REQUEST['self_name'];
+
+		$to_name1 = $_REQUEST['to_name'];
+
+		$from_name1 = $_REQUEST['from_name'];
+
+		$occasion_type = $_REQUEST['occasion_type'];
+
+		$delivery_date = $_REQUEST['delivery_date'];
+
+		$template_message = $_REQUEST['template_message'];
+
+		$your_email = $_REQUEST['your_email'];
+
+		$your_number = $_REQUEST['your_number'];
+
+		$your_gst_name = $_REQUEST['your_gst_name'];
+
+		$your_gst_number = $_REQUEST['your_gst_number'];
+
+		$your_gst_state = $_REQUEST['your_gst_state'];
+
+		$amount = $_REQUEST['amount'];
+
+		$public_permission1 = $_REQUEST['public_permission'];
+
+		$send_on_wa1 = $_REQUEST['send_on_wa'];
+
+		$need_gst1 = $_REQUEST['need_gst'];
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+		//check gst number
+		if(!empty($your_gst_number)){
+			if (!preg_match("/^([0-9]){2}([A-Za-z]){5}([0-9]){4}([A-Za-z]){1}([0-9]{1})([A-Za-z0-9]){2}?$/", $your_gst_number)) {
+				$data_json['validation'] = false;
+				$data_json['msg'] = "Please enter your GST number proper.";
+				echo json_encode($data_json);
+				exit;
+			}
+		}
+		if (count($resultUser) > 0) {
+			$usercode = $resultUser[0]['usercode'];
+			if ($msg_for == "my_self") {
+				$self_name = $self_name1;
+				$to_name = "";
+				$from_name = "";
+			} else if ($msg_for == "someone_else") {
+				$to_name = $to_name1;
+				$from_name = $from_name1;
+				$self_name = "";
+			} else {
+				$self_name = "";
+				$to_name = "";
+				$from_name = "";
+			}
+			if ($public_permission1 != "") {
+				$public_permission = 'Yes';
+			} else {
+				$public_permission = 'No';
+			}
+			if ($send_on_wa1 != "") {
+				$send_on_wa = 'Yes';
+			} else {
+				$send_on_wa = 'No';
+			}
+			if ($_REQUEST['need_gst'] != "") {
+				$need_gst = 'Yes';				
+			} else {
+				$need_gst = 'No';
+			}
+
+			$data = array();
+			$data['celebrity_id'] = $celebrity_id;
+			//$data['cart_id'] = $cart_id;
+			$data['create_for'] = $msg_for;
+			$data['self_name'] = $self_name;
+			$data['to_name'] = $to_name;
+			$data['from_name'] = $from_name;
+			$data['occation_type'] = $occasion_type;
+			$data['delivery_date'] = date('Y-m-d', strtotime($delivery_date));
+			$data['template_message'] = $template_message;
+			$data['email_id'] = $your_email;
+			$data['phone_number'] = $your_number;
+			$data['allow_to_public'] = $public_permission;
+			$data['send_to_wa'] = $send_on_wa;
+			$data['need_gst'] = $need_gst;
+			$data['gst_name'] = $your_gst_name;
+			$data['gst_no'] = $your_gst_number;
+			$data['gst_state'] = $your_gst_state;
+			$data['amount'] = $amount;
+			$data['status'] = "Active";
+			$data['create_date'] = date('Y-m-d H:i:s');
+			$data['update_date'] = date('Y-m-d h:i:s');
+			$this->comman_fun->update($data, 'cart_details', array('id' => $cart_detail_id));
+
+			$UpdateUData = array();
+			$UpdateUData['update_date'] = date('Y-m-d h:i:s');
+			$this->comman_fun->update($UpdateUData, 'cart_master', array('cart_id' => $cart_id));
+
+			$data_json['validation'] = true;
+			$data_json['msg'] = "cart updated";
+			echo json_encode($data_json);
+			exit;
+		} else {
+			$data_json['validation'] = false;
+			$data_json['msg'] = "user not found.";
+			echo json_encode($data_json);
+			exit;
+		}
+	}
 	
+	function getCartDetails() {
+		$getHeaders = apache_request_headers();
+		$accessToken = $getHeaders['Accesstoken'];
+		$cart_detail_id = $_REQUEST['cart_detail_id'];
+		$cart_id = $_REQUEST['cart_id'];
+
+		if ($accessToken != "") {
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '3', 'status' => 'Active'));
+		} else {
+			$data_json['validation'] = false;
+			$data_json['msg'] = "Please enter your token.";
+			echo json_encode($data_json);
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+			$usercode = $resultUser[0]['usercode'];
+			$resultCDetails = $this->comman_fun->get_table_data('cart_details', array('id' => $cart_detail_id));
+			if (count($resultCDetails) > 0) {
+				$resultCelebrityMaster = $this->comman_fun->get_table_data('celebrity_master', array('id' => $resultCDetails[0]['celebrity_id']));
+				$json_arr = array();
+				$data_json['validation'] = true;
+				$data_json['msg'] = "";
+				$data_json['cart_detail_id'] = $cart_detail_id;
+				$data_json['cart_id'] = $cart_id;
+				$data_json['fname'] = $resultCelebrityMaster[0]['fname'];
+				$data_json['lname'] = $resultCelebrityMaster[0]['lname'];
+				$data_json['amount'] = '₹.'.$resultCDetails[0]['amount'];
+				$data_json['delivery_date'] = date('d-m-Y', strtotime($resultCDetails[0]['delivery_date']));
+				if ($resultCDetails[0]['create_for'] == "my_self") {
+					$data_json['booking_for'] = $resultCDetails[0]['self_name'];
+				} else {
+					$data_json['booking_for'] = $resultCDetails[0]['to_name'];
+				}
+				if ($resultCDetails[0]['occation_type'] != "Customize_Your_Message") {
+					$data_json['occation_type'] = $resultCDetails[0]['occation_type'];
+				} else {
+					$data_json['occation_type'] = '';
+				}
+				if ($resultCelebrityMaster[0]['profile_pic'] != "") {
+					$img_file_path = base_url() . "upload/celebrity_profile/" . $resultCelebrityMaster[0]['profile_pic'];
+				} else {
+					$img_file_path = "-";
+				}
+				$data_json['profile_pic'] = $img_file_path;
+				$data_json['create_for'] = $resultCDetails[0]['create_for'];
+				$data_json['self_name'] = $resultCDetails[0]['self_name'];
+				$data_json['to_name'] = $resultCDetails[0]['to_name'];
+				$data_json['from_name'] = $resultCDetails[0]['from_name'];
+				$data_json['template_message'] = $resultCDetails[0]['template_message'];
+				$data_json['email_id'] = $resultCDetails[0]['email_id'];
+				$data_json['phone_number'] = $resultCDetails[0]['phone_number'];
+				$data_json['allow_to_public'] = $resultCDetails[0]['allow_to_public'];
+				$data_json['send_to_wa'] = $resultCDetails[0]['send_to_wa'];
+				$data_json['need_gst'] = $resultCDetails[0]['need_gst'];
+				$data_json['gst_name'] = $resultCDetails[0]['gst_name'];
+				$data_json['gst_no'] = $resultCDetails[0]['gst_no'];
+				$data_json['gst_state'] = $resultCDetails[0]['gst_state'];
+				echo json_encode($data_json);
+				exit;
+			} else {
+				$data_json['validation'] = false;
+				$data_json['msg'] = "data not found.";
+				echo json_encode($data_json);
+				exit;
+			}
+
+		} else {
+			$data_json['validation'] = false;
+			$data_json['msg'] = "user not found.";
+			echo json_encode($data_json);
+			exit;
+		}
+	}
+
+	function getCelebrityInformation() {
+
+		$getHeaders = apache_request_headers();
+
+		$accessToken = $getHeaders['Accesstoken'];
+
+		$data_json = array();
+
+		if ($accessToken != "") {
+
+			$resultUser = $this->comman_fun->get_table_data('membermaster', array('accessToken' => $accessToken, 'role_type' => '2', 'status' => 'Active'));
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "Please enter your token.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+		if (count($resultUser) > 0) {
+
+			$celebrity_id = $resultUser[0]['celebrity_id'];
+
+			$result = $this->ObjM->getCelebrityDetail($celebrity_id);
+
+			if (isset($result[0])) {
+
+				$resWishlist = $this->comman_fun->check_record('wishlist_master', array('celebrity_id' => $celebrity_id, 'usercode' => $resultUser[0]['usercode']));
+
+				$json_arr = array();
+
+				$data = array();
+
+				$data['id'] = $result[0]['id'];
+
+				$data['fname'] = $result[0]['fname'];
+
+				$data['lname'] = $result[0]['lname'];
+
+				$data['username'] = $resultUser[0]['username'];
+
+				$data['charge_fees'] = '₹.'.$result[0]['charge_fees'];
+
+				$data['isFavorite'] = $resWishlist;
+
+				$data['emailid'] = ($resultUser[0]['emailid'] != '') ? $resultUser[0]['emailid'] : '';
+				$data['mobileno'] = ($resultUser[0]['mobileno'] != '') ? $resultUser[0]['mobileno'] : '';
+
+				if ($result[0]['profile_pic'] != "") {
+					$img_file_path = base_url() . "upload/celebrity_profile/" . $result[0]['profile_pic'];
+				} else {
+					$img_file_path = "-";
+				}
+
+				$data['profile_pic'] = $img_file_path;
+
+				//$data['category'] = json_decode($result[0]['category'], true);
+				$category = json_decode($result[0]['category'], true);
+				$arrCate = array();
+				$dataCate = array();
+				for ($i = 0; $i < count($category); $i++) {
+
+					$dataCate['category'] = $category[$i];
+					$arrCate[] = $dataCate;
+				}
+
+				$data['category'] = $arrCate;
+				$data['known_for'] = $result[0]['known_for'];
+				$data['gender'] = ($result[0]['gender'] != '') ? $result[0]['gender'] : '';
+				$data['birthdate'] = ($result[0]['birthdate'] != '') ? date('d-m-Y', strtotime($result[0]['birthdate'])) : '';
+				$data['age'] = ($result[0]['age'] != '') ? $result[0]['age'] : '';
+				$data['is_trending'] = ($result[0]['is_trending'] != '') ? $result[0]['is_trending'] : '';
+				$data['blue_tick'] = ($result[0]['blue_tick'] != '') ? boolval($result[0]['blue_tick']) : '';
+				$language_known = json_decode($result[0]['language_known'], true);
+				$arrLK = array();
+				$dataLK = array();
+				for ($i = 0; $i < count($language_known); $i++) {
+					$dataLK['language_known'] = $language_known[$i];
+					$arrLK[] = $dataLK;
+				}
+
+				$data['language_known'] = $arrLK;
+				$data['twitter_link'] = ($result[0]['twitter_link'] != '') ? $result[0]['twitter_link'] : '';
+				$data['fb_link'] = ($result[0]['fb_link'] != '') ? $result[0]['fb_link'] : '';
+				$data['insta_link'] = ($result[0]['insta_link'] != '') ? $result[0]['insta_link'] : '';
+				$data['sample_video_link'] = ($result[0]['sample_video_link'] != '') ? $result[0]['sample_video_link'] : '';
+				$data['hashtag'] = ($result[0]['hashtag'] != '') ? $result[0]['hashtag'] : '';
+				$data['experience_in_industry'] = ($result[0]['experience_in_industry'] != '') ? $result[0]['experience_in_industry'] : '';
+				$data['brief_details'] = ($result[0]['brief_details'] != '') ? $result[0]['brief_details'] : '';
+				$data['about_life'] = ($result[0]['about_life'] != '') ? $result[0]['about_life'] : '';
+				$data['successfull_events'] = ($result[0]['successfull_events'] != '') ? $result[0]['successfull_events'] : '';
+				$data['nature_character'] = ($result[0]['nature_character'] != '') ? $result[0]['nature_character'] : '';
+				$data['brief_family_bg'] = ($result[0]['brief_family_bg'] != '') ? $result[0]['brief_family_bg'] : '';
+				$data['about_career'] = ($result[0]['about_career'] != '') ? $result[0]['about_career'] : '';
+
+				//$arr[] = $data;
+
+				$data_json['validation'] = true;
+
+				$data_json['msg'] = "";
+
+				$data_json['data'] = $data;
+
+				echo json_encode($data_json);
+
+				exit;
+
+			} else {
+
+				$data_json['validation'] = false;
+
+				$data_json['msg'] = "There is no data";
+
+				echo json_encode($data_json);
+				exit;
+			}
+
+		} else {
+
+			$data_json['validation'] = false;
+
+			$data_json['msg'] = "user not found.";
+
+			echo json_encode($data_json);
+
+			exit;
+		}
+
+	}
 
 }

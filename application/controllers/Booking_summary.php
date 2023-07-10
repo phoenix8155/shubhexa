@@ -152,6 +152,7 @@ class Booking_summary extends CI_Controller {
 			'amount' => $_SESSION['payable_amount'] * 100,
 			'currency' => 'INR',
 			'payment_capture' => 1, // auto capture
+			//'callback_url' => 'booking_summary/verify',
 		));
 
 		$amount = $razorpayOrder['amount'];

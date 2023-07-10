@@ -116,3 +116,4 @@ define('RAZOR_KEY_SECRET', 'Uxk5v5Ts91ZmpdzjlRGVjyPQ');
 //For API Testing
 define('RAZOR_KEY_APP', 'rzp_test_G4NlZG1SBo1SBS');
 define('RAZOR_KEY_SECRET_APP', 'Uxk5v5Ts91ZmpdzjlRGVjyPQ');
+define('FIREBASE_SERVER_KEY', 'AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7');

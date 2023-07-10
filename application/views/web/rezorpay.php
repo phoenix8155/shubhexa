@@ -21,23 +21,22 @@ options.handler = function (response){
 
 // Boolean whether to show image inside a white frame. (default: true)
 options.theme.image_padding = false;
-
 options.modal = {
     ondismiss: function() {
         //console.log("This code runs when the popup is closed");
-        window.location.href = "<?php base_url() ?>";
+        window.location.href = "https://www.shubhexa.in/booking_summary/view";
     },
     // Boolean indicating whether pressing escape key
     // should close the checkout form. (default: true)
     escape: true,
     // Boolean indicating whether clicking translucent blank
     // space outside checkout form should close the form. (default: false)
-    backdropclose: false
+    backdropclose: false,
 };
 var rzp = new Razorpay(options);
 
 $(document).ready(function(){
-	$("#rzp-button1").click();
+    $("#rzp-button1").click();
 	 rzp.open();
     e.preventDefault();
 });

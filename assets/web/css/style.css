@@ -13765,3 +13765,16 @@ button.close { line-height: 12px; }
 	padding-top: 40px;
     padding-bottom: 40px;
 }
+@media only screen and (max-width:992px){
+	.aon-about-pic {
+	    height: auto !important;
+	}
+	.aon-about-pic img {
+	    width: 100% !important;
+	}
+	.sf-provi-bio-left {
+	    position: unset !important;
+	    height: 350px !important;
+	    top: 100px !important;
+	}
+}

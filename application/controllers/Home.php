@@ -14,6 +14,7 @@ class Home extends CI_Controller {
 	public function index() {
 
 		// echo "hji";exit;
+		//var_dump($_SESSION['user']);exit;
 
 		$data['resTestimonial'] = $this->ObjM->getRecentTestimonials();
 
@@ -31,15 +32,28 @@ class Home extends CI_Controller {
 
 	}
 
-	public function newsDetails() {
+	public function newsDetails($id) {
 
 		$this->load->view('web/common/top_header_web');
-
-		$this->load->view('web/news_detail_view');
+		
+		if($id == 1){
+			$this->load->view('web/blog_detail_one_view');
+		}else if($id == 2){
+			$this->load->view('web/blog_detail_two_view');
+		}else if($id == 3){
+			$this->load->view('web/blog_detail_three_view');
+		}else if($id == 4){
+			$this->load->view('web/blog_detail_four_view');
+		}else if($id == 5){
+			$this->load->view('web/blog_detail_five_view');
+		}else{
+			$this->load->view('web/blog_detail_one_view');
+		}
 
 		$this->load->view('web/common/footer_web');
 
 	}
+	
 
 	public function checkLogin() {
 
@@ -68,9 +82,10 @@ class Home extends CI_Controller {
 			$sess_array['login'] = 'true';
 
 			$sess_array['login_code'] = $this->login_record(true, $result[0]['usercode'], array('emailid' => $result[0]['emailid'], 'password' => $result[0]['password']));
-
+			
 			$this->session->set_userdata('user', $sess_array);
-
+			var_dump($_SESSION['user']);exit;
+			var_dump($sess_array);exit;
 			$response = "true";
 			echo json_encode($response);exit;
 

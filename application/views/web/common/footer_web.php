@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <ul>
                             <li><a href="<?=file_path()?>about">About Us</a></li>
                             <li><a href="<?=file_path()?>testimonials">Testimonial</a></li>
-                            <li><a href="<?=file_path()?>faq">FAQS</a></li>
+                            <li><a href="<?=file_path()?>faq">FAQ</a></li>
                             <li><a href="<?=file_path()?>contact">Contact Us</a></li>
                         </ul>
                     </div>
