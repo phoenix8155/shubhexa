@@ -84,8 +84,8 @@ class Home extends CI_Controller {
 			$sess_array['login_code'] = $this->login_record(true, $result[0]['usercode'], array('emailid' => $result[0]['emailid'], 'password' => $result[0]['password']));
 			
 			$this->session->set_userdata('user', $sess_array);
-			var_dump($_SESSION['user']);exit;
-			var_dump($sess_array);exit;
+			// var_dump($_SESSION['user']);exit;
+			// var_dump($sess_array);exit;
 			$response = "true";
 			echo json_encode($response);exit;
 
