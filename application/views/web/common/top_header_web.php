@@ -90,7 +90,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
     </style>
 </head>
 <body>
-    <div class="loading-area">
+    <!-- <div class="loading-area">
         <div class="loading-box"></div>
         <div class="loading-pic">
             <div class="windows8">
@@ -111,7 +111,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <div class="page-wraper">
     <header class="site-header header-style-1 mobile-sider-drawer-menu header-full-width">
         <div class="sticky-header main-bar-wraper  navbar-expand-lg">
@@ -119,7 +119,7 @@ if ($this->uri->rsegment(1) == "my_bookings") {
                 <div class="container clearfix">
                     <div class="logo-header">
                         <div class="logo-header-inner logo-header-one">
-                            <a href="<?=base_url()?>">
+                            <a href="<?=base_url()?>">                            
                                 <img src="<?=asset_path('web/')?>images/white-logo-light.png" alt="" class="site-logo-has">
                                 <!-- <img src="<?=asset_path('web/')?>images/logo-light.png" alt="" class="site-logo-sticky"> -->
                                 <img src="<?=asset_path('web/')?>images/shubhexa-logo-blue.png" alt="" class="site-logo-sticky">

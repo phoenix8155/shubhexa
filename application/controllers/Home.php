@@ -13,9 +13,6 @@ class Home extends CI_Controller {
 
 	public function index() {
 
-		// echo "hji";exit;
-		//var_dump($_SESSION['user']);exit;
-
 		$data['resTestimonial'] = $this->ObjM->getRecentTestimonials();
 
 		$data['resRecentCelebirty'] = $this->ObjM->getRecentCelebrity();

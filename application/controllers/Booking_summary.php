@@ -63,7 +63,7 @@ class Booking_summary extends CI_Controller {
 		$url = "https://fcm.googleapis.com/fcm/send";
 		$serverKey = ' AAAAU1JqMbY:APA91bHj0xWkHf-av8lmZvlg0QCG-P9EpLqpzCqpf_BT__AxC_RSrVvj7NbPslvlLPKbiN8vxuyEykuBPvXu6L5WkyQsxTxO_KqGU0UyOPXu8aJiOAAKhfnIcl4SUZqVd7vvUNo9MNU7	';
 
-		$token = $registatoin_ids; //device token
+		$token = $registatoin_ids;  //device token
 		$title = $messageTitle;
 		$body = $data;
 		$notification = array('title' => $title, 'details' => $body, 'sound' => 'default', 'badge' => '1');

@@ -48,7 +48,7 @@
 } else {
 	$amount = 0;
 }?>
-                    			<?php if (count($amount) > 0) {?>
+                    			<?php if ($amount > 0) {?>
                     			<div class="col-xl-12 sf-upgrade-top-area" style="position: sticky;top: 100px;">
                                     <h4 class="sf-upgrade-top-title">Total Amount: <span style="border: none;">₹ <?=$amount;?></span></h4>
                                     <a class="admin-button sf-upgrade-btn" href="<?=file_path()?>booking_summary/confirm/<?=$cartRes[0]['cart_id']?>">Confirm & Pay</a>
